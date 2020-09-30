@@ -1,0 +1,141 @@
+%% lithie-boxes.sty
+%%
+%% -----------------------------------------
+%% Florian Sihler, 30.09.2020
+%%
+%% Standalone and improved box-module of lilly
+%% boxes. This variant won't use the 
+%% tcbtheorems lib to allow more flexibility.
+
+% make with emblems on the right side?
+
+
+
+
+
+%% Packages
+\RequirePackage{tcolorbox,environ,tocloft,calc}
+
+%% lengths
+
+% \newlength\libx@
+
+
+%% pgfkeys of boxes
+
+
+\newif\iflibx@CreateList@
+\newif\iflibx@CustomList@
+\newif\iflibx@BoxEnabled@
+\newif\iflibx@UseBox@
+\pgfkeys{
+    /libx@keys/.is family, /libx@keys,
+    name/.estore in = \libx@box@Name,
+    title/.store in = \libx@box@Title,
+    boxcol/.estore in = \libx@box@BoxColor,
+    preCode/.store in = \libx@box@PreCode,
+    inCode/.store in = \libx@box@InCode,
+    outCode/.store in = \libx@box@OutCode,
+    postCode/.store in = \libx@box@PostCode,
+    usestyle/.estore in = \libx@box@UseStyle,
+    %hasemblem/.estore in = \libx@box@Hasemblem,
+    emblem/.store in = \libx@box@Emblem,
+    createlist/.is if=libx@CreateList@,
+    customlist/.is if=libx@CustomList@,
+    boxenabled/.is if=libx@BoxEnabled@,
+    usebox/.is if = libx@UseBox@,
+    lock/.store in = \libx@box@Lock,
+    listname/.store in = \libx@box@ListName,
+    listtext/.store in =\libx@box@ListText,
+    listmen/.estore in =\libx@box@ListMen,
+    defaults/.style={%
+        name=noname, title={\noexpand\libx@box@Name},%
+        boxcol=black,%
+        usestyle=libx@box@Definition, %hasemblem=FALSE,%
+        emblem={}, listname={\noexpand\libx@box@Name}, createlist=false,%
+        listtext={Alle \noexpand\libx@box@Name}, preCode={}, inCode={},%
+        outCode={}, postCode={},lock={TRUE}, customlist=false,
+        listmen=NO, boxenabled=true, usebox=true%
+    }
+}
+% TODO: listmen NO?
+
+% #1 boxid, #2 key
+\def\libx@persist#1#2{%
+\expandafter\xdef\csname libx@box@perist@#1@#2\endcsname{\@nameuse{libx@box@#2}}%
+}
+
+\def\libx@box@get#1#2{\@nameuse{libx@box@perist@#1@#2}}
+\def\libx@get#1{\@nameuse{libx@box@perist@\libx@boxid @#1}}
+
+% #1 boxud, #2 key
+\def\libx@persistif#1#2{\bgroup\globaldefs=1% true/false set must be global too
+\expandafter\newif\csname iflibx@box@perist@#1@#2@\endcsname%
+% we assgign the same value as the general if
+\@nameuse{iflibx@#2@}%
+    \@nameuse{libx@box@perist@#1@#2@true}%
+\else%
+    \@nameuse{libx@box@perist@#1@#2@false}%
+\fi\egroup}
+
+\def\libx@box@if#1#2{\@nameuse{iflibx@box@perist@#1@#2@}}
+\def\libx@if#1{\@nameuse{iflibx@box@perist@\libx@boxid @#1@}}
+
+% #1 Boxkeys, #2 tikzkeys for box
+% #3 Boxname (set boxnamekey)
+% #4 Title (boxtitlekey)
+% #5 GroupId
+\def\libx@RegisterBox#1#2#3#4#5{\bgroup%
+    \edef\libx@boxid{#5}%
+    \pgfkeys{/libx@keys,defaults,#1,name=#3,title=#4}%
+    \forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
+                                            Outcode,PostCode,UseStyle,Emblem,%
+                                            Lock,ListName,ListText,ListMen}%
+    \forcsvlist{\libx@persistif{\libx@boxid}}{CreateList,CustomList,%
+                                              BoxEnabled,UseBox}%
+% Create List if requested
+    \libx@if{CreateList}%
+        \global\newlistof{\libx@get{ListName}}%
+                         {\libx@get{ListMen}}%
+                         {\libx@get{ListText}}%
+    \fi
+% Define the main environment of the box
+% TODO: if star?
+\globaldefs=1
+    \newenvironment{#3}[2][]{% TODO: use name and opt args
+        \edef\libx@boxid{#5}%
+% First we check if the box is disabled
+        \libx@if{BoxEnabled}%
+            \libx@read@box@default{#5}% TODO: settings
+        \else% 
+            % the expandafter hinders the tokens to be read when libx@if gets expanded and is false
+            \expandafter\libx@read@box@hidden%
+        \fi%
+    }{%
+        \libx@if{BoxEnabled}%
+            \libx@read@box@default@end{#5}% Extra for command% TODO: settings
+        \else%
+            \endlibx@read@box@hidden%
+        \fi
+    }
+\globaldefs=0
+\egroup}
+
+% The boxes
+\NewEnviron{libx@read@box@hidden}{}
+
+\def\libx@read@box@default#1{\bgroup%
+    \edef\libx@boxid{#1}%
+    \libx@get{PreCode}%
+\egroup}
+
+\def\libx@read@box@default@end#1{\bgroup
+    \edef\libx@boxid{#1}%
+% execute the post codes
+    \libx@get{OutCode}% TODO: End Style
+    \libx@get{PostCode}%
+\egroup\ignorespacesafterend}
+
+\let\RegisterBox\libx@RegisterBox
+
+\endinput
