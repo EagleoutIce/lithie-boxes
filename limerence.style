@@ -1,0 +1,57 @@
+% limerence box-styles
+
+% is defined to allow importing this style multiple times
+\def\libx@limerence@border@width{3.41415pt}
+
+\tcbset{%
+    lithi@box@style@limerence/.style={% TODO: change attachment?
+        breakable,lines before break=3,enhanced jigsaw,sharp corners,%
+        boxrule=0pt,fonttitle={},coltitle={black},attach title to upper,%
+        % TODO: allow better opacity fill
+        opacityfill=0.45,top=3pt,bottom=3pt,right=5pt,frame hidden,%
+        % TODO: allow flexible back color
+        colback=gray!20!white,grow to right by=\libx@limerence@border@width,%
+        enlarge left by=-\libx@limerence@border@width,
+        enlargepage flexible=\baselineskip,%
+        after title app={\hbox{}~\vspace*{-.85\baselineskip}%
+            \newline\unskip\widowpenalties=3 10000 10000 150}%
+    },%
+    lithi@box@style@limerence@extra@arrows/.style={%
+        borderline west={\libx@limerence@border@width}{0pt}{#1},
+        extras first and middle={overlay={%
+            \begin{scope}[shift={(frame.south west)}]
+                    \path[fill=#1] (0pt,0) -- ++(\libx@limerence@border@width,0pt) -- ++(-1.75pt,-\libx@limerence@border@width) -- cycle;
+            \end{scope}
+        }},%
+        extras middle and last={overlay={%
+            \begin{scope}[shift={(frame.north west)}]
+                    \path[fill=#1] (0pt,0) -- ++(\libx@limerence@border@width,0pt) -- ++(-1.75pt,\libx@limerence@border@width) -- cycle;
+            \end{scope}
+        }}%
+    }%
+}
+
+% TODO: tag style?
+% \tcbset{tag/.style={after title=}}
+
+% TODO: set styles according to correct color if it changes?
+
+
+% \ifx\@onlypreamble\@notprerr% 
+%     \ifx\LILLYxBOXxDefinitionxBox\true\tcbset{LILLYxBOXxDefinitionxBoxxLimerence/.style={LillyxBOXxDesignxLimerencexArrows=\LILLYxColorxDefinition}}\else\tcbset{LILLYxBOXxDefinitionxBoxxLimerence/.style={opacityfill=0}}\fi
+% \else%
+% \AtBeginDocument{
+%     \ifx\LILLYxBOXxDefinitionxBox\true\tcbset{LILLYxBOXxDefinitionxBoxxLimerence/.style={LillyxBOXxDesignxLimerencexArrows=\LILLYxColorxDefinition}}\else\tcbset{LILLYxBOXxDefinitionxBoxxLimerence/.style={opacityfill=0}}\fi
+% }\fi
+% TODO: box selection so that there are no arrows in no-box-mode
+
+
+% TODO: fix spacing with basic strut 
+% TODO: better widthof calculation
+\renewtcolorbox[lithie@box@style@definition@other@init]{libx@box@Definition}[4][]{%
+    lithi@box@style@limerence,tikz={#1},%
+    lithi@box@style@limerence@extra@arrows=libx@color@definition, #3, title={\sffamily%
+    {#2 \thetcbcounter~}\textcolor{libx@color@definition}{\ifx!#4!\else{\raisebox{0.75pt}{$\blacktriangleright$~}}\fi}\parbox[t]{\linewidth-\widthof{#2 \thetcbcounter~}-3.75em}{#4}\\},%
+}
+
+% TODO: setup and load style
