@@ -5,16 +5,60 @@
 
 \usepackage[main=ngerman,english]{babel}
 
-\usepackage{microtype,blindtext}
+\usepackage{microtype,blindtext,wrapfig}
 \usepackage{lithie-boxes}
 
 \LoadStyle{limerence}
 
+\setlength{\columnsep}{1.55em}
+
 \begin{document}
-    \blindtext
+\begin{figure*}
+    \begin{definition}{Ich schwebe, Mammi.}
+        \vspace*{-\baselineskip}\begin{wrapfigure}[3]{r}{0.185\linewidth}
+            \centering\vspace*{-2.33\baselineskip}\begin{tikzpicture}
+                \draw circle [radius=1cm];
+                \draw (225:1.25cm) -- (45:1.25cm);
+            \end{tikzpicture}
+        \end{wrapfigure}Ja und auf mir liegt der ganze Föküs. Den nutze ich jetzt auch! Zum Beispiel mit diesen sinnbefreiten Sinnessetzen zum besinnten Sinnentwandeln sinniger Sinnlichkeiten einer einsinnigen Ersinnung im Sinne der sinnvollen Anklage sinisterer Singles. 
+    \end{definition}
+\end{figure*}
+    \blindtext[5]
+    % TODO: there has to be a better way!
 
     \begin{definition}{Super Titel}
         Ich bin die Sonne, die Wonne, der Glanz, da um mich tanzt; die Welt in der Hand und es trifft sich zum
         Schank; ach dann und wann ein jed-wed jeder der Lächeln noch kann.
     \end{definition}
+
+    \blindtext[3]
+
+    \begin{definition*}{Die Wichtig-Box}
+        Hör doch! Hör doch! Hör doch die Melodie, die sich -- klangverliebt -- lieblich durch die Straßen zieht. 
+        Seh doch! Seh doch! Sieh -- alle diese Bänder die sich dort
+        als Farben ziehn; und so stehn' sie am Himmel und lebten
+        schon im Glanz; als die Bänder noch verschlungen und
+        die Noten noch im Tanz\ldots
+    \end{definition*}
+
+    \blindtext[1]
+
+    Isch bin en füller denn mir brauchet hier noch oin zwoi Zeilööön.  Und die erschaffe ich damit glaube ich ganz effitschient wie mir san. Also\ldots{} guck mr mal wies ausschaut nunele net woar? Wird bestimmt dr puuuure hammer...
+    \begin{definition}{Ich bin der lange Titel der, dich frei und unbeschwert, durch die Welt sich selbst erfährt und heimlich seine Tagen gährt.}
+        Man kennt mich als die Dunkelheit, die Petroleum den Flammen zeigt, und in die der Rauch aufsteigt.
+        Für mich schlägt die Mitternacht derer Luft die Welt
+        vermacht.
+    \end{definition}
+
+    \blindtext
+
+    \begin{definition*}{Lange Titel mögen wir; wenn auch die Box an sich nicht so. Drum brechen wir hier ab}
+        Ach sie lächeln, strahlen, freuen, sich an all den Leuten,
+        die noch heute -- vielleicht morgen -- sich auch um den Andern sorgen. Und von Dauer lebt nicht lange schon der Zeiten wegen
+        der, welcher bei geöffnetem Fenster sein Papier nicht beschwert.
+    \end{definition*}
+
+    \blindtext
+
+    % \listofdefinitions
 \end{document}

@@ -12,20 +12,21 @@
         % TODO: allow flexible back color
         colback=gray!20!white,grow to right by=\libx@limerence@border@width,%
         enlarge left by=-\libx@limerence@border@width,
-        enlargepage flexible=\baselineskip,%
         after title app={\hbox{}~\vspace*{-.85\baselineskip}%
             \newline\unskip\widowpenalties=3 10000 10000 150}%
     },%
     lithi@box@style@limerence@extra@arrows/.style={%
         borderline west={\libx@limerence@border@width}{0pt}{#1},
-        extras first and middle={overlay={%
+        extras first and middle={overlay={% 0.5 pt offset to buffer
             \begin{scope}[shift={(frame.south west)}]
-                    \path[fill=#1] (0pt,0) -- ++(\libx@limerence@border@width,0pt) -- ++(-1.75pt,-\libx@limerence@border@width) -- cycle;
+                \path[fill=#1] (0,0pt) -- ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) -- 
+                    ++(\libx@limerence@border@width/2,\libx@limerence@border@width) |- (0,.5pt) -- cycle;
             \end{scope}
         }},%
         extras middle and last={overlay={%
             \begin{scope}[shift={(frame.north west)}]
-                    \path[fill=#1] (0pt,0) -- ++(\libx@limerence@border@width,0pt) -- ++(-1.75pt,\libx@limerence@border@width) -- cycle;
+                \path[fill=#1] (0,0pt) -- ++(\libx@limerence@border@width/2,\libx@limerence@border@width) -- 
+                    ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) |- (0,-.5pt) -- cycle;
             \end{scope}
         }}%
     }%
@@ -48,10 +49,20 @@
 
 % TODO: fix spacing with basic strut 
 % TODO: better widthof calculation
+
+% {%
+% \textcolor{libx@color@definition}{\sffamily#2 \thetcbcounter~\ifx!#4!\else{\raisebox{0.75pt}{$\blacktriangleright$~}}\fi}\parbox[t]{\linewidth-\widthof{#2 \thetcbcounter~}-3.75em}{#4}\\}
+\def\libx@typeset@title#1#2#3{%
+    \textsf{\libx@title@strut\textcolor{libx@color@definition}{%
+        #2 #3~%
+        \ifx!#1!\else\raisebox{0.7pt}{$\blacktriangleright$}~\fi%
+    }% we do not use the width again as we want to save space :D
+    {#1 \null\hfill\libx@get{Emblem}}}\nopagebreak\smallskip\\*%
+}
+
 \renewtcolorbox[lithie@box@style@definition@other@init]{libx@box@Definition}[4][]{%
     lithi@box@style@limerence,tikz={#1},%
-    lithi@box@style@limerence@extra@arrows=libx@color@definition, #3, title={\sffamily%
-    {#2 \thetcbcounter~}\textcolor{libx@color@definition}{\ifx!#4!\else{\raisebox{0.75pt}{$\blacktriangleright$~}}\fi}\parbox[t]{\linewidth-\widthof{#2 \thetcbcounter~}-3.75em}{#4}\\},%
+    lithi@box@style@limerence@extra@arrows=libx@color@definition, #3, title={\libx@typeset@title{#4}{#2}{\thetcbcounter}},%
 }
 
 % TODO: setup and load style

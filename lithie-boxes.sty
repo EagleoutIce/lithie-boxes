@@ -14,7 +14,7 @@
 % TODO: allow dynamic loading of box styles
 
 %% Packages
-\RequirePackage{tcolorbox,environ,tocloft,calc,amssymb}
+\RequirePackage{tcolorbox,environ,tocloft,calc,amssymb,fontawesome}
 \tcbuselibrary{skins,breakable,hooks}
 %% lengths
 
@@ -27,7 +27,7 @@
 \colorlet{libx@color@definition}{purple}
 
 %% pgfkeys of boxes
-\newif\iflibx@CreateList@
+\newif\iflibx@HasEmblem@
 \newif\iflibx@CustomList@
 \newif\iflibx@BoxEnabled@
 \newif\iflibx@UseBox@
@@ -41,9 +41,8 @@
     outCode/.store in = \libx@box@OutCode,
     postCode/.store in = \libx@box@PostCode,
     usestyle/.store in = \libx@box@UseStyle,
-    %hasemblem/.store in = \libx@box@Hasemblem,
     emblem/.store in = \libx@box@Emblem,
-    createlist/.is if=libx@CreateList@,
+    hasemblem/.is if=libx@HasEmblem@,
     customlist/.is if=libx@CustomList@,
     boxenabled/.is if=libx@BoxEnabled@,
     usebox/.is if = libx@UseBox@,
@@ -55,9 +54,9 @@
         name=noname, title={\noexpand\libx@box@Name},%
         box color=black,%
         usestyle=libx@box@Definition,%
-        emblem={}, listname={\noexpand\libx@box@Name}, createlist=false,%
+        emblem={}, listname={\noexpand\libx@box@Name},%
         listtext={Alle \noexpand\libx@box@Name}, preCode={}, inCode={},%
-        outCode={}, postCode={},lock={}, customlist=false,
+        outCode={}, postCode={},lock={}, customlist=true,
         listmen=NO, boxenabled=true, usebox=true%
     }
 }
@@ -71,7 +70,7 @@
 \def\libx@box@get#1#2{\@nameuse{libx@box@perist@#1@#2}}
 \def\libx@get#1{\@nameuse{libx@box@perist@\libx@boxid @#1}}
 \def\libx@get@ifempty#1#2#3{%
-    \edef\@libx@tmp{\@nameuse{libx@box@perist@\libx@boxid @#1}}%
+    \protected@edef\@libx@tmp{\@nameuse{libx@box@perist@\libx@boxid @#1}}%
     \expandafter\ifx\expandafter!\@libx@tmp!%
     #2\else#3\fi%
 }
@@ -99,14 +98,8 @@
     \forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
                                             Outcode,PostCode,UseStyle,Emblem,%
                                             Lock,ListName,ListText,ListMen}%
-    \forcsvlist{\libx@persistif{\libx@boxid}}{CreateList,CustomList,%
+    \forcsvlist{\libx@persistif{\libx@boxid}}{HasEmblem,CustomList,%
                                               BoxEnabled,UseBox}%
-% Create List if requested
-    \libx@if{CreateList}{%
-        \global\newlistof{\libx@get{ListName}}%
-                         {\libx@get{ListMen}}%
-                         {\libx@get{ListText}}%
-    }{}%
 % Define the main environment of the box
 % TODO: if star?
 \globaldefs=1
@@ -179,12 +172,12 @@
 % #1: title
 \def\@libx@box@title@pre#1{%
     \libx@if{CustomList}{%
-        \libx@get@ifempty{Emblem}{%
-            % We register without emblem
-            \@libx@box@list@add@element%
-        }{%
+        \libx@if{HasEmblem}{%
             % We register with emblem
-            \@libx@box@list@add@element@emblem%
+            \expandafter\@libx@box@list@add@element@emblem%
+        }{%
+            % We register without emblem
+            \expandafter\@libx@box@list@add@element%
         }% args:
         {\libx@get{ListName}}% list name
         {\libx@get{ListMen}}% list men
@@ -208,22 +201,37 @@
 \def\@libx@box@list@add@element@emblem#1#2#3#4#5{%
     \refstepcounter{#1}\phantomsection%
     \libx@get@ifempty{Lock}{%
-        \addcontentsline{#2}{#1}{\makebox[.4cm][r]{#3} \makebox[1em][c]{#5}~#4}%
+        \addcontentsline{#2}{#1}{\makebox[.4cm][r]{#3} \makebox[1.5em][c]{#5}~\ignorespaces#4}%
     }{%
-        \addcontentsline{#2}{#1}{\makebox[0.75cm][r]{#3} \makebox[1em][c]{#5}~#4}%
+        \addcontentsline{#2}{#1}{\makebox[0.75cm][r]{#3} \makebox[1.5em][c]{#5}~\ignorespaces#4}%
     }%
 }
 
 \def\libx@loadstyle@ending{.style}
-\def\libx@LoadStyle#1{\makeatletter\input{#1\libx@loadstyle@ending}}
+\def\libx@LoadStyle#1{\typeout{Loading style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}}
 
-
+% TODO: we have a problem. if there are floating environments 
+% the ids may be in the wrong order.
+% TODO:
+% - add a unique id to every box
+% - this id will be incremented constantly (globally)
+% - and used to sort the 'writefile' commands.
+% TODO:
+% - add option for shorter entry in listof...
+% - improve listof-structure
+% - fix indention if starred (and improve spacing to be more saving)
+% - allow better naming of list'of' blahblah
+% ...
+% \def\libx@addcontentslines#1#2#3
 
 
 
 % ----------------------------------------
-\libx@RegisterBox{createlist=true,inCode=\noindent,box color=libx@color@definition}{}{definition}{Definition}{def}
-
+% TODO: group lists better so they get created automatically and no repetition?
+\newlistof{definitions}{ldefs}{List of Definitions}
+% TODO: besser emblem support if 'starred' variant
+\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,inCode=\noindent,box color=libx@color@definition}{}{definition}{Definition}{def}
+\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,emblem=\protect\faStar,inCode=\noindent,box color=libx@color@definition}{}{definition*}{Definition}{defStar}
 
 
 
@@ -257,9 +265,10 @@
 \def\libx@title@strut{\vphantom{\large I}}
 
 % #1 is prefix, #2 is number, #3 is text
-\def\libx@typeset@title#1#2#3{%
-    \textbf{\textsc{\libx@title@strut{#2 #3~}} \hfill \parbox[t]{\linewidth-\widthof{#2}-5em}{\raggedleft\textbf{#1}}}%
-}
+\def\libx@typeset@title#1#2#3{\bgroup%
+    \def\libx@tmp@title{\libx@get{Emblem} #2 #3~}%
+    \textbf{\textsc{\libx@title@strut{}\libx@tmp@title} \hfill \parbox[t]{\linewidth-\widthof{\libx@tmp@title}-1em}{\raggedleft\textbf{#1}}}%
+\egroup}
 
 \newtcolorbox[lithie@box@style@definition@init]{libx@box@Definition}[4][]{%
     lithie@box@style@definition={#1},#3,%
