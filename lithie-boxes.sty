@@ -188,22 +188,23 @@
     }{}% Do nothing
 }
 
+\def\libx@sp{\hskip.1cm}
 % #5 will be dropped as it is the emblem
 \def\@libx@box@list@add@element#1#2#3#4#5{%
     \refstepcounter{#1}\phantomsection%
     \libx@get@ifempty{Lock}{%
-        \addcontentsline{#2}{#1}{\makebox[.4cm][r]{#3} #4}%
+        \addcontentsline{#2}{#1}{\makebox[.4cm][r]{#3}\libx@sp#4}%
     }{%
-        \addcontentsline{#2}{#1}{\makebox[0.75cm][r]{#3} #4}%
+        \addcontentsline{#2}{#1}{\makebox[.75cm][r]{#3}\libx@sp#4}%
     }%
 }
 
 \def\@libx@box@list@add@element@emblem#1#2#3#4#5{%
     \refstepcounter{#1}\phantomsection%
     \libx@get@ifempty{Lock}{%
-        \addcontentsline{#2}{#1}{\makebox[.4cm][r]{#3} \makebox[1.5em][c]{#5}~\ignorespaces#4}%
+        \addcontentsline{#2}{#1}{\makebox[.4cm][r]{#3}\libx@sp\makebox[.4cm][c]{#5}\libx@sp\ignorespaces#4}%
     }{%
-        \addcontentsline{#2}{#1}{\makebox[0.75cm][r]{#3} \makebox[1.5em][c]{#5}~\ignorespaces#4}%
+        \addcontentsline{#2}{#1}{\makebox[.75cm][r]{#3}\libx@sp\makebox[.4cm][c]{#5}\libx@sp\ignorespaces#4}%
     }%
 }
 
