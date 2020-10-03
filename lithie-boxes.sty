@@ -10,6 +10,7 @@
 %% Options
 %% -----------------------------------------------------------------------------
 
+% TODO: different numbering for singles?
 \def\libx@boxes@lockstyle@{}
 \DeclareOption{lockhigh}{% lock on high
     \@ifundefined{chapter}{%
@@ -268,7 +269,7 @@
 
 
 % ----------------------------------------
-% boxe definition
+% box definitions
 
 % initialize the number within lock
 \expandafter\ifx\expandafter!\libx@boxes@lockstyle@!% no lock:
@@ -290,14 +291,15 @@
 % #4 Emblem for starred variant #5 color
 % #6 style to use #7 id
 % #8 environment name
-\def\libx@RegisterBoxPair#1#2#3#4#5#6#7#8{%
+% #9 title
+\def\libx@RegisterBoxPair#1#2#3#4#5#6#7#8#9{%
     \newlistof{#1}{#2}{#3}%
     \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
 % Register no star
     \libx@RegisterBox{listname=#1,listmen=#2,hasemblem=true,inCode=\noindent,%
-    box color=#5}{}{#8}{#6}{#7}%
+    box color=#5,usestyle=libx@box@#6}{}{#8}{#9}{#7}%
     \libx@RegisterBox{listname=#1,listmen=#2,hasemblem=true,emblem=\protect#4,%
-    inCode=\noindent,box color=#5}{}{#8*}{#6}{#7@s}%
+    inCode=\noindent,box color=#5,usestyle=libx@box@#6}{}{#8*}{#9}{#7@s}%
 }
 
 % ----------------------------------------
@@ -348,7 +350,7 @@
 % #1 Name of style
 % #2 style update (#1-#4)
 \def\libx@UpdateBoxStyle#1#2{%
-    \renewtcolorbox[lithie@box@style@other@init=libx@box@#1]{libx@box@#1}[4][]{%
+    \renewtcolorbox[lithie@box@style@other@init={libx@box@#1}]{libx@box@#1}[4][]{%
         #2
     }%
 }
@@ -356,7 +358,7 @@
 \def\@libx@UpdateHelper#1#2{\libx@UpdateBoxStyle{#2}{#1}}
 
 \def\libx@UpdateAllBoxStyles#1{%
-    \forlistdo{\@libx@UpdateHelper{#1}}{\libx@list@boxes}
+    \forlistloop{\@libx@UpdateHelper{#1}}{\libx@list@boxes}
 }
 
 % ----------------------------------------
@@ -375,10 +377,25 @@
 {\faStar}{libx@color@definition}%
 % style and id:
 {Definition}{def}%
-% environment name:
-{definition}
+% environment name and Prefix:
+{definition}{Definition}
 
 
+\libx@RegisterNewDefaultStyle{Bemerkung}{}
+% default colors TODO: colors
+% TODO: option to set color directly
+\colorlet{libx@color@bemerkung}{teal}
+
+\def\remarksname{List of Remarks}
+\libx@RegisterBoxPair%
+% List definition:
+{remarks}{lrem}{\remarksname}%
+% Emblem and color:
+{\faStar}{libx@color@bemerkung}%
+% style and id:
+{Bemerkung}{bem}%
+% environment name and Prefix:
+{bemerkung}{Bemerkung}
 
 
 

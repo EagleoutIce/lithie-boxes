@@ -63,8 +63,9 @@
 }
 
 
+% TODO: plain style?
 % use #1 to #4
-\libx@UpdateBoxStyle{Definition}{%
+\libx@UpdateAllBoxStyles{%
     lithi@box@style@limerence={#1},%
     lithi@box@style@limerence@extra@arrows=\libx@get{BoxColor},#3,%
     title={\libx@typeset@title{#4}{#2}{\thetcbcounter}}%
