@@ -162,7 +162,7 @@
             }{% Further arguments for tcolorbox
                 #2, libx@box@current@style@modification,%
                 before upper app={\ignorespacesafterend},%
-                before title pre={% TODO: emblem
+                before title pre={%
                     \@libx@box@title@pre{#3}%
                     \label{auto:\libx@get{ListMen}\thetcbcounter}%
                     \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
@@ -243,10 +243,9 @@
     \let\libx@raw@addcontentsline\addcontentsline%
     \patchcmd{\libx@raw@addcontentsline}{\thepage}{\@libx@getrefpage}{}{}%
     % TODO: loop? this should be done until no more present!
-    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{}{}%
-    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{}{}%
-    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{}{}%
-    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{}{}%
+    \loop% we stop if replace throws error
+        \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{\iftrue}{\iffalse}%
+    \repeat%
 }
 
 \def\@libx@addcontentsline#1#2#3#4{%
