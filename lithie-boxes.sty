@@ -31,7 +31,6 @@
 
 \ProcessOptions*\relax%
 
-
 %% Packages
 \RequirePackage{tcolorbox,environ,tocloft,calc,amssymb,fontawesome}
 \tcbuselibrary{skins,breakable,hooks}
@@ -51,27 +50,27 @@
     name/.store in = \libx@box@Name,
     title/.store in = \libx@box@Title,
     box color/.store in = \libx@box@BoxColor,
-    preCode/.store in = \libx@box@PreCode,
-    inCode/.store in = \libx@box@InCode,
-    outCode/.store in = \libx@box@OutCode,
-    postCode/.store in = \libx@box@PostCode,
-    usestyle/.store in = \libx@box@UseStyle,
+    pre code/.store in = \libx@box@PreCode,
+    in code/.store in = \libx@box@InCode,
+    out code/.store in = \libx@box@OutCode,
+    post code/.store in = \libx@box@PostCode,
+    use style/.store in = \libx@box@UseStyle,
     emblem/.store in = \libx@box@Emblem,
-    hasemblem/.is if=libx@HasEmblem@,
-    customlist/.is if=libx@CustomList@,
-    boxenabled/.is if=libx@BoxEnabled@,
-    usebox/.is if = libx@UseBox@,
-    listname/.store in = \libx@box@ListName,
-    listtext/.store in =\libx@box@ListText,
-    listmen/.store in =\libx@box@ListMen,
+    has emblem/.is if=libx@HasEmblem@,
+    custom list/.is if=libx@CustomList@,
+    box enabled/.is if=libx@BoxEnabled@,
+    use box/.is if = libx@UseBox@,
+    list name/.store in = \libx@box@ListName,
+    list text/.store in =\libx@box@ListText,
+    list men/.store in =\libx@box@ListMen,
     defaults/.style={%
         name=noname, title={\noexpand\libx@box@Name},%
         box color=black,%
-        usestyle=libx@box@Definition,%
-        emblem={}, listname={\noexpand\libx@box@Name},%
-        listtext={Alle \noexpand\libx@box@Name}, preCode={}, inCode={},%
-        outCode={},postCode={},customlist=true,
-        listmen=NO,boxenabled=true,usebox=true%
+        use style=libx@box@Definition,%
+        emblem={}, list name={\noexpand\libx@box@Name},%
+        list text={Alle \noexpand\libx@box@Name}, pre code={}, in code={},%
+        out code={},post code={},custom list=true,
+        list men=NO,box enabled=true,use box=true%
     }
 }
 
@@ -301,10 +300,10 @@
     \newlistof{#1}{#2}{#3}%
     \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
 % Register no star
-    \libx@RegisterBox{listname=#1,listmen=#2,hasemblem=true,inCode=\noindent,%
-    box color=#5,usestyle=libx@box@#6}{}{#8}{#9}{#7}%
-    \libx@RegisterBox{listname=#1,listmen=#2,hasemblem=true,emblem=\protect#4,%
-    inCode=\noindent,box color=#5,usestyle=libx@box@#6}{}{#8*}{#9}{#7@s}%
+    \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,in code=\noindent,%
+    box color=#5,use style=libx@box@#6}{}{#8}{#9}{#7}%
+    \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,emblem=\protect#4,%
+    in code=\noindent,box color=#5,use style=libx@box@#6}{}{#8*}{#9}{#7@s}%
 }
 
 % ----------------------------------------
@@ -408,7 +407,8 @@
 
 
 
-
+% ----------------------------------------
+% Utility control
 
 
 
