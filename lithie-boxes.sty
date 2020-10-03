@@ -148,7 +148,7 @@
             [% Tikz arguments:
                 #4%
             ]{% Title (braces guard):
-                {\libx@get{Title}}%
+            \hypertarget{@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}{\libx@get{Title}}%
             }{% Further arguments for tcolorbox
                 #2, libx@box@current@style@modification,%
                 before upper app={\ignorespacesafterend},%
@@ -156,7 +156,7 @@
                     \@libx@box@title@pre{#3}%
                     \label{auto:\libx@get{ListMen}\thetcbcounter}%
                     \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
-                    #2%
+                    {#2}%
                 }%
             }{#3}%
     \libx@get{InCode}%
@@ -203,7 +203,7 @@
 \def\libx@sp{\hskip.1cm}
 % #5 will be dropped as it is the emblem
 \def\@libx@box@list@add@element#1#2#3#4#5#6{%
-    \refstepcounter{#1}\phantomsection%
+    \refstepcounter{#1}%
     \libx@get@ifempty{Lock}{%
         \libx@addcontentsline{#6}{#2}{#1}{\makebox[.4cm][r]{#3}\libx@sp#4}%
     }{%
@@ -212,7 +212,7 @@
 }
 
 \def\@libx@box@list@add@element@emblem#1#2#3#4#5#6{%
-    \refstepcounter{#1}\phantomsection%
+    \refstepcounter{#1}%
     \libx@get@ifempty{Lock}{%
         \libx@addcontentsline{#6}{#2}{#1}{\makebox[.4cm][r]{#3}\libx@sp\makebox[.4cm][c]{#5}\libx@sp\ignorespaces#4}%
     }{%
@@ -236,12 +236,20 @@
 % ...
 % #1 id order #2#3#4 - default args for addcontentsline
 
-\def\@libx@getrefpage{% we expect i and curboxid to be set
-\pageref*{@libx:\libx@get{ListMen}\i}
+\def\@libx@getcurtar#1{% we expect i and curboxid to be set
+#1:\libx@get{ListMen}\i%
+}
+\def\@libx@getrefpage{%
+\pageref*{\@libx@getcurtar{@libx}}%
 }
 \AtEndPreamble{%
     \let\libx@raw@addcontentsline\addcontentsline%
     \patchcmd{\libx@raw@addcontentsline}{\thepage}{\@libx@getrefpage}{}{}%
+    % TODO: loop? this should be done until no more present!
+    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{}{}%
+    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{}{}%
+    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{}{}%
+    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{}{}%
 }
 
 \def\@libx@addcontentsline#1#2#3#4{%
