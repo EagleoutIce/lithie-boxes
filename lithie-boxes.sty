@@ -102,12 +102,13 @@
                                               BoxEnabled,UseBox}%
     % setup id counter:
     \@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
-        \newcounter{@libx@box@\libx@get{ListMen}@id}}{}%
-    \AtEndDocument{\bgroup\edef\libx@boxid{#5}% just to carry for sub commands
-        \foreach \i in {1,...,\arabic{@libx@box@\libx@get{ListMen}@id}}{%
-            \@nameuse{libx@box@\libx@get{ListMen}@contentsline@\i}%
-        }%
-    \egroup}%
+        \newcounter{@libx@box@\libx@get{ListMen}@id}%
+        \AtEndDocument{\bgroup\edef\libx@boxid{#5}% just to carry for sub commands
+            \foreach \i in {1,...,\arabic{@libx@box@\libx@get{ListMen}@id}}{% 
+                \@nameuse{libx@box@\libx@get{ListMen}@contentsline@\i}%
+            }%
+        \egroup}%
+    }{}
 % Define the main environment of the box
 % TODO: if star?
 \globaldefs=1
@@ -154,6 +155,7 @@
                 before title pre={% TODO: emblem
                     \@libx@box@title@pre{#3}%
                     \label{auto:\libx@get{ListMen}\thetcbcounter}%
+                    \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
                     #2%
                 }%
             }{#3}%
@@ -234,10 +236,18 @@
 % ...
 % #1 id order #2#3#4 - default args for addcontentsline
 
+\def\@libx@getrefpage{% we expect i and curboxid to be set
+\pageref*{@libx:\libx@get{ListMen}\i}
+}
+\AtEndPreamble{%
+    \let\libx@raw@addcontentsline\addcontentsline%
+    \patchcmd{\libx@raw@addcontentsline}{\thepage}{\@libx@getrefpage}{}{}%
+}
+
 \def\@libx@addcontentsline#1#2#3#4{%
     % we want the exact id:
     \expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{%
-        \noexpand\addcontentsline{#2}{#3}{#4}%
+        \noexpand\libx@raw@addcontentsline{#2}{#3}{#4}%
     }%
 }
 
