@@ -44,7 +44,8 @@
 \newif\iflibx@HasEmblem@
 \newif\iflibx@CustomList@
 \newif\iflibx@BoxEnabled@
-\newif\iflibx@UseBox@
+% NOTE: changed to style modification 'style derivative'
+% \newif\iflibx@UseBox@
 \pgfkeys{
     /libx@keys/.is family, /libx@keys,
     name/.store in = \libx@box@Name,
@@ -56,10 +57,10 @@
     post code/.store in = \libx@box@PostCode,
     use style/.store in = \libx@box@UseStyle,
     emblem/.store in = \libx@box@Emblem,
+    style derivative/.store in=\libx@box@StyleDerivative,
     has emblem/.is if=libx@HasEmblem@,
     custom list/.is if=libx@CustomList@,
     box enabled/.is if=libx@BoxEnabled@,
-    use box/.is if = libx@UseBox@,
     list name/.store in = \libx@box@ListName,
     list text/.store in =\libx@box@ListText,
     list men/.store in =\libx@box@ListMen,
@@ -70,35 +71,51 @@
         emblem={}, list name={\noexpand\libx@box@Name},%
         list text={Alle \noexpand\libx@box@Name}, pre code={}, in code={},%
         out code={},post code={},custom list=true,
-        list men=NO,box enabled=true,use box=true%
+        list men=NO,box enabled=true,style derivative={}%
     }
 }
 
 % #1 boxid, #2 key
 \def\libx@persist#1#2{%
-\expandafter\protected@xdef\csname libx@box@perist@#1@#2\endcsname{\@nameuse{libx@box@#2}}%
+\expandafter\protected@xdef\csname libx@box@persist@#1@#2\endcsname{\@nameuse{libx@box@#2}}%
 }
 
-\def\libx@box@get#1#2{\@nameuse{libx@box@perist@#1@#2}}
-\def\libx@get#1{\@nameuse{libx@box@perist@\libx@boxid @#1}}
+\def\libx@box@get#1#2{\@nameuse{libx@box@persist@#1@#2}}
+\def\libx@get#1{\@nameuse{libx@box@persist@\libx@boxid @#1}}
 \def\libx@get@ifempty#1#2#3{%
-    \protected@edef\@libx@tmp{\@nameuse{libx@box@perist@\libx@boxid @#1}}%
+    \protected@edef\@libx@tmp{\@nameuse{libx@box@persist@\libx@boxid @#1}}%
     \expandafter\ifx\expandafter!\@libx@tmp!%
     #2\else#3\fi%
 }
 
 % #1 boxud, #2 key
 \def\libx@persistif#1#2{\bgroup\globaldefs=1% true/false set must be global too
-\expandafter\newif\csname iflibx@box@perist@#1@#2@\endcsname%
+\expandafter\newif\csname iflibx@box@persist@#1@#2@\endcsname%
 % we assgign the same value as the general if
 \@nameuse{iflibx@#2@}%
-    \@nameuse{libx@box@perist@#1@#2@true}%
+    \@nameuse{libx@box@persist@#1@#2@true}%
 \else%
-    \@nameuse{libx@box@perist@#1@#2@false}%
+    \@nameuse{libx@box@persist@#1@#2@false}%
 \fi\egroup}
 
-\def\libx@box@if#1#2{\@nameuse{iflibx@box@perist@#1@#2@}}
-\def\libx@if#1#2#3{\@nameuse{iflibx@box@perist@\libx@boxid @#1@}#2\else#3\fi}
+\def\libx@box@if#1#2{\@nameuse{iflibx@box@persist@#1@#2@}}
+\def\libx@if#1#2#3{\@nameuse{iflibx@box@persist@\libx@boxid @#1@}#2\else#3\fi}
+
+% #1 box id, #2 datafield, #3 new value
+\def\libx@update@boxdata#1#2#3{\bgroup
+    \edef\libx@boxid{#1}%
+    % This allows them to be persisted:
+    \@namedef{libx@box@#2}{#3}%
+    \libx@persist{\libx@boxid}{#2}%
+\egroup}
+
+% #1 box id, #2 ifname, #3 new value (true|false)
+\def\libx@update@boxif#1#2#3{\bgroup
+    \edef\libx@boxid{#1}%
+    % This allows them to be persisted:
+    \@nameuse{libx@#2@#3}% if-hook
+    \libx@persistif{\libx@boxid}{#2}%
+\egroup}
 
 % #1 Boxkeys, #2 tikzkeys for box
 % #3 Boxname (set boxnamekey)
@@ -109,9 +126,9 @@
     \pgfkeys{/libx@keys,defaults,#1,name=#3,title=#4}%
     \forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
                                             Outcode,PostCode,UseStyle,Emblem,%
-                                            ListName,ListText,ListMen}%
+                                            ListName,ListText,ListMen,StyleDerivative}%
     \forcsvlist{\libx@persistif{\libx@boxid}}{HasEmblem,CustomList,%
-                                              BoxEnabled,UseBox}%
+                                              BoxEnabled}%
     % setup id counter:
     \@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
         \newcounter{@libx@box@\libx@get{ListMen}@id}%
@@ -145,6 +162,9 @@
             \endlibx@read@box@hidden%
         }%
     }%
+    % these mappings are used (internally) for user commands 
+    % for easier access
+    \@namedef{@libx@map@envshort@#3}{#5}
 \globaldefs=0%
 \egroup}
 
@@ -166,18 +186,12 @@
     \edef\libx@boxid{#1}%
     \libx@get{PreCode}%
 % we check if we use the box style
-    \libx@if{UseBox}{%
-        \libx@box@usestyle%
-    }{%
-        \libx@box@useplainstyle%
-    }%
     \begin{\libx@get{UseStyle}}%
             [% Tikz arguments:
                 #3%
             ]{% Title (braces guard):
                 \libx@hypertarget{@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}{\libx@get{Title}}%
             }{% Further arguments for tcolorbox
-                libx@box@current@style@modification,%
                 before upper app={\ignorespacesafterend},%
                 before title pre={%
                     \@libx@box@title@pre{#2}%
@@ -196,15 +210,9 @@
     \libx@get{PostCode}%
 \endgroup\ignorespacesafterend}
 
-% style
-\def\libx@box@usestyle{%
-    \tcbset{libx@box@current@style@modification/.style={}}% No Modifications needed :D
-}
-
 % TODO: command like 'make plain' which will use plain design
-\def\libx@box@useplainstyle{%
-    \tcbset{libx@box@current@style@modification/.style={}}% TODO: plain design
-}
+% TODO: plain design
+
 
 % #1: title
 \def\@libx@box@title@pre#1{%
@@ -241,8 +249,9 @@
 }
 
 % TODO: store current catcode?
+\gdef\libx@currentstyle{default}
 \def\libx@loadstyle@ending{.style}
-\def\libx@LoadStyle#1{\typeout{Loading style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}}
+\def\libx@LoadStyle#1{\typeout{Loading style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}\gdef\libx@currentstyle{#1}}
 
 \def\@libx@getcurtar#1{% we expect i and curboxid to be set
 #1:\libx@get{ListMen}\i%
@@ -313,12 +322,19 @@
 \def\libx@list@boxes{}
 
 \tcbset{%
-    lithi@box@style@default/.style={%
+    lithie@box@style@default/.style={%
         enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
         lines before break=3,before skip=0pt,boxrule=0mm,toprule=0.5mm,%
         bottomtitle=0.5mm,bottomrule=1.2mm,after skip=0pt,%
         enlarge top by=0.2\baselineskip,enlarge bottom by=0.2\baselineskip,%
         sharp corners=south,breakable, colback=\libx@get{BoxColor}!5!white,colframe=\libx@get{BoxColor},tikz={#1}%
+    },%
+    lithie@box@style@default@plain/.style={%
+        enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
+        lines before break=3,before skip=0pt,boxrule=0mm,%
+        enlarge top by=0.2\baselineskip,enlarge bottom by=0.2\baselineskip,attach title to upper={\medskip\\*},coltitle=black,boxsep=0pt,left=0pt,right=0pt,%
+        opacityback=0,opacityframe=0,%
+        breakable,tikz={#1}%
     }%
 }
 
@@ -344,9 +360,9 @@
 % #1 Name of the style
 % #2 other options
 \def\libx@RegisterNewDefaultStyle#1#2{%
-    \listadd{\libx@list@boxes}{#1}%
+    \listadd{\libx@list@boxes}{#1}% \libx@get{StyleDerivative}
     \newtcolorbox[lithie@box@style@default@init]{libx@box@#1}[4][]{%
-        lithi@box@style@default={##1},##3,#2,%
+        lithie@box@style@default\libx@get{StyleDerivative}={##1},##3,#2,%
         title={\libx@typeset@title{##4}{##2}{\thetcbcounter}}%
     }%
 }
@@ -410,7 +426,11 @@
 % ----------------------------------------
 % Utility control
 
-
+% #1 derivative to use
+% #2 boxname
+\newcommand*{\SetBoxPlain}[2][@plain]{%
+    \libx@update@boxdata{\@nameuse{@libx@map@envshort@#2}}{StyleDerivative}{#1}%
+}
 
 
 

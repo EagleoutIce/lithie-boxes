@@ -4,7 +4,7 @@
 \def\libx@limerence@border@width{3.41415pt}
 
 \tcbset{%
-    lithi@box@style@limerence/.style={% TODO: change attachment?
+    lithie@box@style@limerence/.style={% TODO: change attachment?
         breakable,lines before break=3,enhanced jigsaw,sharp corners,%
         boxrule=0pt,fonttitle={},coltitle={black},attach title to upper,%
         % TODO: allow better opacity fill
@@ -14,42 +14,37 @@
         enlarge left by=-\libx@limerence@border@width,
         after title app={\hbox{}~\vspace*{-.85\baselineskip}%
             \newline\unskip\widowpenalties=3 10000 10000 150},%
-        tikz={#1}%
+        tikz={#1},%
+        borderline west={\libx@limerence@border@width}{0pt}{\libx@get{BoxColor}},%
+        lithie@box@style@limerence@extra@arrows=\libx@get{BoxColor}%
     },%
-    lithi@box@style@limerence@extra@arrows/.style={%
-        borderline west={\libx@limerence@border@width}{0pt}{#1},
-        extras first and middle={overlay={% 0.5 pt offset to buffer
+    lithie@box@style@limerence@plain/.style={%
+        breakable,lines before break=3,enhanced jigsaw,sharp corners,%
+        boxrule=0pt,fonttitle={},coltitle={black},attach title to upper,%
+        opacityfill=0,boxsep=0pt,top=0pt,bottom=0pt,right=0pt,left=0pt,frame hidden,%
+        after title app={\hbox{}~\vspace*{-.85\baselineskip}%
+            \newline\unskip\widowpenalties=3 10000 10000 150},%
+        tikz={#1},%
+        % as guides:
+        lithie@box@style@limerence@extra@arrows=black,%
+        % padding to give them space to breathe:
+        pad before break*=2mm,pad after break=2mm%
+    },%
+    lithie@box@style@limerence@extra@arrows/.style={%
+        extras first and middle={overlay={% 0.33pt offset to buffer
             \begin{scope}[shift={(frame.south west)}]
                 \path[fill=#1] (0,0pt) -- ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) -- 
-                    ++(\libx@limerence@border@width/2,\libx@limerence@border@width) |- (0,.5pt) -- cycle;
+                    ++(\libx@limerence@border@width/2,\libx@limerence@border@width) |- (0,.33pt) -- cycle;
             \end{scope}
         }},%
         extras middle and last={overlay={%
             \begin{scope}[shift={(frame.north west)}]
                 \path[fill=#1] (0,0pt) -- ++(\libx@limerence@border@width/2,\libx@limerence@border@width) -- 
-                    ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) |- (0,-.5pt) -- cycle;
+                    ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) |- (0,-.33pt) -- cycle;
             \end{scope}
         }}%
     }%
 }
-
-% TODO: tag style?
-% \tcbset{tag/.style={after title=}}
-
-% TODO: set styles according to correct color if it changes?
-
-
-% \ifx\@onlypreamble\@notprerr% 
-%     \ifx\LILLYxBOXxDefinitionxBox\true\tcbset{LILLYxBOXxDefinitionxBoxxLimerence/.style={LillyxBOXxDesignxLimerencexArrows=\LILLYxColorxDefinition}}\else\tcbset{LILLYxBOXxDefinitionxBoxxLimerence/.style={opacityfill=0}}\fi
-% \else%
-% \AtBeginDocument{
-%     \ifx\LILLYxBOXxDefinitionxBox\true\tcbset{LILLYxBOXxDefinitionxBoxxLimerence/.style={LillyxBOXxDesignxLimerencexArrows=\LILLYxColorxDefinition}}\else\tcbset{LILLYxBOXxDefinitionxBoxxLimerence/.style={opacityfill=0}}\fi
-% }\fi
-% TODO: box selection so that there are no arrows in no-box-mode
-
-
-% {%
-% \textcolor{libx@color@definition}{\sffamily#2 \thetcbcounter~\ifx!#4!\else{\raisebox{0.75pt}{$\blacktriangleright$~}}\fi}\parbox[t]{\linewidth-\widthof{#2 \thetcbcounter~}-3.75em}{#4}\\}
 
 \def\libx@style@limerence@titledivider{%
     {\normalcolor~--~}%
@@ -66,7 +61,6 @@
 % TODO: plain style?
 % use #1 to #4
 \libx@UpdateAllBoxStyles{%
-    lithi@box@style@limerence={#1},%
-    lithi@box@style@limerence@extra@arrows=\libx@get{BoxColor},#3,%
+    lithie@box@style@limerence\libx@get{StyleDerivative}={#1},#3,%
     title={\libx@typeset@title{#4}{#2}{\thetcbcounter}}%
 }
