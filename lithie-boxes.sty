@@ -124,11 +124,17 @@
     }{}
 % Define the main environment of the box
 \globaldefs=1%
+    % NOTE: #1 is short form!
     \newenvironment{#3}[2][]{%
         \edef\libx@boxid{#5}%
+        \ifx!##1!%
+            \def\libx@curbox@shorttitle{##2}%
+        \else%
+            \def\libx@curbox@shorttitle{##1}%
+        \fi%
 % First we check if the box is disabled
         \libx@if{BoxEnabled}{%
-            \libx@read@box@default{#5}{##1}{##2}{#2}%
+            \libx@read@box@default{#5}{##2}{#2}%
         }{% 
             % the expandafter hinders the tokens to be read when libx@if gets expanded and is false
             \expandafter\libx@read@box@hidden%
@@ -156,8 +162,8 @@
         \let\libx@pageref\pageref%
     }%
 }
-% #1 id, #2 args, #3 title, #4 default tikz args
-\def\libx@read@box@default#1#2#3#4{\begingroup%
+% #1 id, #2 title, #3 default tikz args
+\def\libx@read@box@default#1#2#3{\begingroup%
     \edef\libx@boxid{#1}%
     \libx@get{PreCode}%
 % we check if we use the box style
@@ -168,19 +174,18 @@
     }%
     \begin{\libx@get{UseStyle}}%
             [% Tikz arguments:
-                #4%
+                #3%
             ]{% Title (braces guard):
                 \libx@hypertarget{@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}{\libx@get{Title}}%
             }{% Further arguments for tcolorbox
-                #2, libx@box@current@style@modification,%
+                libx@box@current@style@modification,%
                 before upper app={\ignorespacesafterend},%
                 before title pre={%
-                    \@libx@box@title@pre{#3}%
+                    \@libx@box@title@pre{#2}%
                     \label{auto:\libx@get{ListMen}\thetcbcounter}%
                     \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
-                    {#2}%
                 }%
-            }{#3}%
+            }{#2}%
     \libx@get{InCode}%
 \endgroup}
 
@@ -216,7 +221,7 @@
         {\libx@get{ListName}}% list name
         {\libx@get{ListMen}}% list men
         {\thetcbcounter}% counter
-        {#1}% title
+        {\libx@curbox@shorttitle}% title
         {\libx@get{Emblem}}% may be ignored
         {@libx@box@\libx@get{ListMen}@id}% the id will be used to shiput list add
         \ignorespacesafterend%
