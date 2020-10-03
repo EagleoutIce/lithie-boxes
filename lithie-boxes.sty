@@ -38,7 +38,7 @@
 %% lengths
 \newlength\libx@numwidth%
 \newlength\libx@numwidth@offset%
-\setlength\libx@numwidth@offset{.15cm}
+\setlength\libx@numwidth@offset{.235cm}
 
 % default colors TODO: colors
 % TODO: option to set color directly
@@ -278,12 +278,12 @@
     lithie@box@number@within/.style={}%
 }
 % note effective width will be '\libx@numwidth@offset' higher
-\setlength\libx@numwidth{.25cm}%
+\setlength\libx@numwidth{.4cm-\libx@numwidth@offset}%
 \else% got lock
 \pgfqkeys{/tcb/new}{%
     lithie@box@number@within/.style={number within=\libx@boxes@lockstyle@}%
 }
-\setlength\libx@numwidth{.75cm}%
+\setlength\libx@numwidth{.9cm-\libx@numwidth@offset}%
 \fi
 
 % #1 is list name #2 ist list men #3 is list text 
