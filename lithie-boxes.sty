@@ -261,8 +261,8 @@
 % TODO: group lists better so they get created automatically and no repetition?
 \newlistof{definitions}{ldefs}{List of Definitions}
 % TODO: besser emblem support if 'starred' variant
-\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,inCode=\noindent,box color=libx@color@definition}{}{definition}{Definition}{def}
-\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,emblem=\protect\faStar,inCode=\noindent,box color=libx@color@definition}{}{definition*}{Definition}{defStar}
+\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,inCode=\noindent,box color=libx@color@definition,lock=true}{}{definition}{Definition}{def}
+\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,emblem=\protect\faStar,inCode=\noindent,lock=true,box color=libx@color@definition}{}{definition*}{Definition}{defStar}
 
 
 
@@ -286,7 +286,7 @@
 % get the new stlyes
 \pgfqkeys{/tcb/new}{%
     lithie@box@style@definition@init/.style={%
-        auto counter,% number within=section,% TODO: allow option for this
+        auto counter,number within=section,% number within=section,% TODO: allow option for this
     },%
     lithie@box@style@definition@other@init/.style={%
         use counter from=libx@box@Definition%
