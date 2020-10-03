@@ -426,6 +426,7 @@
 % ----------------------------------------
 % Utility control
 
+% TODO: make more of them
 % #1 derivative to use
 % #2 boxname
 \newcommand*{\SetBoxPlain}[2][@plain]{%
@@ -433,6 +434,9 @@
 }
 
 
+\newcommand*{\SetBoxesPlain}[2][@plain]{%
+    \forcsvlist{\SetBoxPlain[#1]}{#2}%
+}
 
 
 

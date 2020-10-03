@@ -9,8 +9,7 @@
 \usepackage{microtype,blindtext,XCharter,wrapfig,hyperref}
 \usepackage[lockhigh]{lithie-boxes}
 
-\SetBoxPlain{bemerkung}
-\SetBoxPlain{definition*}
+\SetBoxesPlain{bemerkung,definition*}
 
 \hypersetup{pdfborder=1 1 0,colorlinks=true,allcolors=purple}
 
@@ -20,6 +19,7 @@
 
 \begin{document}
 \section{Ich bin ein Abschnitt}
+    % TODO: there has to be a better way!
 \begin{figure*}
     \begin{definition}{Ich schwäbe, Mammi.}
         \vspace*{-\baselineskip}\begin{wrapfigure}[3]{r}{0.185\linewidth}
@@ -41,7 +41,6 @@
         ich bin eine Randbemerkung. Aber eine wichtige!
     \end{bemerkung*}
     \blindtext[4]
-    % TODO: there has to be a better way!
 
     \begin{definition}{Super Titel}
         Ich bin die Sonne, die Wonne, der Glanz, da um mich tanzt; die Welt in der Hand und es trifft sich zum
