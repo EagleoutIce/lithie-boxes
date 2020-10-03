@@ -13,7 +13,8 @@
         colback=gray!20!white,grow to right by=\libx@limerence@border@width,%
         enlarge left by=-\libx@limerence@border@width,
         after title app={\hbox{}~\vspace*{-.85\baselineskip}%
-            \newline\unskip\widowpenalties=3 10000 10000 150}%
+            \newline\unskip\widowpenalties=3 10000 10000 150},%
+        tikz={#1}%
     },%
     lithi@box@style@limerence@extra@arrows/.style={%
         borderline west={\libx@limerence@border@width}{0pt}{#1},
@@ -54,16 +55,17 @@
     {\normalcolor~--~}%
 }
 \def\libx@typeset@title#1#2#3{%
-    \textsf{\libx@title@strut\textcolor{libx@color@definition}{%
+    \textsf{\libx@title@strut\textcolor{\libx@get{BoxColor}}{%
         \libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\,~}#2 #3%
         \ifx!#1!\else\libx@style@limerence@titledivider\fi%
     }% we do not use the width again as we want to save space :D
     {#1}}\nopagebreak\smallskip\\*%
 }
 
-\renewtcolorbox[lithie@box@style@definition@other@init]{libx@box@Definition}[4][]{%
-    lithi@box@style@limerence,tikz={#1},%
-    lithi@box@style@limerence@extra@arrows=\libx@get{BoxColor},#3, title={\libx@typeset@title{#4}{#2}{\thetcbcounter}},%
-}
 
-% TODO: setup and load style
+% use #1 to #4
+\libx@UpdateBoxStyle{Definition}{%
+    lithi@box@style@limerence={#1},%
+    lithi@box@style@limerence@extra@arrows=\libx@get{BoxColor},#3,%
+    title={\libx@typeset@title{#4}{#2}{\thetcbcounter}}%
+}

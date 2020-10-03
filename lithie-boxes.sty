@@ -196,6 +196,7 @@
     \tcbset{libx@box@current@style@modification/.style={}}% No Modifications needed :D
 }
 
+% TODO: command like 'make plain' which will use plain design
 \def\libx@box@useplainstyle{%
     \tcbset{libx@box@current@style@modification/.style={}}% TODO: plain design
 }
@@ -234,6 +235,7 @@
     \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp\makebox[.4cm][c]{#5}\libx@sp\ignorespaces#4}%
 }
 
+% TODO: store current catcode?
 \def\libx@loadstyle@ending{.style}
 \def\libx@LoadStyle#1{\typeout{Loading style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}}
 
@@ -266,7 +268,7 @@
 
 
 % ----------------------------------------
-% default boxes
+% boxe definition
 
 % initialize the number within lock
 \expandafter\ifx\expandafter!\libx@boxes@lockstyle@!% no lock:
@@ -298,6 +300,69 @@
     inCode=\noindent,box color=#5}{}{#8*}{#6}{#7@s}%
 }
 
+% ----------------------------------------
+% default boxstyle registration
+
+% list of all boxes for style updates
+\def\libx@list@boxes{}
+
+\tcbset{%
+    lithi@box@style@default/.style={%
+        enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
+        lines before break=3,before skip=0pt,boxrule=0mm,toprule=0.5mm,%
+        bottomtitle=0.5mm,bottomrule=1.2mm,after skip=0pt,%
+        enlarge top by=0.2\baselineskip,enlarge bottom by=0.2\baselineskip,%
+        sharp corners=south,breakable, colback=\libx@get{BoxColor}!5!white,colframe=\libx@get{BoxColor},tikz={#1}%
+    }%
+}
+
+% get the new stlyes
+\pgfqkeys{/tcb/new}{%
+    lithie@box@style@default@init/.style={%
+        auto counter,lithie@box@number@within%
+    },%
+    lithie@box@style@other@init/.style={%
+        use counter from=#1%
+    }%
+}
+
+\def\libx@title@strut{\vphantom{\large I}}
+
+% #1 is prefix, #2 is number, #3 is text
+\def\libx@typeset@title#1#2#3{\bgroup%
+    \def\libx@tmp@title{\libx@get{Emblem} #2 #3~}%
+    \textbf{\textsc{\libx@title@strut{}\libx@tmp@title} \hfill \parbox[t]{\linewidth-\widthof{\libx@tmp@title}-1em}{\raggedleft\textbf{#1}}}%
+\egroup}
+
+
+% #1 Name of the style
+% #2 other options
+\def\libx@RegisterNewDefaultStyle#1#2{%
+    \listadd{\libx@list@boxes}{#1}%
+    \newtcolorbox[lithie@box@style@default@init]{libx@box@#1}[4][]{%
+        lithi@box@style@default={##1},##3,#2,%
+        title={\libx@typeset@title{##4}{##2}{\thetcbcounter}}%
+    }%
+}
+
+% #1 Name of style
+% #2 style update (#1-#4)
+\def\libx@UpdateBoxStyle#1#2{%
+    \renewtcolorbox[lithie@box@style@other@init=libx@box@#1]{libx@box@#1}[4][]{%
+        #2
+    }%
+}
+% simple swap for consume
+\def\@libx@UpdateHelper#1#2{\libx@UpdateBoxStyle{#2}{#1}}
+
+\def\libx@UpdateAllBoxStyles#1{%
+    \forlistdo{\@libx@UpdateHelper{#1}}{\libx@list@boxes}
+}
+
+% ----------------------------------------
+% default boxes
+
+\libx@RegisterNewDefaultStyle{Definition}{}
 % default colors TODO: colors
 % TODO: option to set color directly
 \colorlet{libx@color@definition}{purple}
@@ -312,54 +377,6 @@
 {Definition}{def}%
 % environment name:
 {definition}
-
-
-
-% ----------------------------------------
-% default boxstyle
-
-\tcbset{%
-    lithi@box@style@default/.style={%
-        enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
-        lines before break=4,before skip=0pt,boxrule=0mm,toprule=0.5mm,%
-        bottomtitle=0.5mm,bottomrule=1.2mm,after skip=0pt,%
-        enlarge top by=0.2\baselineskip,enlarge bottom by=0.2\baselineskip,%
-        sharp corners=south,breakable%
-    },%
-    lithie@box@style@definition/.style={%
-        lithi@box@style@default,colback=\libx@get{BoxColor}!5!white,colframe=\libx@get{BoxColor},tikz={#1}%
-    }%
-}
-
-% get the new stlyes
-\pgfqkeys{/tcb/new}{%
-    lithie@box@style@definition@init/.style={%
-        auto counter,lithie@box@number@within%
-    },%
-    lithie@box@style@definition@other@init/.style={%
-        use counter from=libx@box@Definition%
-    }%
-}
-
-\def\libx@title@strut{\vphantom{\large I}}
-
-% #1 is prefix, #2 is number, #3 is text
-\def\libx@typeset@title#1#2#3{\bgroup%
-    \def\libx@tmp@title{\libx@get{Emblem} #2 #3~}%
-    \textbf{\textsc{\libx@title@strut{}\libx@tmp@title} \hfill \parbox[t]{\linewidth-\widthof{\libx@tmp@title}-1em}{\raggedleft\textbf{#1}}}%
-\egroup}
-
-% TODO: make style names more generic if no extra wanted to have something like
-% 'DEFAULT' and 'PLAIN' instead of specific boxes
-\newtcolorbox[lithie@box@style@definition@init]{libx@box@Definition}[4][]{%
-    lithie@box@style@definition={#1},#3,%
-    title={\libx@typeset@title{#4}{#2}{\thetcbcounter}}%
-}
-
-\newtcolorbox[lithie@box@style@definition@other@init]{libx@box@Definition*}[4][]{%
-    llithie@box@style@definition={#1},#3,%
-    title={\libx@typeset@title{#4}{#2}{\thetcbcounter}}%
-}
 
 
 
@@ -391,5 +408,6 @@
 
 \let\LoadStyle\libx@LoadStyle
 \let\RegisterBox\libx@RegisterBox
+\let\RegisterNewDefaultStyle\libx@RegisterNewDefaultStyle
 
 \endinput
