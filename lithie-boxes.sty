@@ -7,19 +7,38 @@
 %% boxes. This variant won't use the 
 %% tcbtheorems lib to allow more flexibility.
 
-% make with emblems on the right side?
+%% Options
+%% -----------------------------------------------------------------------------
 
-\errorcontextlines 999999
+\def\libx@boxes@lockstyle@{}
+\DeclareOption{lockhigh}{% lock on high
+    \@ifundefined{chapter}{%
+        \def\libx@boxes@lockstyle@{section}%
+    }{%
+        \def\libx@boxes@lockstyle@{chapter}%
+    }%
+}
+\DeclareOption{locklow}{% lock on low
+    \@ifundefined{chapter}{%
+        \def\libx@boxes@lockstyle@{subsection}%
+    }{%
+        \def\libx@boxes@lockstyle@{section}%
+    }%
+}
 
-% TODO: allow dynamic loading of box styles
+\DeclareOption{nolock}{ \def\libx@boxes@lockstyle@{} }
+
+\ProcessOptions*\relax%
+
 
 %% Packages
-\RequirePackage{tcolorbox,environ,tocloft,calc,fontawesome}
+\RequirePackage{tcolorbox,environ,tocloft,calc,amssymb,fontawesome}
 \tcbuselibrary{skins,breakable,hooks}
+
 %% lengths
-
-% \newlength\libx@
-
+\newlength\libx@numwidth%
+\newlength\libx@numwidth@offset%
+\setlength\libx@numwidth@offset{.15cm}
 
 % default colors TODO: colors
 % TODO: option to set color directly
@@ -46,7 +65,6 @@
     customlist/.is if=libx@CustomList@,
     boxenabled/.is if=libx@BoxEnabled@,
     usebox/.is if = libx@UseBox@,
-    lock/.store in = \libx@box@Lock,
     listname/.store in = \libx@box@ListName,
     listtext/.store in =\libx@box@ListText,
     listmen/.store in =\libx@box@ListMen,
@@ -56,11 +74,10 @@
         usestyle=libx@box@Definition,%
         emblem={}, listname={\noexpand\libx@box@Name},%
         listtext={Alle \noexpand\libx@box@Name}, preCode={}, inCode={},%
-        outCode={}, postCode={},lock={}, customlist=true,
-        listmen=NO, boxenabled=true, usebox=true%
+        outCode={},postCode={},customlist=true,
+        listmen=NO,boxenabled=true,usebox=true%
     }
 }
-% TODO: listmen NO?
 
 % #1 boxid, #2 key
 \def\libx@persist#1#2{%
@@ -97,7 +114,7 @@
     \pgfkeys{/libx@keys,defaults,#1,name=#3,title=#4}%
     \forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
                                             Outcode,PostCode,UseStyle,Emblem,%
-                                            Lock,ListName,ListText,ListMen}%
+                                            ListName,ListText,ListMen}%
     \forcsvlist{\libx@persistif{\libx@boxid}}{HasEmblem,CustomList,%
                                               BoxEnabled,UseBox}%
     % setup id counter:
@@ -110,25 +127,24 @@
         \egroup}%
     }{}
 % Define the main environment of the box
-% TODO: if star?
-\globaldefs=1
-    \newenvironment{#3}[2][]{% TODO: use name and opt args
+\globaldefs=1%
+    \newenvironment{#3}[2][]{%
         \edef\libx@boxid{#5}%
 % First we check if the box is disabled
         \libx@if{BoxEnabled}{%
-            \libx@read@box@default{#5}{##1}{##2}{#2}% TODO: settings
+            \libx@read@box@default{#5}{##1}{##2}{#2}%
         }{% 
             % the expandafter hinders the tokens to be read when libx@if gets expanded and is false
             \expandafter\libx@read@box@hidden%
         }\ignorespaces%
     }{% end of defined environment
         \libx@if{BoxEnabled}{%
-            \libx@read@box@default@end{#5}% Extra for command% TODO: settings
+            \libx@read@box@default@end{#5}%
         }{%
             \endlibx@read@box@hidden%
         }%
     }%
-\globaldefs=0
+\globaldefs=0%
 \egroup}
 
 % The boxes
@@ -142,7 +158,7 @@
     }{%
         \let\libx@hypertarget\hypertarget%
         \let\libx@pageref\pageref%
-    }
+    }%
 }
 % #1 id, #2 args, #3 title, #4 default tikz args
 \def\libx@read@box@default#1#2#3#4{\begingroup%
@@ -172,7 +188,7 @@
     \libx@get{InCode}%
 \endgroup}
 
-\def\libx@read@box@default@end#1{\begingroup
+\def\libx@read@box@default@end#1{\begingroup%
     \edef\libx@boxid{#1}%
 % execute the post codes
     \libx@get{OutCode}%
@@ -210,24 +226,17 @@
     }{}% Do nothing
 }
 
+% NOTE: we don't use numwidth as this allows us to save space on multiline
 \def\libx@sp{\hskip.1cm}
 % #5 will be dropped as it is the emblem
 \def\@libx@box@list@add@element#1#2#3#4#5#6{%
     \refstepcounter{#1}%
-    \libx@get@ifempty{Lock}{%
-        \libx@addcontentsline{#6}{#2}{#1}{\makebox[.4cm][r]{#3}\libx@sp#4}%
-    }{%
-        \libx@addcontentsline{#6}{#2}{#1}{\makebox[.75cm][r]{#3}\libx@sp#4}%
-    }%
+    \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp#4}%
 }
 
 \def\@libx@box@list@add@element@emblem#1#2#3#4#5#6{%
     \refstepcounter{#1}%
-    \libx@get@ifempty{Lock}{%
-        \libx@addcontentsline{#6}{#2}{#1}{\makebox[.4cm][r]{#3}\libx@sp\makebox[.4cm][c]{#5}\libx@sp\ignorespaces#4}%
-    }{%
-        \libx@addcontentsline{#6}{#2}{#1}{\makebox[.75cm][r]{#3}\libx@sp\makebox[.4cm][c]{#5}\libx@sp\ignorespaces#4}%
-    }%
+    \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp\makebox[.4cm][c]{#5}\libx@sp\ignorespaces#4}%
 }
 
 \def\libx@loadstyle@ending{.style}
@@ -242,7 +251,6 @@
 \AtEndPreamble{%
     \let\libx@raw@addcontentsline\addcontentsline%
     \patchcmd{\libx@raw@addcontentsline}{\thepage}{\@libx@getrefpage}{}{}%
-    % TODO: loop? this should be done until no more present!
     \loop% we stop if replace throws error
         \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{\iftrue}{\iffalse}%
     \repeat%
@@ -262,11 +270,32 @@
 
 
 % ----------------------------------------
+
+
+% initialize the number within lock
+\expandafter\ifx\expandafter!\libx@boxes@lockstyle@!% no lock:
+\pgfqkeys{/tcb/new}{%
+    lithie@box@number@within/.style={}%
+}
+% note effective width will be '\libx@numwidth@offset' higher
+\setlength\libx@numwidth{.25cm}%
+\else% got lock
+\pgfqkeys{/tcb/new}{%
+    lithie@box@number@within/.style={number within=\libx@boxes@lockstyle@}%
+}
+\setlength\libx@numwidth{.75cm}%
+\fi
+
+% #1 is list name #2 ist list men #3 is list text 
+% \def\libx@RegisterBoxPair#1
+
 % TODO: group lists better so they get created automatically and no repetition?
 \newlistof{definitions}{ldefs}{List of Definitions}
+\setlength\cftdefinitionsnumwidth{\libx@numwidth}
+
 % TODO: besser emblem support if 'starred' variant
-\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,inCode=\noindent,box color=libx@color@definition,lock=true}{}{definition}{Definition}{def}
-\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,emblem=\protect\faStar,inCode=\noindent,lock=true,box color=libx@color@definition}{}{definition*}{Definition}{defStar}
+\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,inCode=\noindent,box color=libx@color@definition}{}{definition}{Definition}{def}
+\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,emblem=\protect\faStar,inCode=\noindent,box color=libx@color@definition}{}{definition*}{Definition}{defStar}
 
 
 
@@ -287,10 +316,11 @@
         lithi@box@style@default,colback=libx@color@definition!5!white,colframe=libx@color@definition,tikz={#1}%
     }%
 }
+
 % get the new stlyes
 \pgfqkeys{/tcb/new}{%
     lithie@box@style@definition@init/.style={%
-        auto counter,number within=section,% number within=section,% TODO: allow option for this
+        auto counter,lithie@box@number@within%
     },%
     lithie@box@style@definition@other@init/.style={%
         use counter from=libx@box@Definition%
