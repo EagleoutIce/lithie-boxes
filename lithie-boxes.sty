@@ -252,7 +252,7 @@
 }
 
 \def\libx@addcontentsline#1#2#3#4{%
-    \@libx@addcontentsline{\arabic{#1}}{#2}{#3}{#4}
+    \@libx@addcontentsline{\arabic{#1}}{#2}{#3}{#4}%
 }
 
 
@@ -286,7 +286,7 @@
 % get the new stlyes
 \pgfqkeys{/tcb/new}{%
     lithie@box@style@definition@init/.style={%
-        auto counter%
+        auto counter,% number within=section,% TODO: allow option for this
     },%
     lithie@box@style@definition@other@init/.style={%
         use counter from=libx@box@Definition%

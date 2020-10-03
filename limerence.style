@@ -62,7 +62,7 @@
 
 \renewtcolorbox[lithie@box@style@definition@other@init]{libx@box@Definition}[4][]{%
     lithi@box@style@limerence,tikz={#1},%
-    lithi@box@style@limerence@extra@arrows=libx@color@definition, #3, title={\libx@typeset@title{#4}{#2}{\thetcbcounter}},%
+    lithi@box@style@limerence@extra@arrows=libx@color@definition,#3, title={\libx@typeset@title{#4}{#2}{\thetcbcounter}},%
 }
 
 % TODO: setup and load style
