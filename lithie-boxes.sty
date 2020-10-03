@@ -40,11 +40,6 @@
 \newlength\libx@numwidth@offset%
 \setlength\libx@numwidth@offset{.235cm}
 
-% default colors TODO: colors
-% TODO: option to set color directly
-
-\colorlet{libx@color@definition}{purple}
-
 %% pgfkeys of boxes
 \newif\iflibx@HasEmblem@
 \newif\iflibx@CustomList@
@@ -269,8 +264,9 @@
 
 
 
-% ----------------------------------------
 
+% ----------------------------------------
+% default boxes
 
 % initialize the number within lock
 \expandafter\ifx\expandafter!\libx@boxes@lockstyle@!% no lock:
@@ -286,23 +282,41 @@
 \setlength\libx@numwidth{.9cm-\libx@numwidth@offset}%
 \fi
 
-% #1 is list name #2 ist list men #3 is list text 
-% \def\libx@RegisterBoxPair#1
+% TODO: restructure?
+% TODO: allow without emblem and 'other' second style?
+% #1 internal list name #2 internal list men #3 list of title text 
+% #4 Emblem for starred variant #5 color
+% #6 style to use #7 id
+% #8 environment name
+\def\libx@RegisterBoxPair#1#2#3#4#5#6#7#8{%
+    \newlistof{#1}{#2}{#3}%
+    \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
+% Register no star
+    \libx@RegisterBox{listname=#1,listmen=#2,hasemblem=true,inCode=\noindent,%
+    box color=#5}{}{#8}{#6}{#7}%
+    \libx@RegisterBox{listname=#1,listmen=#2,hasemblem=true,emblem=\protect#4,%
+    inCode=\noindent,box color=#5}{}{#8*}{#6}{#7@s}%
+}
 
-% TODO: group lists better so they get created automatically and no repetition?
-\newlistof{definitions}{ldefs}{List of Definitions}
-\setlength\cftdefinitionsnumwidth{\libx@numwidth}
+% default colors TODO: colors
+% TODO: option to set color directly
+\colorlet{libx@color@definition}{purple}
 
-% TODO: besser emblem support if 'starred' variant
-\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,inCode=\noindent,box color=libx@color@definition}{}{definition}{Definition}{def}
-\libx@RegisterBox{listname=definitions,listmen=ldefs,hasemblem=true,emblem=\protect\faStar,inCode=\noindent,box color=libx@color@definition}{}{definition*}{Definition}{defStar}
+\def\definitionsname{List of Definitions}
+\libx@RegisterBoxPair%
+% List definition:
+{definitions}{ldefs}{\definitionsname}%
+% Emblem and color:
+{\faStar}{libx@color@definition}%
+% style and id:
+{Definition}{def}%
+% environment name:
+{definition}
 
 
 
 % ----------------------------------------
 % default boxstyle
-
-
 
 \tcbset{%
     lithi@box@style@default/.style={%
@@ -313,7 +327,7 @@
         sharp corners=south,breakable%
     },%
     lithie@box@style@definition/.style={%
-        lithi@box@style@default,colback=libx@color@definition!5!white,colframe=libx@color@definition,tikz={#1}%
+        lithi@box@style@default,colback=\libx@get{BoxColor}!5!white,colframe=\libx@get{BoxColor},tikz={#1}%
     }%
 }
 
@@ -335,6 +349,8 @@
     \textbf{\textsc{\libx@title@strut{}\libx@tmp@title} \hfill \parbox[t]{\linewidth-\widthof{\libx@tmp@title}-1em}{\raggedleft\textbf{#1}}}%
 \egroup}
 
+% TODO: make style names more generic if no extra wanted to have something like
+% 'DEFAULT' and 'PLAIN' instead of specific boxes
 \newtcolorbox[lithie@box@style@definition@init]{libx@box@Definition}[4][]{%
     lithie@box@style@definition={#1},#3,%
     title={\libx@typeset@title{#4}{#2}{\thetcbcounter}}%

@@ -49,17 +49,21 @@
 
 % {%
 % \textcolor{libx@color@definition}{\sffamily#2 \thetcbcounter~\ifx!#4!\else{\raisebox{0.75pt}{$\blacktriangleright$~}}\fi}\parbox[t]{\linewidth-\widthof{#2 \thetcbcounter~}-3.75em}{#4}\\}
+
+\def\libx@style@limerence@titledivider{%
+    {\normalcolor~--~}%
+}
 \def\libx@typeset@title#1#2#3{%
     \textsf{\libx@title@strut\textcolor{libx@color@definition}{%
         \libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\,~}#2 #3%
-        \ifx!#1!\else~\raisebox{0.75pt}{$\blacktriangleright$}~\fi%
+        \ifx!#1!\else\libx@style@limerence@titledivider\fi%
     }% we do not use the width again as we want to save space :D
     {#1}}\nopagebreak\smallskip\\*%
 }
 
 \renewtcolorbox[lithie@box@style@definition@other@init]{libx@box@Definition}[4][]{%
     lithi@box@style@limerence,tikz={#1},%
-    lithi@box@style@limerence@extra@arrows=libx@color@definition,#3, title={\libx@typeset@title{#4}{#2}{\thetcbcounter}},%
+    lithi@box@style@limerence@extra@arrows=\libx@get{BoxColor},#3, title={\libx@typeset@title{#4}{#2}{\thetcbcounter}},%
 }
 
 % TODO: setup and load style
