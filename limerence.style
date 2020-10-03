@@ -47,9 +47,6 @@
 % TODO: box selection so that there are no arrows in no-box-mode
 
 
-% TODO: fix spacing with basic strut 
-% TODO: better widthof calculation
-
 % {%
 % \textcolor{libx@color@definition}{\sffamily#2 \thetcbcounter~\ifx!#4!\else{\raisebox{0.75pt}{$\blacktriangleright$~}}\fi}\parbox[t]{\linewidth-\widthof{#2 \thetcbcounter~}-3.75em}{#4}\\}
 \def\libx@typeset@title#1#2#3{%

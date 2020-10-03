@@ -223,19 +223,6 @@
 \def\libx@loadstyle@ending{.style}
 \def\libx@LoadStyle#1{\typeout{Loading style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}}
 
-% TODO: we have a problem. if there are floating environments 
-% the ids may be in the wrong order.
-% TODO:
-% - add a unique id to every box
-% - this id will be incremented constantly (globally)
-% - and used to sort the 'writefile' commands.
-% TODO:
-% - add option for shorter entry in listof...
-% - improve listof-structure
-% - allow better naming of list'of' blahblah
-% ...
-% #1 id order #2#3#4 - default args for addcontentsline
-
 \def\@libx@getcurtar#1{% we expect i and curboxid to be set
 #1:\libx@get{ListMen}\i%
 }
