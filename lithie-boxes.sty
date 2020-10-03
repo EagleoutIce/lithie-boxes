@@ -134,6 +134,16 @@
 % The boxes
 \NewEnviron{libx@read@box@hidden}{}
 
+\AtEndPreamble{%
+    \@ifundefined{hypertarget}{%
+        \long\def\libx@hypertarget#1#2{\label{#1}#2}%
+        % gobble the star:
+        \def\libx@pageref{\protect\@ifstar\pageref\pageref}%
+    }{%
+        \let\libx@hypertarget\hypertarget%
+        \let\libx@pageref\pageref%
+    }
+}
 % #1 id, #2 args, #3 title, #4 default tikz args
 \def\libx@read@box@default#1#2#3#4{\begingroup%
     \edef\libx@boxid{#1}%
@@ -148,7 +158,7 @@
             [% Tikz arguments:
                 #4%
             ]{% Title (braces guard):
-            \hypertarget{@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}{\libx@get{Title}}%
+                \libx@hypertarget{@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}{\libx@get{Title}}%
             }{% Further arguments for tcolorbox
                 #2, libx@box@current@style@modification,%
                 before upper app={\ignorespacesafterend},%
@@ -227,7 +237,7 @@
 #1:\libx@get{ListMen}\i%
 }
 \def\@libx@getrefpage{%
-\pageref*{\@libx@getcurtar{@libx}}%
+\libx@pageref*{\@libx@getcurtar{@libx}}%
 }
 \AtEndPreamble{%
     \let\libx@raw@addcontentsline\addcontentsline%
