@@ -40,7 +40,7 @@
 \ProcessOptions*\relax%
 
 %% Packages
-\RequirePackage{tcolorbox,environ,tocloft,calc,fontawesome}
+\RequirePackage{tcolorbox,environ,tocloft,calc,fontawesome,translator}
 \tcbuselibrary{skins,breakable,hooks}
 
 %% lengths
@@ -308,7 +308,7 @@
 
 \def\@libx@box@list@add@element@emblem#1#2#3#4#5#6{%
     \refstepcounter{#1}%
-    \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp\makebox[.4cm][c]{#5}\libx@sp\ignorespaces#4}%
+    \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp\makebox[.45cm][c]{#5}\libx@sp\ignorespaces#4}%
 }
 
 % TODO: store current catcode?
@@ -371,11 +371,15 @@
 \def\libx@RegisterBoxPair#1#2#3#4#5#6#7#8#9{%
     \newlistof{#1}{#2}{#3}%
     \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
+    % \expandafter\protected@edef\csname cft#2titlefont\endcsname{\@nameuse{cft#2titlefont}\selectfont}%
 % Register no star
     \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,in code=\noindent,%
     box color=#5,use style=libx@box@#6}{}{#8}{#9}{#7}%
-    \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,emblem=\protect#4,%
+    % if the emblem is empty we do not define the starred variant!
+    \ifx!#4!\else%
+        \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,emblem=\protect#4,%
     in code=\noindent,box color=#5,use style=libx@box@#6}{}{#8*}{#9}{#7@s}%
+    \fi
 }
 
 % ----------------------------------------
@@ -447,91 +451,155 @@
     \forlistloop{\@libx@UpdateHelper{#1}}{\libx@list@boxes}%
 }
 
+% ----------------------------------------
+% translations
+\languagealias{ngerman}{German}
+\languagealias{german}{German1997,German}
+
+\providetranslation[to=German]{List of}{Alle}
+
+\providetranslation[to=German]{definition}{definition}
+\providetranslation[to=German]{definitions}{definitionen}
+\providetranslation[to=German]{Definition}{Definition}
+\providetranslation[to=German]{Definitions}{Definitionen}
+
+\providetranslation[to=German]{remark}{bemerkung}
+\providetranslation[to=German]{remarks}{bemerkungen}
+\providetranslation[to=German]{Remark}{Bemerkung}
+\providetranslation[to=German]{Remarks}{Bemerkungen}
+
+\providetranslation[to=German]{theorem}{satz}
+\providetranslation[to=German]{theorems}{sätze}
+\providetranslation[to=German]{Theorem}{Satz}
+\providetranslation[to=German]{Theorems}{Sätze}
+
+\providetranslation[to=German]{example}{beispiel}
+\providetranslation[to=German]{examples}{beispiele}
+\providetranslation[to=German]{Example}{Beispiel}
+\providetranslation[to=German]{Examples}{Beispiele}
+
+
+\providetranslation[to=German]{lemma}{lemma}
+\providetranslation[to=German]{lemmas}{lemmata}
+\providetranslation[to=German]{Lemma}{Lemma}
+\providetranslation[to=German]{Lemmas}{Lemmata}
+
+\providetranslation[to=German]{proof}{beweis}
+\providetranslation[to=German]{proofs}{beweise}
+\providetranslation[to=German]{Proof}{Beweis}
+\providetranslation[to=German]{Proofs}{Beweise}
+
+\providetranslation[to=German]{summary}{zusammenfassung}
+\providetranslation[to=German]{summaries}{zusammenfassungen}
+\providetranslation[to=German]{Summary}{Zusammenfassung}
+\providetranslation[to=German]{Summaries}{Zusammenfassungen}
 
 % ----------------------------------------
 % default boxes
+% TODO: option keep env names to leave env names in another language?
+\translatelet{\@libx@defstyle}{Definition}
+\libx@RegisterNewDefaultStyle{\@libx@defstyle}{}
 
-\libx@RegisterNewDefaultStyle{Definition}{}
+\translatelet{\@libx@def@envname}{definition}
 
-\def\definitionsname{List of Definitions}
+% note if this order is wrong redef of '\definitionsname' is needed
+\providecommand\definitionsname{\translate{List of} \translate{Definitions}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {definitions}{ldefs}{\definitionsname}{\faStar}%
 % color, style, id:
-{purple}{Definition}{def}%
+{purple}{\@libx@defstyle}{def}%
 % environment name and Prefix:
-{definition}{Definition}
+{\@libx@def@envname}{\translate{Definition}}
 
 
-\libx@RegisterNewDefaultStyle{Bemerkung}{}
-% TODO: replace with 'ListText' update?
-\def\remarksname{List of Remarks}
+\translatelet{\@libx@remstyle}{Remark}
+\libx@RegisterNewDefaultStyle{\@libx@remstyle}{}
+
+\translatelet{\@libx@rem@envname}{remark}
+
+\providecommand\remarksname{\translate{List of} \translate{Remarks}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {remarks}{lrem}{\remarksname}{\faStar}%
 % color, style, id:
-{teal}{Bemerkung}{bem}%
+{teal}{\@libx@remstyle}{bem}%
 % environment name and Prefix:
-{bemerkung}{Bemerkung}
+{\@libx@rem@envname}{\translate{Remark}}
 
 
-\libx@RegisterNewDefaultStyle{Satz}{}
+\translatelet{\@libx@theostyle}{Theorem}
+\libx@RegisterNewDefaultStyle{\@libx@theostyle}{}
 
-\def\theoremsname{List of Theorems}
+\translatelet{\@libx@the@envname}{theorem}
+
+\providecommand\theoremsname{\translate{List of} \translate{Theorems}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {theorems}{ltheo}{\theoremsname}{\faStar}%
 % color, style, id:
-{orange}{Satz}{sat}%
+{orange}{\@libx@theostyle}{sat}%
 % environment name and Prefix:
-{satz}{Satz}
+{\@libx@the@envname}{\translate{Theorem}}
 
 
-\libx@RegisterNewDefaultStyle{Beispiel}{}
+\translatelet{\@libx@exastyle}{Example}
+\libx@RegisterNewDefaultStyle{\@libx@exastyle}{}
 
-\def\examplesname{List of Examples}
+\translatelet{\@libx@exa@envname}{example}
+
+\providecommand\examplesname{\translate{List of} \translate{Examples}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {examples}{lexa}{\examplesname}{\faStar}%
 % color, style, id:
-{olive}{Beispiel}{bei}%
+{olive}{\@libx@exastyle}{bei}%
 % environment name and Prefix:
-{beispiel}{Beispiel}
+{\@libx@exa@envname}{\translate{Beispiel}}
 
 
-\libx@RegisterNewDefaultStyle{Lemma}{}
+\translatelet{\@libx@lemstyle}{Lemma}
+\libx@RegisterNewDefaultStyle{\@libx@lemstyle}{}
 
-\def\lemmasname{List of Lemmas}
+\translatelet{\@libx@lem@envname}{lemma}
+
+\providecommand\lemmasname{\translate{List of} \translate{Lemmas}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {lemmas}{llem}{\lemmasname}{\faStar}%
 % color, style, id:
-{violet}{Lemma}{lem}%
+{violet}{\@libx@lemstyle}{lem}%
 % environment name and Prefix:
-{lemma}{Lemma}
+{\@libx@lem@envname}{\translate{Lemma}}
 
-\libx@RegisterNewDefaultStyle{Beweis}{after upper={\quad\nobreak\null\nobreak\hfill\nobreak\faSquareO}}
+\translatelet{\@libx@prostyle}{Proof}
+\libx@RegisterNewDefaultStyle{\@libx@prostyle}{after upper={\quad\nobreak\null\nobreak\hfill\nobreak\faSquareO}}
 
-\def\proofsname{List of Proofs}
+\translatelet{\@libx@pro@envname}{proof}
+
+\providecommand\proofsname{\translate{List of} \translate{Proofs}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {proofs}{lpro}{\proofsname}{\faStar}%
 % color, style, id:
-{cyan}{Beweis}{bew}%
+{cyan}{\@libx@prostyle}{bew}%
 % environment name and Prefix:
-{beweis}{Beweis}
+{\@libx@pro@envname}{\translate{Proof}}
 
-\libx@RegisterNewDefaultStyle{Zusammenfassung}{}
+\translatelet{\@libx@sumstyle}{Summary}
+\libx@RegisterNewDefaultStyle{\@libx@sumstyle}{}
+
+\translatelet{\@libx@sum@envname}{summary}
 
 % synopses
-\def\summariesname{List of Summaries}
+\providecommand\summariesname{\translate{List of} \translate{Summaries}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {summaries}{lsum}{\summariesname}{\faStar}%
 % color, style, id:
-{lime!80!blue}{Zusammenfassung}{zsf}%
+{lime!80!blue}{\@libx@sumstyle}{zsf}%
 % environment name and Prefix:
-{zusammenfassung}{Zusammenfassung}
+{\@libx@sum@envname}{\translate{Summary}}
 
 
 % ----------------------------------------
@@ -686,13 +754,13 @@
     \libx@cpalette@hook%
 }
 \def\libx@cpalette@hook{%
-\libx@setboth@boxcolor{definition}{paletteA}%
-\libx@setboth@boxcolor{satz}{paletteC}%
-\libx@setboth@boxcolor{lemma}{paletteC}%
-\libx@setboth@boxcolor{zusammenfassung}{paletteD}%
-\libx@setboth@boxcolor{beweis}{gray}%
-\libx@setboth@boxcolor{bemerkung}{gray}%
-\libx@setboth@boxcolor{beispiel}{gray}%
+\libx@setboth@boxcolor{\@libx@def@envname}{paletteA}%
+\libx@setboth@boxcolor{\@libx@the@envname}{paletteC}%
+\libx@setboth@boxcolor{\@libx@lem@envname}{paletteC}%
+\libx@setboth@boxcolor{\@libx@sum@envname}{paletteD}%
+\libx@setboth@boxcolor{\@libx@pro@envname}{gray}%
+\libx@setboth@boxcolor{\@libx@rem@envname}{gray}%
+\libx@setboth@boxcolor{\@libx@exa@envname}{gray}%
 }
 \fi
 
@@ -700,10 +768,10 @@
 % Auto style
 
 \iflibx@autostyle@
-\libx@setboth@boxesplain{bemerkung}%
-\libx@setboth@boxesplain{beispiel}%
-\libx@setboth@boxesplain{lemma}%
-\libx@setboth@boxesplain{beweis}%
+\libx@setboth@boxesplain{\@libx@rem@envname}%
+\libx@setboth@boxesplain{\@libx@exa@envname}%
+\libx@setboth@boxesplain{\@libx@lem@envname}%
+\libx@setboth@boxesplain{\@libx@pro@envname}%
 \fi
 
 % ----------------------------------------------
