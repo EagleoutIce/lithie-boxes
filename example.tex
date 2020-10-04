@@ -36,7 +36,13 @@
     \end{bemerkung}
 \end{figure*}
 
-    Hier verweisen wir auf die Zukunft: \nameref{def:exdef}.
+    Hier verweisen wir auf die Zukunft: \nameref{def:exdef}. Dies
+    ist die selbe Referenz mit \texttt{\textbackslash boxref}:
+    \boxref{def:exdef}. Nun mit Stern: \boxref*{def:exdef}. Und nochmal um etwas zu testen: \boxref*{def:exdef}.
+    Hier nun mit \texttt{\textbackslash boxnameref}: \boxnameref{def:exdef}. Nun mit Stern: \boxnameref*{def:exdef}. Und nochmal um etwas zu testen: \boxnameref*{def:exdef}.
+
+    Hier verweise ich auf ein Beispiel: \boxref{bei:beiref}. Aber
+    vermutlich brauchen wir nur die nummer: \boxref*{bei:beiref}.
 
     \blindtext
     \begin{bemerkung*}{Nimm mich am besten gar nicht wahr\ldots}
@@ -59,7 +65,7 @@
     \blindtext
 
     \begin{beispiel}{Ich bin ein noch viel bessers Beispiel}
-        Super duper Beispiel Weispiel nicht war du bist leitspiel dreitspiel.
+        \label{bei:beiref}Super duper Beispiel Weispiel nicht war du bist leitspiel dreitspiel.
     \end{beispiel}
 
     \blindtext
@@ -88,13 +94,13 @@
 
     \blindtext
 
-    \begin{beispiel*}{Dies ist ein beispiel}
+    \begin{beispiel*}{Dies ist ein Beispiel}
         \blindtext
     \end{beispiel*}
 
     \blindtext
 
-    \begin{definition*}{Lange Titel mögen wir; wenn auch die Box an sich nicht so. Drum brechen wir hier ab}
+    \begin{definition*}[Kurze Titel auch]{Lange Titel mögen wir; wenn auch die Box an sich nicht so. Drum brechen wir hier ab}
         \label{def:exdef}Ach sie lächeln, strahlen, freuen, sich an all den Leuten,
         die noch heute -- vielleicht morgen -- sich auch um den Andern sorgen. Und von Dauer lebt nicht lange schon der Zeiten wegen
         der, welcher bei geöffnetem Fenster sein Papier nicht beschwert.
