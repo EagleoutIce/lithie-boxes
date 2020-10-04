@@ -1,0 +1,123 @@
+\documentclass{article}
+\usepackage[a4paper,total={18cm,25.5cm}]{geometry}
+
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{microtype,hyperref,array,enumitem}
+
+\usepackage[main=ngerman,english]{babel}
+
+\usepackage[hyperref,enumitem,addons]{color-palettes}
+\usepackage[cpalette,upshape,numinpar]{sopra-listings}
+\solLoadLanguage{latex}
+
+\usepackage[lockhigh,cpalette]{lithie-boxes}
+\LoadStyle{limerence}
+
+
+\UsePalette{GreenWater}
+
+\usepackage{imakeidx}
+\makeindex[title=Befehlsübersicht,columns=2,columnsep=0.75cm]\renewcommand{\indexname}{Befehlsübersicht}
+
+
+\def\say#1{\glqq{#1}\grqq{}}
+
+\def\cmd#1{\texttt{\paletteA{\textbackslash#1}}}
+\def\cmdlink#1{\phantomsection\label{cmd:#1}\cmd{#1}}
+\def\cmdref#1{\hyperref[cmd:#1]{\cmd{#1}}}
+
+\def\env#1{\texttt{\paletteB{#1}}}
+\def\envlink#1{\phantomsection\label{env:#1}\env{#1}}
+\def\envref#1{\hyperref[env:#1]{\env{#1}}}
+
+
+\def\arg#1{\textit{\paletteB{#1}}}
+\def\manArg#1{\texttt{\{\,\arg{#1}\,\}}}
+\def\optArg#1{\texttt{[\,\arg{#1}\,]}}
+
+\def\secref#1{\hyperref[#1]{\ref*{#1} \nameref*{#1}}}
+
+\long\def\imp#1{\emph{\paletteD{#1}}}
+
+\newenvironment{command}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2@\cmdref{#2}}\cmdlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
+
+\newenvironment{environment}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2@\envref{#2}}\envlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35\baselineskip plus 0.15\baselineskip minus 0.05\baselineskip}
+
+\title{\textsf{\paletteD{\{}\paletteA{lithie-boxes}\paletteD{\}}}}
+\author{Florian Sihler}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    Dieses Paket ist die eigenständige, (immens) verbesserte und polierte Variante des Box-Mechanismus des \href{https://github.com/EagleoutIce/LILLY}{Lilly-Frameworks}. Die Namen einiger Bezeichner innerhalb dieses Dokuments hängen von der konfigurierten Sprache ab. Da dieses Dokument in deutscher Sprache gefasst wurde, sind die hier angegebenen Standardbezeichner auch jeweils in deutscher Sprache gesetzt.
+\end{abstract}
+
+\tableofcontents
+
+\section{Ein Schnelleinstieg}
+
+Bevor die genauere Betrachtung der Boxmechanik ansteht, ist hier eine Kurzübersicht über die Verwendung. Grundlegend werden durch das Paket sieben Boxen geladen, deren Bezeichner und derer Textsatz von der konfigurierten Sprache abhängen\footnote{Unterstützt werden die englische und die deutsche Sprache}.
+Die Sprache beeinflusst selbst den Bezeichner der Umgebungen. Diese können durch die \hyperref[sec:packetoptions]{Paketoptionen} allerdings auch unabhängig von der Ausgabe-Sprache generiert werden.
+Wie bereits zu Beginn erwähnt, wird im Rahmen der Dokumentation die deutsche Sprache verwendet, die englischen Pendants
+sind jeweils angemerkt.
+
+\subsection{Die Boxen}
+
+Betrachten wir die Darstellung einer Definition durch \envref{definition}:
+
+\begin{latex}
+\begin{definition}[Referenztitel]{Ich bin eine Definition}
+    \label{def:example}Dies ist der Text innerhalb der Definition.
+\end{definition}
+
+Ein Verweis auf \autoref{def:example}.
+\end{latex}
+
+Die Struktur ist hierbei für alle Boxen dieselbe. Wir der \arg{Referenztitel} nicht angegebenen, so wird der \say{lange} Titel gewählt (analog zu Befehlen wie \cmd{section}). Das Ergebnis des eben gezeigten Listings ist das Folgende (Linien zur Trennung eingefügt)\footnote{Der Befehl \cmd{autoref} entstammt dem Paket \T{hyperref} welches nicht geladen werden oder sein muss um die Boxen zu verwenden. Für weitere Befehle siehe \cmdref{boxref} oder \cmdref{boxnameref}.}: \\
+\rule{\linewidth}{1pt}
+\begin{definition}[Referenztitel]{Ich bin eine Definition}
+    \label{def:example}Dies ist der Text innerhalb der Definition.
+\end{definition}
+
+Ein Verweis auf \autoref{def:example}. Eine tolle \boxref{def:example}.\\
+\rule{\linewidth}{1pt}\\
+
+Ebenso gibt es die Boxen \envref{bemerkung}, \envref{satz}, \envref{beispiel}, \envref{lemma}, \envref{beweis} und \envref{zusammenfassung}. Jede dieser Boxen besitzt eine Variante mit Sternchen in der sie als wichtig hervorgehoben wird:
+\begin{latex}
+\begin{satz*}[Supersatz]{Ein Beispielsatz}
+    Ich bin ein Beispielsatz.
+\end{satz*}
+\end{latex}
+
+Das Ergebnis ist das Folgende:
+\begin{satz*}[Supersatz]{Ein Beispielsatz}
+    Ich bin ein Beispielsatz.
+\end{satz*}
+
+Eine Auflistung aller Boxen gibt es mittels des Befehls \cmdref{listof<enboxpl>} wobei \T{enboxpl} den englischen Plural des Boxtitels bezeichnet\footnote{Der Befehl ändert sich auch nicht durch eine andere Sprache oder Optionen, da Bezeichner wie \cmd{listofbemerkungen} sehr seltsam wirken.}. So ist die Ausgabe von \cmdref{listofdefinitions} exemplarisch \hyperref[mrk:listofdefs]{am Ende} aufgeführt.
+
+\section{Paketoptionen}
+\label{sec:packetoptions}
+
+\section{Versionierung}
+\subsection{Version 1.0}
+
+\clearpage\appendix
+\addcontentsline{toc}{section}{\indexname}
+\printindex
+
+\addcontentsline{toc}{section}{Beispielhafte Listen}
+\phantomsection\label{mrk:listofdefs}%
+\listofdefinitions
+\listoftheorems
+\end{document}

@@ -376,6 +376,8 @@
 \def\libx@RegisterBoxPair#1#2#3#4#5#6#7#8#9{%
     \newlistof{#1}{#2}{#3}%
     \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
+    % set name
+    \expandafter\providecommand\csname #1name\endcsname{#9}%
     % \expandafter\protected@edef\csname cft#2titlefont\endcsname{\@nameuse{cft#2titlefont}\selectfont}%
 % Register no star
     \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,in code=\noindent,%
@@ -517,11 +519,11 @@
 
 \libx@translateenv{def}{definition}
 
-% note if this order is wrong redef of '\definitionsname' is needed
-\providecommand\definitionsname{\translate{List of} \translate{Definitions}}
+% note if this order is wrong redef of '\definitionslistname' is needed
+\providecommand\definitionslistname{\translate{List of} \translate{Definitions}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
-{definitions}{ldefs}{\definitionsname}{\faStar}%
+{definitions}{ldefs}{\definitionslistname}{\faStar}%
 % color, style, id:
 {purple}{\@libx@defstyle}{def}%
 % environment name and Prefix:
@@ -533,10 +535,10 @@
 
 \libx@translateenv{rem}{remark}
 
-\providecommand\remarksname{\translate{List of} \translate{Remarks}}
+\providecommand\remarkslistname{\translate{List of} \translate{Remarks}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
-{remarks}{lrem}{\remarksname}{\faStar}%
+{remarks}{lrem}{\remarkslistname}{\faStar}%
 % color, style, id:
 {teal}{\@libx@remstyle}{bem}%
 % environment name and Prefix:
@@ -548,10 +550,10 @@
 
 \libx@translateenv{the}{theorem}
 
-\providecommand\theoremsname{\translate{List of} \translate{Theorems}}
+\providecommand\theoremslistname{\translate{List of} \translate{Theorems}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
-{theorems}{ltheo}{\theoremsname}{\faStar}%
+{theorems}{ltheo}{\theoremslistname}{\faStar}%
 % color, style, id:
 {orange}{\@libx@theostyle}{sat}%
 % environment name and Prefix:
@@ -563,10 +565,10 @@
 
 \libx@translateenv{exa}{example}
 
-\providecommand\examplesname{\translate{List of} \translate{Examples}}
+\providecommand\exampleslistname{\translate{List of} \translate{Examples}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
-{examples}{lexa}{\examplesname}{\faStar}%
+{examples}{lexa}{\exampleslistname}{\faStar}%
 % color, style, id:
 {olive}{\@libx@exastyle}{bei}%
 % environment name and Prefix:
@@ -578,10 +580,10 @@
 
 \libx@translateenv{lem}{lemma}
 
-\providecommand\lemmasname{\translate{List of} \translate{Lemmas}}
+\providecommand\lemmaslistname{\translate{List of} \translate{Lemmas}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
-{lemmas}{llem}{\lemmasname}{\faStar}%
+{lemmas}{llem}{\lemmaslistname}{\faStar}%
 % color, style, id:
 {violet}{\@libx@lemstyle}{lem}%
 % environment name and Prefix:
@@ -592,10 +594,10 @@
 
 \libx@translateenv{pro}{proof}
 
-\providecommand\proofsname{\translate{List of} \translate{Proofs}}
+\providecommand\proofslistname{\translate{List of} \translate{Proofs}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
-{proofs}{lpro}{\proofsname}{\faStar}%
+{proofs}{lpro}{\proofslistname}{\faStar}%
 % color, style, id:
 {cyan}{\@libx@prostyle}{bew}%
 % environment name and Prefix:
@@ -607,10 +609,10 @@
 \libx@translateenv{sum}{summary}
 
 % synopses
-\providecommand\summariesname{\translate{List of} \translate{Summaries}}
+\providecommand\summarieslistname{\translate{List of} \translate{Summaries}}
 \libx@RegisterBoxPair%
 % List definition and emblem:
-{summaries}{lsum}{\summariesname}{\faStar}%
+{summaries}{lsum}{\summarieslistname}{\faStar}%
 % color, style, id:
 {lime!80!blue}{\@libx@sumstyle}{zsf}%
 % environment name and Prefix:
@@ -702,6 +704,7 @@
 
 % ----------------------------------------
 % Ref system
+% TODO: autoref does same as starred? remove on?
 
 % ref box with given label
 % if starred hide title
