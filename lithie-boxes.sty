@@ -29,6 +29,10 @@
 
 \DeclareOption{nolock}{ \def\libx@boxes@lockstyle@{} }
 
+\newif\iflibx@cpalette@%
+\DeclareOption{cpalette}{ \libx@cpalette@true }
+\DeclareOption{nocpalette}{ \libx@cpalette@false }
+
 \ProcessOptions*\relax%
 
 %% Packages
@@ -65,10 +69,9 @@
     list text/.store in =\libx@box@ListText,
     list men/.store in =\libx@box@ListMen,
     defaults/.style={%
-        name=noname, title={\noexpand\libx@box@Name},%
-        box color=black,%
-        use style=libx@box@Definition,%
-        emblem={}, list name={\noexpand\libx@box@Name},%
+        name=noname,title={\noexpand\libx@box@Name},%
+        box color=black,use style={},% mandatory!
+        emblem={},list name={\noexpand\libx@box@Name},%
         list text={Alle \noexpand\libx@box@Name}, pre code={}, in code={},%
         out code={},post code={},custom list=true,
         list men=NO,box enabled=true,style derivative={}%
@@ -266,9 +269,6 @@
     \libx@get{PostCode}%
 \endgroup\ignorespacesafterend}
 
-% TODO: command like 'make plain' which will use plain design
-% TODO: plain design
-
 
 % #1: title
 \def\@libx@box@title@pre#1{%
@@ -437,76 +437,82 @@
     \forlistloop{\@libx@UpdateHelper{#1}}{\libx@list@boxes}%
 }
 
+
 % ----------------------------------------
 % default boxes
 
 \libx@RegisterNewDefaultStyle{Definition}{}
-% default colors TODO: colors
-% TODO: option to set color directly
-\colorlet{libx@color@definition}{purple}
 
 \def\definitionsname{List of Definitions}
 \libx@RegisterBoxPair%
-% List definition:
-{definitions}{ldefs}{\definitionsname}%
-% Emblem and color:
-{\faStar}{libx@color@definition}%
-% style and id:
-{Definition}{def}%
+% List definition and emblem:
+{definitions}{ldefs}{\definitionsname}{\faStar}%
+% color, style, id:
+{purple}{Definition}{def}%
 % environment name and Prefix:
 {definition}{Definition}
 
 
 \libx@RegisterNewDefaultStyle{Bemerkung}{}
-% default colors TODO: colors
-% TODO: option to set color directly
-\colorlet{libx@color@bemerkung}{teal}
-
+% TODO: replace with 'ListText' update?
 \def\remarksname{List of Remarks}
 \libx@RegisterBoxPair%
-% List definition:
-{remarks}{lrem}{\remarksname}%
-% Emblem and color:
-{\faStar}{libx@color@bemerkung}%
-% style and id:
-{Bemerkung}{bem}%
+% List definition and emblem:
+{remarks}{lrem}{\remarksname}{\faStar}%
+% color, style, id:
+{teal}{Bemerkung}{bem}%
 % environment name and Prefix:
 {bemerkung}{Bemerkung}
 
 
 \libx@RegisterNewDefaultStyle{Satz}{}
-% default colors TODO: colors
-% TODO: option to set color directly
-\colorlet{libx@color@satz}{orange}
 
 \def\theoremsname{List of Theorems}
 \libx@RegisterBoxPair%
-% List definition:
-{theorems}{ltheo}{\theoremsname}%
-% Emblem and color:
-{\faStar}{libx@color@satz}%
-% style and id:
-{Satz}{sat}%
+% List definition and emblem:
+{theorems}{ltheo}{\theoremsname}{\faStar}%
+% color, style, id:
+{orange}{Satz}{sat}%
 % environment name and Prefix:
 {satz}{Satz}
 
 
 \libx@RegisterNewDefaultStyle{Beispiel}{}
-% default colors TODO: colors
-% TODO: option to set color directly
-\colorlet{libx@color@beispiel}{olive}
 
 \def\examplesname{List of Examples}
 \libx@RegisterBoxPair%
-% List definition:
-{examples}{lexa}{\examplesname}%
-% Emblem and color:
-{\faStar}{libx@color@beispiel}%
-% style and id:
-{Beispiel}{bei}%
+% List definition and emblem:
+{examples}{lexa}{\examplesname}{\faStar}%
+% color, style, id:
+{olive}{Beispiel}{bei}%
 % environment name and Prefix:
 {beispiel}{Beispiel}
 
+
+
+% ----------------------------------------
+% Color Palettes Control
+
+\iflibx@cpalette@
+\@ifundefined{cpl@registered@palettes}{%
+    \PackageError{lithie-boxes}{cpalette requested, but package not loaded}
+    {You have to load the 'color-palettes' package yourself if you use the 'cpalette'-Option.}%
+}{% Add to the hook..
+}
+\let\libx@old@cpl@hooks\cpl@hooks%
+\def\cpl@hooks{% Add to the hook
+    \libx@old@cpl@hooks%
+    \libx@cpalette@hook%
+}
+\def\libx@cpalette@hook{%
+\libx@setboth@boxcolor{definition}{paletteA}%
+\libx@setboth@boxcolor{bemerkung}{black}%
+\libx@setboth@boxcolor{satz}{paletteC}%
+\libx@setboth@boxcolor{beispiel}{gray}%
+}
+% trigger once for sure:
+\AtEndPreamble{\libx@cpalette@hook}%
+\fi
 
 
 % ----------------------------------------
@@ -527,6 +533,25 @@
 
 \newcommand*{\SetBoxesDisabled}[2][false]{ \forcsvlist{\SetBoxDisabled[#1]}{#2} }
 
+% maybe with rgb support?
+% ifstar: include 'starred' variant
+% #1 box id, #2 new color
+\newcommand*{\SetBoxColor}{%
+    \@ifstar\libx@setboth@boxcolor\libx@set@boxcolor%
+}
+
+\def\libx@setboth@boxcolor#1#2{%
+    \libx@set@boxcolor{#1}{#2}%
+    \libx@set@boxcolor{#1*}{#2}%
+}
+
+\def\libx@set@boxcolor#1#2{%
+    \libx@update@boxdata{\@nameuse{@libx@map@envshort@#1}}{BoxColor}{#2}%
+}
+
+
+% ----------------------------------------
+% Ref system
 
 % ref box with given label
 % if starred hide title
