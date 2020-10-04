@@ -176,15 +176,50 @@
         \long\def\libx@hypertarget#1#2{\label{#1}#2}%
         % gobble the star:
         \def\libx@pageref{\protect\@ifstar\pageref\pageref}%
+        \def\libx@phantomsection{}%
     }{%
         \let\libx@hypertarget\hypertarget%
         \let\libx@pageref\pageref%
+        \let\libx@phantomsection\phantomsection%
     }%
 }
+
+\def\libx@setnameref#1{\protected@edef\@currentlabelname{#1}}
+\AfterEndPreamble{%
+  \ifdefined\NR@gettitle%
+    \let\libx@setnameref\NR@gettitle%
+  \fi%
+}
+
+% id | num | short | long 
+\def\libx@loadmark#1#2#3#4{%
+    \expandafter\gdef\csname @libx@box@marker@#1@num\endcsname{#2}%
+    \expandafter\gdef\csname @libx@box@marker@#1@short\endcsname{#3}%
+    \expandafter\gdef\csname @libx@box@marker@#1@long\endcsname{#4}%
+}
+
+% #1 is list-men #2 is number
+\def\libx@marker@getnum#1#2{\@nameuse{@libx@box@marker@#1#2@num}}
+\def\libx@marker@getshort#1#2{\@nameuse{@libx@box@marker@#1#2@short}}
+\def\libx@marker@getlong#1#2{\@nameuse{@libx@box@marker@#1#2@long}}
+
 % #1 id, #2 title, #3 default tikz args
 \def\libx@read@box@default#1#2#3{\begingroup%
     \edef\libx@boxid{#1}%
     \libx@get{PreCode}%
+    \libx@phantomsection%
+    % Note: We do this extra to control expansion
+    % To get the correct counter value we cheat by guessing the next id of this box
+    % then we will create a marker to a command defined inside the box getting
+    % the exact counter value
+    \edef\libx@tmp@nextval{\the\numexpr\value{@libx@box@\libx@get{ListMen}@id}+1\relax}%
+    \protected@edef\@libx@tmpnr{%
+        \noexpand\libx@setnameref{%
+            \libx@get{Title} \noexpand\libx@marker@getnum{\libx@get{ListMen}}{\libx@tmp@nextval}%
+            ~(\noexpand\libx@marker@getshort{\libx@get{ListMen}}{\libx@tmp@nextval})
+        }%
+    }%
+    \@libx@tmpnr%
 % we check if we use the box style
     \begin{\libx@get{UseStyle}}%
             [% Tikz arguments:
@@ -195,10 +230,17 @@
                 before upper app={\ignorespacesafterend},%
                 before title pre={%
                     \@libx@box@title@pre{#2}%
-                    \label{auto:\libx@get{ListMen}\thetcbcounter}%
                     \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
                 }%
             }{#2}%
+    % global lock the counter value
+    \edef\@libx@markertag{\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
+    % stored signature: <num>:<short>:<long>
+    \def\@libx@tmp@store{{\thetcbcounter}{\libx@curbox@shorttitle}{#2}}%
+    \expandafter\expandafter\expandafter\xdef%
+            \expandafter\csname\@libx@markertag\endcsname{\@libx@tmp@store}%
+    % we mirror it to auxout:
+    \protected@write\@auxout{}{\protect\libx@loadmark{\expandafter\protect\@libx@markertag}\@libx@tmp@store}%
     \libx@get{InCode}%
 \endgroup}
 
@@ -378,7 +420,7 @@
 \def\@libx@UpdateHelper#1#2{\libx@UpdateBoxStyle{#2}{#1}}
 
 \def\libx@UpdateAllBoxStyles#1{%
-    \forlistloop{\@libx@UpdateHelper{#1}}{\libx@list@boxes}
+    \forlistloop{\@libx@UpdateHelper{#1}}{\libx@list@boxes}%
 }
 
 % ----------------------------------------
@@ -418,8 +460,38 @@
 {bemerkung}{Bemerkung}
 
 
+\libx@RegisterNewDefaultStyle{Satz}{}
+% default colors TODO: colors
+% TODO: option to set color directly
+\colorlet{libx@color@satz}{orange}
+
+\def\theoremsname{List of Theorems}
+\libx@RegisterBoxPair%
+% List definition:
+{theorems}{ltheo}{\theoremsname}%
+% Emblem and color:
+{\faStar}{libx@color@satz}%
+% style and id:
+{Satz}{sat}%
+% environment name and Prefix:
+{satz}{Satz}
 
 
+\libx@RegisterNewDefaultStyle{Beispiel}{}
+% default colors TODO: colors
+% TODO: option to set color directly
+\colorlet{libx@color@beispiel}{olive}
+
+\def\examplesname{List of Examples}
+\libx@RegisterBoxPair%
+% List definition:
+{examples}{lexa}{\examplesname}%
+% Emblem and color:
+{\faStar}{libx@color@beispiel}%
+% style and id:
+{Beispiel}{bei}%
+% environment name and Prefix:
+{beispiel}{Beispiel}
 
 
 
@@ -433,13 +505,13 @@
     \libx@update@boxdata{\@nameuse{@libx@map@envshort@#2}}{StyleDerivative}{#1}%
 }
 
+\newcommand*{\SetBoxesPlain}[2][@plain]{ \forcsvlist{\SetBoxPlain[#1]}{#2} }
 
-\newcommand*{\SetBoxesPlain}[2][@plain]{%
-    \forcsvlist{\SetBoxPlain[#1]}{#2}%
+\newcommand*{\SetBoxDisabled}[2][false]{%
+    \libx@update@boxif{\@nameuse{@libx@map@envshort@#2}}{BoxEnabled}{#1}%
 }
 
-
-
+\newcommand*{\SetBoxesDisabled}[2][false]{ \forcsvlist{\SetBoxDisabled[#1]}{#2} }
 
 
 
