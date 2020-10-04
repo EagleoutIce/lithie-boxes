@@ -33,6 +33,10 @@
 \DeclareOption{cpalette}{ \libx@cpalette@true }
 \DeclareOption{nocpalette}{ \libx@cpalette@false }
 
+\newif\iflibx@autostyle@% supplies some defaults for styling. loadsd cpalletes
+\DeclareOption{autostyle}{ \libx@cpalette@true\libx@autostyle@true }
+\DeclareOption{noautostyle}{ \libx@autostyle@false }
+
 \ProcessOptions*\relax%
 
 %% Packages
@@ -128,10 +132,8 @@
     \edef\libx@boxid{#5}%
     \pgfkeys{/libx@keys,defaults,#1,name=#3,title=#4}%
     \forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
-                                            Outcode,PostCode,UseStyle,Emblem,%
-                                            ListName,ListText,ListMen,StyleDerivative}%
-    \forcsvlist{\libx@persistif{\libx@boxid}}{HasEmblem,CustomList,%
-                                              BoxEnabled}%
+            Outcode,PostCode,UseStyle,Emblem,ListName,ListText,ListMen,StyleDerivative}%
+    \forcsvlist{\libx@persistif{\libx@boxid}}{HasEmblem,CustomList,BoxEnabled}%
     % setup id counter:
     \@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
         \newcounter{@libx@box@\libx@get{ListMen}@id}%
@@ -493,50 +495,71 @@
 % environment name and Prefix:
 {beispiel}{Beispiel}
 
-
-
-% ----------------------------------------
-% Color Palettes Control
-
-\iflibx@cpalette@
-\@ifundefined{cpl@registered@palettes}{%
-    \PackageError{lithie-boxes}{cpalette requested, but package not loaded}
-    {You have to load the 'color-palettes' package yourself if you use the 'cpalette'-Option.}%
-}{% Add to the hook..
-}
-\let\libx@old@cpl@hooks\cpl@hooks%
-\def\cpl@hooks{% Add to the hook
-    \libx@old@cpl@hooks%
-    \libx@cpalette@hook%
-}
-\def\libx@cpalette@hook{%
-\libx@setboth@boxcolor{definition}{paletteA}%
-\libx@setboth@boxcolor{bemerkung}{black}%
-\libx@setboth@boxcolor{satz}{paletteC}%
-\libx@setboth@boxcolor{beispiel}{gray}%
-}
-% trigger once for sure:
-\AtEndPreamble{\libx@cpalette@hook}%
-\fi
-
-
 % ----------------------------------------
 % Utility control
 
 % TODO: make more of them
+% starred variant sets both
 % #1 derivative to use
 % #2 boxname
-\newcommand*{\SetBoxPlain}[2][@plain]{%
+\newcommand*{\SetBoxPlain}{%
+    \@ifstar\libx@setboth@boxplain\libx@set@boxplain
+}
+
+\newcommand*{\libx@setboth@boxplain}[2][@plain]{%
+    \libx@set@boxplain[#1]{#2}%
+    \libx@set@boxplain[#1]{#2*}%
+}
+
+\newcommand*{\libx@set@boxplain}[2][@plain]{%
     \libx@update@boxdata{\@nameuse{@libx@map@envshort@#2}}{StyleDerivative}{#1}%
 }
 
-\newcommand*{\SetBoxesPlain}[2][@plain]{ \forcsvlist{\SetBoxPlain[#1]}{#2} }
+% ----------------------------------------
 
-\newcommand*{\SetBoxDisabled}[2][false]{%
+\newcommand*{\SetBoxesPlain}{%
+    \@ifstar\libx@setboth@boxesplain\libx@set@boxesplain%
+}
+
+\newcommand*{\libx@setboth@boxesplain}[2][@plain]{%
+    \forcsvlist{\SetBoxPlain*[#1]}{#2}%
+}
+
+\newcommand*{\libx@set@boxesplain}[2][@plain]{%
+    \forcsvlist{\SetBoxPlain[#1]}{#2}%
+}
+
+% ----------------------------------------
+
+\newcommand*{\SetBoxDisabled}{%
+    \@ifstar\libx@setboth@boxdisabled\libx@set@boxdisabled%
+}
+
+
+\newcommand*{\libx@setboth@boxdisabled}[2][false]{%
+    \libx@set@boxdisabled[#1]{#2}%
+    \libx@set@boxdisabled[#1]{#2*}%
+}
+
+\newcommand*{\libx@set@boxdisabled}[2][false]{%
     \libx@update@boxif{\@nameuse{@libx@map@envshort@#2}}{BoxEnabled}{#1}%
 }
 
-\newcommand*{\SetBoxesDisabled}[2][false]{ \forcsvlist{\SetBoxDisabled[#1]}{#2} }
+% ----------------------------------------
+
+\newcommand*{\SetBoxesDisabled}{%
+    \@ifstar\libx@setboth@boxesdisabled\libx@set@boxesdisabled%
+}
+
+\newcommand*{\libx@setboth@boxesdisabled}[2][false]{%
+    \forcsvlist{\SetBoxDisabled*[#1]}{#2}%
+}
+
+\newcommand*{\libx@set@boxesdisabled}[2][false]{%
+    \forcsvlist{\SetBoxDisabled[#1]}{#2}%
+}
+
+% ----------------------------------------
 
 % maybe with rgb support?
 % ifstar: include 'starred' variant
@@ -607,6 +630,37 @@
         \typeout{Warning boxref-short '#1' not found.}%
     \fi%
 }
+
+
+% ----------------------------------------
+% Color Palettes Control
+
+\iflibx@cpalette@
+\@ifundefined{cpl@registered@palettes}{%
+    \PackageError{lithie-boxes}{cpalette requested, but package not loaded}
+    {You have to load the 'color-palettes' package yourself if you use the 'cpalette'-Option.}%
+}{% Add to the hook..
+}
+\let\libx@old@cpl@hooks\cpl@hooks%
+\def\cpl@hooks{% Add to the hook
+    \libx@old@cpl@hooks%
+    \libx@cpalette@hook%
+}
+\def\libx@cpalette@hook{%
+\libx@setboth@boxcolor{definition}{paletteA}%
+\libx@setboth@boxcolor{bemerkung}{gray}%
+\libx@setboth@boxcolor{satz}{paletteC}%
+\libx@setboth@boxcolor{beispiel}{gray}%
+}
+\fi
+
+% ----------------------------------------
+% Auto style
+
+\iflibx@autostyle@
+\libx@setboth@boxesplain{bemerkung}%
+\libx@setboth@boxesplain{beispiel}%
+\fi
 
 % ----------------------------------------------
 % User commands
