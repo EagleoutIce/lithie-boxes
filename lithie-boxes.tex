@@ -1,3 +1,4 @@
+\errorcontextlines 999999
 \documentclass{article}
 \usepackage[a4paper,total={18cm,25.5cm}]{geometry}
 
@@ -14,7 +15,7 @@
 \solLoadLanguage{latex}
 
 \usepackage[lockhigh,cpalette]{lithie-boxes}
-\LoadStyle{limerence}
+\LoadBoxStyle{limerence}
 
 
 \UsePalette{GreenWater}
@@ -105,6 +106,29 @@ Das Ergebnis ist das Folgende:
 \end{satz*}
 
 Eine Auflistung aller Boxen gibt es mittels des Befehls \cmdref{listof<enboxpl>} wobei \T{enboxpl} den englischen Plural des Boxtitels bezeichnet\footnote{Der Befehl ändert sich auch nicht durch eine andere Sprache oder Optionen, da Bezeichner wie \cmd{listofbemerkungen} sehr seltsam wirken.}. So ist die Ausgabe von \cmdref{listofdefinitions} exemplarisch \hyperref[mrk:listofdefs]{am Ende} aufgeführt.
+
+\subsection{Stile}
+
+Die Gestaltung der Boxen kann durch Stile verändert werden.
+Diese können über \cmdref{LoadBoxStyle} geladen und geändert werden. Es können eigene Stile definiert werden (\cmd{libx@UpdateAllBoxStyles}). In diesem Dokument ist der
+Stil \T{limerence} geladen. Der Standard-Stil \T{default} muss nicht manuell geladen
+werden, erlaubt es aber den Stil im Dokument zu ändern:
+{
+\LoadBoxStyle{default}%
+\begin{definition*}{Definition im standard Stil}
+    Ich fasse Fässer zusammen.
+\end{definition*}
+}
+
+Die Stile können durch normale \LaTeX-Gruppen begrenzt werden. Nach dem Verlassen wird der letzte Stil wiederhergestellt:
+\begin{definition}{Wieder eine normale Definition}
+    Back to normal.
+\end{definition}
+
+\subsection{Nummerierung}
+
+Die Nummerierung der Boxen kann durch \hyperref[sec:packetoptions]{Paketoptionen} kontrolliert werden. So sorgt \T{lockhigh} zum Beispiel dafür, dass die Nummerierung sich an der höheren Gliederungsebene im Dokument orientiert.
+Diese Option wird auch in dieser Dokumentation verwendet. Mit \T{nolock} können diese Sperren deaktiviert werden.
 
 \section{Paketoptionen}
 \label{sec:packetoptions}

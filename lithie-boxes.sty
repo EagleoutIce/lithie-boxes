@@ -319,7 +319,7 @@
 % TODO: store current catcode?
 \gdef\libx@currentstyle{default}
 \def\libx@loadstyle@ending{.style}
-\def\libx@LoadStyle#1{\typeout{Loading style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}\gdef\libx@currentstyle{#1}}
+\def\libx@LoadBoxStyle#1{\typeout{Loading box style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}\gdef\libx@currentstyle{#1}}
 
 \def\@libx@getcurtar#1{% we expect i and curboxid to be set
 #1:\libx@get{ListMen}\i%
@@ -399,8 +399,8 @@
     lithie@box@style@default/.style={%
         enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
         lines before break=3,before skip=0pt,boxrule=0mm,toprule=0.5mm,%
-        bottomtitle=0.5mm,bottomrule=1.2mm,after skip=0pt,%
-        enlarge top by=0.2\baselineskip,enlarge bottom by=0.2\baselineskip,%
+        bottomtitle=0.5mm,bottomrule=1.1mm,after skip=0pt,%
+        enlarge top by=0.55\baselineskip,enlarge bottom by=0.55\baselineskip,%
         sharp corners=south,breakable, colback=\libx@get{BoxColor}!5!white,colframe=\libx@get{BoxColor},tikz={#1}%
     },%
     lithie@box@style@default@plain/.style={%
@@ -425,7 +425,7 @@
 \def\libx@title@strut{\vphantom{\large I}}
 
 % #1 is prefix, #2 is number, #3 is text
-\def\libx@typeset@title#1#2#3{\bgroup%
+\def\libx@default@typeset@title#1#2#3{\bgroup%
     \def\libx@tmp@title{\libx@get{Emblem} #2 #3~}%
     \textbf{\textsc{\libx@title@strut{}\libx@tmp@title} \hfill \parbox[t]{\linewidth-\widthof{\libx@tmp@title}-1em}{\raggedleft\textbf{#1}}}%
 \egroup}
@@ -440,7 +440,7 @@
     }%
     \newtcolorbox[lithie@box@style@default@init]{libx@box@#1}[4][]{%
         lithie@box@style@default\libx@get{StyleDerivative}={##1},##3,libx@style@defaults@libx@box@#1,%
-        title={\libx@typeset@title{##4}{##2}{\thetcbcounter}}%
+        title={\libx@default@typeset@title{##4}{##2}{\thetcbcounter}}%
     }%
 }
 
@@ -795,7 +795,7 @@
 % ----------------------------------------------
 % User commands
 
-\let\LoadStyle\libx@LoadStyle
+\let\LoadBoxStyle\libx@LoadBoxStyle
 \let\RegisterBox\libx@RegisterBox
 \let\RegisterNewDefaultStyle\libx@RegisterNewDefaultStyle
 

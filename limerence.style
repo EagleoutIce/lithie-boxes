@@ -50,7 +50,7 @@
 \def\libx@style@limerence@titledivider{%
     {\normalcolor~--~}%
 }
-\def\libx@typeset@title#1#2#3{%
+\def\libx@limerence@typeset@title#1#2#3{%
     \textsf{\libx@title@strut\textcolor{\libx@get{BoxColor}}{%
         \libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\,~}#2 #3%
         \ifx!#1!\else\libx@style@limerence@titledivider\fi%
@@ -59,9 +59,9 @@
 }
 
 
-% TODO: plain style?
 % use #1 to #4
 \libx@UpdateAllBoxStyles{%
-    lithie@box@style@limerence\libx@get{StyleDerivative}={#1},libx@style@defaults@\libx@get{UseStyle},#3,%
-    title={\libx@typeset@title{#4}{#2}{\thetcbcounter}}%
+    lithie@box@style@limerence\libx@get{StyleDerivative}={#1},%
+    libx@style@defaults@\libx@get{UseStyle},#3,%
+    title={\libx@limerence@typeset@title{#4}{#2}{\thetcbcounter}}%
 }
