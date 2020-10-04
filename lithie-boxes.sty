@@ -37,6 +37,11 @@
 \DeclareOption{autostyle}{ \libx@cpalette@true\libx@autostyle@true }
 \DeclareOption{noautostyle}{ \libx@autostyle@false }
 
+\def\libx@environments@trans{}
+\DeclareOption{germanenv}{ \def\libx@environments@trans{German} }
+\DeclareOption{englishenv}{ \def\libx@environments@trans{English} }%defaults for trans
+\DeclareOption{autoenv}{ \def\libx@environments@trans{} }
+
 \ProcessOptions*\relax%
 
 %% Packages
@@ -494,13 +499,23 @@
 \providetranslation[to=German]{Summary}{Zusammenfassung}
 \providetranslation[to=German]{Summaries}{Zusammenfassungen}
 
+\def\libx@translateenv#1#2{
+    % empty auto:
+    \expandafter\ifx\expandafter!\libx@environments@trans!%
+        \protected@edef\libx@tmp{\noexpand\translatelet{\csname @libx@#1@envname\endcsname}{#2}}%
+    \else
+        \protected@edef\libx@tmp{\noexpand\translatelet[to=\libx@environments@trans]{\csname @libx@#1@envname\endcsname}{#2}}%
+    \fi
+    \libx@tmp%
+}
+
 % ----------------------------------------
 % default boxes
 % TODO: option keep env names to leave env names in another language?
 \translatelet{\@libx@defstyle}{Definition}
 \libx@RegisterNewDefaultStyle{\@libx@defstyle}{}
 
-\translatelet{\@libx@def@envname}{definition}
+\libx@translateenv{def}{definition}
 
 % note if this order is wrong redef of '\definitionsname' is needed
 \providecommand\definitionsname{\translate{List of} \translate{Definitions}}
@@ -516,7 +531,7 @@
 \translatelet{\@libx@remstyle}{Remark}
 \libx@RegisterNewDefaultStyle{\@libx@remstyle}{}
 
-\translatelet{\@libx@rem@envname}{remark}
+\libx@translateenv{rem}{remark}
 
 \providecommand\remarksname{\translate{List of} \translate{Remarks}}
 \libx@RegisterBoxPair%
@@ -531,7 +546,7 @@
 \translatelet{\@libx@theostyle}{Theorem}
 \libx@RegisterNewDefaultStyle{\@libx@theostyle}{}
 
-\translatelet{\@libx@the@envname}{theorem}
+\libx@translateenv{the}{theorem}
 
 \providecommand\theoremsname{\translate{List of} \translate{Theorems}}
 \libx@RegisterBoxPair%
@@ -546,7 +561,7 @@
 \translatelet{\@libx@exastyle}{Example}
 \libx@RegisterNewDefaultStyle{\@libx@exastyle}{}
 
-\translatelet{\@libx@exa@envname}{example}
+\libx@translateenv{exa}{example}
 
 \providecommand\examplesname{\translate{List of} \translate{Examples}}
 \libx@RegisterBoxPair%
@@ -555,13 +570,13 @@
 % color, style, id:
 {olive}{\@libx@exastyle}{bei}%
 % environment name and Prefix:
-{\@libx@exa@envname}{\translate{Beispiel}}
+{\@libx@exa@envname}{\translate{Example}}
 
 
 \translatelet{\@libx@lemstyle}{Lemma}
 \libx@RegisterNewDefaultStyle{\@libx@lemstyle}{}
 
-\translatelet{\@libx@lem@envname}{lemma}
+\libx@translateenv{lem}{lemma}
 
 \providecommand\lemmasname{\translate{List of} \translate{Lemmas}}
 \libx@RegisterBoxPair%
@@ -575,7 +590,7 @@
 \translatelet{\@libx@prostyle}{Proof}
 \libx@RegisterNewDefaultStyle{\@libx@prostyle}{after upper={\quad\nobreak\null\nobreak\hfill\nobreak\faSquareO}}
 
-\translatelet{\@libx@pro@envname}{proof}
+\libx@translateenv{pro}{proof}
 
 \providecommand\proofsname{\translate{List of} \translate{Proofs}}
 \libx@RegisterBoxPair%
@@ -589,7 +604,7 @@
 \translatelet{\@libx@sumstyle}{Summary}
 \libx@RegisterNewDefaultStyle{\@libx@sumstyle}{}
 
-\translatelet{\@libx@sum@envname}{summary}
+\libx@translateenv{sum}{summary}
 
 % synopses
 \providecommand\summariesname{\translate{List of} \translate{Summaries}}
