@@ -424,8 +424,11 @@
 % #2 other options
 \def\libx@RegisterNewDefaultStyle#1#2{%
     \listadd{\libx@list@boxes}{#1}% \libx@get{StyleDerivative}
+    \tcbset{%
+        libx@style@defaults@libx@box@#1/.style={#2}%
+    }%
     \newtcolorbox[lithie@box@style@default@init]{libx@box@#1}[4][]{%
-        lithie@box@style@default\libx@get{StyleDerivative}={##1},##3,#2,%
+        lithie@box@style@default\libx@get{StyleDerivative}={##1},##3,libx@style@defaults@libx@box@#1,%
         title={\libx@typeset@title{##4}{##2}{\thetcbcounter}}%
     }%
 }
@@ -494,6 +497,42 @@
 {olive}{Beispiel}{bei}%
 % environment name and Prefix:
 {beispiel}{Beispiel}
+
+
+\libx@RegisterNewDefaultStyle{Lemma}{}
+
+\def\lemmasname{List of Lemmas}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{lemmas}{llem}{\lemmasname}{\faStar}%
+% color, style, id:
+{violet}{Lemma}{lem}%
+% environment name and Prefix:
+{lemma}{Lemma}
+
+\libx@RegisterNewDefaultStyle{Beweis}{after upper={\quad\nobreak\null\nobreak\hfill\nobreak\faSquareO}}
+
+\def\proofsname{List of Proofs}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{proofs}{lpro}{\proofsname}{\faStar}%
+% color, style, id:
+{cyan}{Beweis}{bew}%
+% environment name and Prefix:
+{beweis}{Beweis}
+
+\libx@RegisterNewDefaultStyle{Zusammenfassung}{}
+
+% synopses
+\def\summariesname{List of Summaries}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{summaries}{lsum}{\summariesname}{\faStar}%
+% color, style, id:
+{lime!80!blue}{Zusammenfassung}{zsf}%
+% environment name and Prefix:
+{zusammenfassung}{Zusammenfassung}
+
 
 % ----------------------------------------
 % Utility control
@@ -648,8 +687,11 @@
 }
 \def\libx@cpalette@hook{%
 \libx@setboth@boxcolor{definition}{paletteA}%
-\libx@setboth@boxcolor{bemerkung}{gray}%
 \libx@setboth@boxcolor{satz}{paletteC}%
+\libx@setboth@boxcolor{lemma}{paletteC}%
+\libx@setboth@boxcolor{zusammenfassung}{paletteD}%
+\libx@setboth@boxcolor{beweis}{gray}%
+\libx@setboth@boxcolor{bemerkung}{gray}%
 \libx@setboth@boxcolor{beispiel}{gray}%
 }
 \fi
@@ -660,6 +702,8 @@
 \iflibx@autostyle@
 \libx@setboth@boxesplain{bemerkung}%
 \libx@setboth@boxesplain{beispiel}%
+\libx@setboth@boxesplain{lemma}%
+\libx@setboth@boxesplain{beweis}%
 \fi
 
 % ----------------------------------------------
