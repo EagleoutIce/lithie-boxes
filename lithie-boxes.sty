@@ -215,6 +215,18 @@
     \expandafter\gdef\csname @libx@box@marker@#1@long\endcsname{#4}%
 }
 
+% #1 long title
+\def\libx@storemark#1{%
+    % global lock the counter value
+    \edef\@libx@markertag{\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
+    % stored signature: <num>:<short>:<long>
+    \def\@libx@tmp@store{{\thetcbcounter}{\libx@curbox@shorttitle}{#1}}%
+    \expandafter\expandafter\expandafter\xdef%
+            \expandafter\csname\@libx@markertag\endcsname{\@libx@tmp@store}%
+    % we mirror it to auxout:
+    \protected@write\@auxout{}{\protect\libx@loadmark{\expandafter\protect\@libx@markertag}\@libx@tmp@store}%
+}
+
 % #1 is list-men #2 is number
 \def\libx@marker@getnum#1#2{\@nameuse{@libx@box@marker@#1#2@num}}
 \def\libx@marker@getshort#1#2{\@nameuse{@libx@box@marker@#1#2@short}}
@@ -250,14 +262,7 @@
                     \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
                 }%
             }{#2}%
-    % global lock the counter value
-    \edef\@libx@markertag{\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
-    % stored signature: <num>:<short>:<long>
-    \def\@libx@tmp@store{{\thetcbcounter}{\libx@curbox@shorttitle}{#2}}%
-    \expandafter\expandafter\expandafter\xdef%
-            \expandafter\csname\@libx@markertag\endcsname{\@libx@tmp@store}%
-    % we mirror it to auxout:
-    \protected@write\@auxout{}{\protect\libx@loadmark{\expandafter\protect\@libx@markertag}\@libx@tmp@store}%
+    \libx@storemark{#2}%
     \libx@get{InCode}%
 \endgroup}
 
