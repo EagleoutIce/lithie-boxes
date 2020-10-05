@@ -34,7 +34,6 @@
 \def\envlink#1{\phantomsection\label{env:#1}\env{#1}}
 \def\envref#1{\hyperref[env:#1]{\env{#1}}}
 
-
 \def\optstar{\textit{\(\langle\,\)\T{\paletteA{*}}\(\rangle\)}}
 \def\arg#1{\textit{\paletteB{#1}}}
 \def\manArg#1{\texttt{\{\,\arg{#1}\,\}}}
@@ -44,6 +43,10 @@
 \def\secref#1{\hyperref[#1]{\ref*{#1} \nameref*{#1}}}
 
 \long\def\imp#1{\emph{\paletteD{#1}}}
+
+\def\packageOption#1{\T{\normalcolor#1}}
+\def\packagelink#1{\phantomsection\label{po:#1}\index{#1@\protect\packageref{#1}}\packageref{#1}}
+\def\packageref#1{\hyperref[po:#1]{\packageOption{#1}}}
 
 \newenvironment{command}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2@\cmdref{#2}}\cmdlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
 
@@ -140,12 +143,12 @@ Die Stile können durch normale \LaTeX-Gruppen begrenzt werden. Nach dem Verlass
     Back to normal.
 \end{definition}
 
-Darüber hinaus besitzt jede Box eine \say{Plain}-Variante (diese kann und wird auch vom jeweiligen Stil geändert). Für mehr Informationen über die Verwendung siehe \cmdref{SetBoxPlain} oder die \hyperref[sec:packetoptions]{Paketoption} \T{autostyle}.
+Darüber hinaus besitzt jede Box eine \say{Plain}-Variante (diese kann und wird auch vom jeweiligen Stil geändert). Für mehr Informationen über die Verwendung siehe \cmdref{SetBoxPlain} oder die \hyperref[sec:packetoptions]{Paketoption} \packageref{autostyle}.
 
 \subsection{Nummerierung}
 
-Die Nummerierung der Boxen kann durch \hyperref[sec:packetoptions]{Paketoptionen} kontrolliert werden. So sorgt \T{lockhigh} zum Beispiel dafür, dass die Nummerierung sich an der höheren Gliederungsebene im Dokument orientiert.
-Diese Option wird auch in dieser Dokumentation verwendet. Mit \T{nolock} können diese Sperren deaktiviert werden.
+Die Nummerierung der Boxen kann durch \hyperref[sec:packetoptions]{Paketoptionen} kontrolliert werden. So sorgt \packageref{lockhigh} zum Beispiel dafür, dass die Nummerierung sich an der höheren Gliederungsebene im Dokument orientiert.
+Diese Option wird auch in dieser Dokumentation verwendet. Mit \packageref{nolock} können diese Sperren deaktiviert werden.
 
 \subsection{Hinweis zu den Listen}
 
@@ -155,7 +158,7 @@ Das Paket schiebt ein paar Abstraktionen zwischen dem Setzen einer Box und dem E
 
 \subsection{Die Standardboxen}
 
-Hinweis für die Beispiele: Die dokumentation macht \emph{nicht} von der \hyperref[sec:packetoptions]{Paketoptionen} \T{autostyle} gebrauch. Die Farben werden allerdings durch die Palette \say{\CurrentPalette}.
+Hinweis für die Beispiele: Die dokumentation macht \emph{nicht} von der \hyperref[sec:packetoptions]{Paketoptionen} \packageref{autostyle} gebrauch. Die Farben werden allerdings durch die Palette \say{\CurrentPalette}.
 
 \begin{bemerkung*}(after=\bigskip){Bezüglich des Klammerarguments}
     \label{bem:optbracekey}Jede Box unterstützt auch das Argument \arg{Boxargs}. Dieses ist ebenfalls optional, erlaubt es aber weitere Argumente an die zugrundeliegende Box zu übergeben!
@@ -371,12 +374,41 @@ Wir haben also den Nummer der Definition benutzt, sind aber nicht in der Liste e
 
 % TODO: geladenen Pakete/abhängigkeiten?
 \section{Paketoptionen}
-\label{sec:packetoptions}
+\label{sec:packetoptions}Das Paket erlaubt einige Optionen zur Konfiguration.
+Die Dokumentation wurde mit den Folgenden Optionen geladen:
+\begin{latex*}[morekeywords={[5]{\\LoadBoxStyle}},add to literate={lithie-boxes}{{\paletteD{lithie-boxes}}}3]
+\usepackage[lockhigh,cpalette]{lithie-boxes}
+\LoadBoxStyle{limerence}
+\end{latex*}
 
-Dies ist der aktuelle Stand der Dokumentation.
+\paragraph{Nummerierungskontrolle}
+Mit den Optionen \packagelink{lockhigh} und \packagelink{locklow} kann konfiguriert werden, wie die Nummerierung
+des Dokuments von statten geht. Hierbei verwendet \packageref{lockhigh} die jeweils höhere Hierarchieebene\footnote{Also wenn vorhanden: \cmd{chapter}, sonst \cmd{section}.} und \packagelink{locklow} die jeweils niedrigere\footnote{Ist also \cmd{chapter} vorhanden, wird \cmd{section} gewählt, sonst wird \cmd{subsection} gewählt.}. Derartige Nummerierungen können mit der Option \packagelink{nolock}
+deaktiviert werden (diese Option ist auch der Standard). In diesem Dokument wird \packageref{lockhigh} verwendet.
+
+\paragraph{Box-Varianten}
+Standardmäßig werden alle Boxen in der normalen Variante gesetzt. Die Paketoption \packagelink{autostyle} sorgt allerdings dafür, dass automatisch einige Boxen mit der \cmdref{SetBoxPlain}-Routine konfiguriert werden um einen schöneren Fokus zu legen. Die \packageref{autostyle}-Option aktiviert auch gleichzeitig die im Folgenden beschriebene Option \packageref{cpallete}. Die \packagelink{noautostyle}-Option deaktiviert die Mechanik (lässt \packageref{cpalette} aber unverändert).
+
+\paragraph{Farben}
+Mit der Option \packagelink{cpalette} muss das Paket \href{https://github.com/EagleoutIce/color-palettes}{color-palettes} \emph{zuvor} geladen werden.
+Die Option (welche in der Dokumentation ebenfalls aktiv ist) sorgt dafür, dass die Boxfarben sich
+an der jeweiligen Palette orientieren. Im Gegensatz zu einer Stil-Änderung beeinflusst die Option
+allerdings nur die Optionen, die vom Paket mitgeliefert werden.
+Die Option kann mit \packagelink{nocpalette} deaktiviert werden.
+
+\paragraph{Umgebungsbezeichner}
+Standardmäßig orientieren sich die Bezeichner der Umgebungen an der Sprache.
+Dies kann aber problematisch sein, wenn man sich entweder an eine Sprache gewöhnt oder die Sprache
+im Dokument einfach ändert.
+Die Option \packagelink{germanenv} sorgt dafür, dass die Umgebungen unabhängig von der Ausgabesprache die
+Bezeichner in deutscher Sprache erhalten. Analog verfährt die Option \packagelink{englishenv} mit der englischen Sprache für die Umgebungen.
+Die Option \packagelink{autoenv} wechselt wieder zur Standardkonfiguration, welche den Namen anhand der Dokumentsprache herausfindet\footnote{Wichtig: Es ist die konfigurierte Sprache zum Ladezeitpunkt des Pakets von Relevanz. Es empfiehlt sich also Pakete wie \T{babel} vor diesem Paket zu laden, wenn man von der automatischen Spracherkennung Gebrauch machen möchte.}.
+
 
 \section{Versionierung}
 \subsection{Version 1.0}
+Initiale Version mit den Boxen \envref{definition}, \envref{bemerkung}, \envref{satz}, \envref{beispiel}, \envref{lemma}, \envref{beweis} und \envref{zusammenfassung}. Auch
+Befehle wie \cmdref{boxref} und \cmdref{LoadBoxStyle} wurden eingeführt.
 
 \clearpage\appendix
 \addcontentsline{toc}{section}{\indexname}
