@@ -2,6 +2,9 @@
 \documentclass{article}
 \usepackage[a4paper,total={18cm,25.5cm}]{geometry}
 
+% TODO: restyle signature:
+% \begin{definition}(optional tcolorbox args)[refname]{name}
+% so we can make them 'float*' and stuff.
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -56,6 +59,19 @@
 \title{\textsf{\paletteD{\{}\paletteA{lithie-boxes}\paletteD{\}}}}
 \author{Florian Sihler}
 \date{\today}
+
+\newlistof{codeliste}{lcode}{Alle Codeboxen}%
+\RegisterBox{%
+    list name=codeliste,%
+    list men=lcode,%
+    custom list=true,
+    has emblem=true,%
+    in code=\noindent,%
+    emblem=\protect\faCode,%
+    box color=purple,%
+    use style=libx@box@Definition%
+}{}{code}{Code}{cde}%
+
 
 \begin{document}
 
@@ -133,6 +149,10 @@ Darüber hinaus besitzt jede Box eine \say{Plain}-Variante (diese kann und wird 
 
 Die Nummerierung der Boxen kann durch \hyperref[sec:packetoptions]{Paketoptionen} kontrolliert werden. So sorgt \T{lockhigh} zum Beispiel dafür, dass die Nummerierung sich an der höheren Gliederungsebene im Dokument orientiert.
 Diese Option wird auch in dieser Dokumentation verwendet. Mit \T{nolock} können diese Sperren deaktiviert werden.
+
+\subsection{Hinweis zu den Listen}
+
+Das Paket schiebt ein paar Abstraktionen zwischen dem Setzen einer Box und dem Eintrag in die Liste. Dies sorgt dafür, dass auch im Falle von \say{schwebenden} (floating) Boxen die Reihenfolge im \LaTeX-Code eingehalten wird.
 
 \section{Nutzerbefehle}
 
@@ -249,6 +269,8 @@ sie einen Zweck erfüllen oder abgesichert wurden (Beispiel: \cmdref{SetBoxPlain
 
 Hinweis: das definieren eigener Boxen ist aktuell noch etwas umständlich, sofern man \say{abgefahrene Sachen} machen will (wie der Block am Ende eines Beweises; siehe \envref{beweis}). In diesem Fall kann aktuell nur der Quellcode des Pakets selbst als Beispiel herhalten.
 
+
+
 \begin{command}{RegisterBox}{\manArg{Boxkeys}\manArg{Tikzkeys}\manArg{Boxname}\manArg{Titel}\manArg{GroupId}}
     Erzeugt eine neue Box mit den entsprechenden Parametern. Die (wichtigsten) gültigen Parameter für \arg{Boxkeys} sind \autoref{tbl:boxkeys} zu entnehmen. Die \arg{Tikzkeys} erlauben es beliebige Ti\textit{k}z-Kommandos an die Box zu übergeben.
     Der \arg{Boxname} bezeichnet den späteren Namen der Umgebung, durch die die Box erzeugt werden soll.
@@ -256,6 +278,7 @@ Hinweis: das definieren eigener Boxen ist aktuell noch etwas umständlich, sofer
     das Präfix (wie \T{Definition}).
     Die \arg{GroupId} muss ein eindeutiger (am Besten möglichst kurzer) Bezeichner sein, der intern für die Persistierung und Handhabung der
     Box verwendet wird.
+    \imp{Eine Boxdefinition muss in der Präambel erfolgen um ungewünschte Seiteneffekte zu vermeiden!}
 
     Betrachten wir einmal ein Beispiel, wie eine Box erzeugt werden kann\footnote{Dieses Beispiel ist im Verhältnis zu den anderen Boxen etwas einfacher gehalten}. Da wir noch nicht wissen, wie mit \cmdref{RegisterNewDefaultStyle} eigene Stile definiert werden können, verwenden wir hier den Stil der Definition.
 \begin{latex}[morekeywords={[1]{\\RegisterBox,\\newlistof,\\protect}}]
@@ -270,23 +293,13 @@ Hinweis: das definieren eigener Boxen ist aktuell noch etwas umständlich, sofer
     use style=libx@box@Definition}%
 {}{code}{Code}{cde}%
 \end{latex}
-\newlistof{codeliste}{lcode}{Alle Codeboxen}%
-\RegisterBox{%
-    list name=codeliste,%
-    list men=lcode,%
-    has emblem=true,%
-    in code=\noindent,%
-    emblem=\protect\faCode,%
-    box color=purple,%
-    use style=libx@box@Definition%
-}{}{code}{Code}{cde}%
-Setzen wir doch mal unsere Code-Box:
+Setzen wir doch mal unsere Code-Box (für die Umgebung \env{java} ist das Paket \T{sopra-listings} aus der \href{https://github.com/EagleoutIce/sopra-collection}{sopra-collection} vonnöten):
 \begin{latex}[morekeywords={[3]{code}}]
 \begin{code}{Ich bin eine Codebox!}
 Super Code nicht wahr?
-    \begin{java*}
+    \begin{java}
 System.out.println("Hallo Welt!");
-    \end{java*}
+    \end{java}
 \end{code}
 \end{latex}
 Wir erhalten:
@@ -296,6 +309,9 @@ Super Code nicht wahr?
 System.out.println("Hallo Welt!");
     \end{java}
 \end{code}
+Wir haben also den Nummer der Definition benutzt, sind aber nicht in der Liste eingetragen, da wir unseren eigenen verwenden! Dafür können wir nun mit
+\cmd{listofcodeliste} die Liste aller Codeboxen anzeigen:
+\listofcodeliste%
 \end{command}
 
 \begin{table}[tbhp]
@@ -321,9 +337,15 @@ System.out.println("Hallo Welt!");
     \label{tbl:boxkeys}
 \end{table}
 
+\begin{command}{RegisterNewDefaultStyle}{\manArg{Name}\manArg{Options}}
+    Erzeugt einen neuen Stil der zum Beispiel von \cmdref{RegisterBox} verwendet werden kann. Die \arg{Options} bezeichnen weitere tcolorbox-Argumente. Erzeugt wird der Stil \T{libx@box@\arg{Name}}.
+\end{command}
+
 % TODO: geladenen Pakete/abhängigkeiten?
 \section{Paketoptionen}
 \label{sec:packetoptions}
+
+Dies ist der aktuelle Stand der Dokumentation.
 
 \section{Versionierung}
 \subsection{Version 1.0}
