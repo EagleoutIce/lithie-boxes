@@ -2,10 +2,6 @@
 \documentclass{article}
 \usepackage[a4paper,total={18cm,25.5cm}]{geometry}
 
-% TODO: restyle signature:
-% \begin{definition}(optional tcolorbox args)[refname]{name}
-% so we can make them 'float*' and stuff.
-
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
@@ -43,6 +39,7 @@
 \def\arg#1{\textit{\paletteB{#1}}}
 \def\manArg#1{\texttt{\{\,\arg{#1}\,\}}}
 \def\optArg#1{\texttt{[\,\arg{#1}\,]}}
+\def\cusArg#1#2#3{\texttt{#1\,\arg{#2}\,#3}}
 
 \def\secref#1{\hyperref[#1]{\ref*{#1} \nameref*{#1}}}
 
@@ -103,13 +100,13 @@ Ein Verweis auf \autoref{def:example}.
 \end{latex}
 
 Die Struktur ist hierbei für alle Boxen dieselbe. Wir der \arg{Referenztitel} nicht angegebenen, so wird der \say{lange} Titel gewählt (analog zu Befehlen wie \cmd{section}). Das Ergebnis des eben gezeigten Listings ist das Folgende (Linien zur Trennung eingefügt)\footnote{Der Befehl \cmd{autoref} entstammt dem Paket \T{hyperref} welches nicht geladen werden oder sein muss um die Boxen zu verwenden. Für weitere Befehle siehe \cmdref{boxref} oder \cmdref{boxnameref}.}: \\
-\rule{\linewidth}{1pt}
+\rule{\linewidth}{.5pt}%
 \begin{definition}[Referenztitel]{Ich bin eine Definition}
     \label{def:example}Dies ist der Text innerhalb der Definition.
 \end{definition}
 
 Ein Verweis auf \autoref{def:example}. Eine tolle \boxref{def:example}.\\
-\rule{\linewidth}{1pt}\\
+\rule{\linewidth}{.5pt}\\
 
 Ebenso gibt es die Boxen \envref{bemerkung}, \envref{satz}, \envref{beispiel}, \envref{lemma}, \envref{beweis} und \envref{zusammenfassung}. Jede dieser Boxen besitzt eine Variante mit Sternchen in der sie als wichtig hervorgehoben wird:
 \begin{latex}
@@ -160,19 +157,48 @@ Das Paket schiebt ein paar Abstraktionen zwischen dem Setzen einer Box und dem E
 
 Hinweis für die Beispiele: Die dokumentation macht \emph{nicht} von der \hyperref[sec:packetoptions]{Paketoptionen} \T{autostyle} gebrauch. Die Farben werden allerdings durch die Palette \say{\CurrentPalette}.
 
+\begin{bemerkung*}(after=\bigskip){Bezüglich des Klammerarguments}
+    \label{bem:optbracekey}Jede Box unterstützt auch das Argument \arg{Boxargs}. Dieses ist ebenfalls optional, erlaubt es aber weitere Argumente an die zugrundeliegende Box zu übergeben!
+    Möchte man zum Beispiel eine Floating-zusammenfassung haben, so genügt:
+% TODO: LaTeX Plain
+\begin{latex}
+\begin{zusammenfassung}(float){Ich bin eine fliegende Zusammen!**!fassung}
+    Dies ist der Text einer fliegenden Zusammen!**!fassung.
+\end{zusammenfassung}
+\end{latex}
+    Die Ausgabe findet sich in \boxref{zsf:floatingex}. Möchte man in einem Zweispaltigen Dokument eine Definition die beide Spalten überspannt so gilt es einfach \T{float*} anstelle von \T{float} zu verwenden. Über \T{floatplacement} können Platzierungshinweise analog zum Optionalen Argument bei Umgebungen wie \env{figure} angegeben werden. Für mehr Informationen empfiehlt sich die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox}.
+    Natürlich kann so auch ein Referenztitel übergeben werden:
+\begin{latex}
+\begin{zusammenfassung}(float*,floatplacement=b)[Und ich der Referenztitel]
+            {Ich bin auch eine fliegende Zusammen!**!fassung}
+    Dies ist der Text einer fliegenden Zusammen!**!fassung.
+\end{zusammenfassung}
+\end{latex}
+Für das Ergebnis siehe hier: \boxref{zsf:floatingex2}.
+\end{bemerkung*}
+
+\begin{zusammenfassung}(float,floatplacement=t){Ich bin eine fliegende Zusammenfassung}
+    \label{zsf:floatingex}Dies ist der Text einer fliegenden Zusammenfassung.
+\end{zusammenfassung}
+
+\begin{zusammenfassung}(float*,floatplacement=b)[Und ich der Referenztitel]
+            {Ich bin auch eine fliegende Zusammenfassung}
+    \label{zsf:floatingex2}Dies ist der Text einer fliegenden Zusammenfassung.
+\end{zusammenfassung}
+
 \makeatletter
 % #1 eng id #2 ger id #3 eng name % #4 eng plural #5 internal style % #6 file ending
 % #7 full title
 \def\PresentBoxEnv#1#2#3#4#5#6#7{%
 \edef\libx@boxid{#2}%
-\begin{environment}{\@nameuse{@libx@#1@envname}}{\optArg{Referenztitel}\manArg{Titel}}
+\begin{environment}{\@nameuse{@libx@#1@envname}}{\cusArg{(}{Boxargs}{)}\optArg{Referenztitel}\manArg{Titel}}
     \index{#3@\envref{#3}\textsuperscript{\,\textsf{(eng. $\rightarrow$ \@nameuse{@libx@#1@envname})}}}%
     Setzt eine \say{\libx@get{Title}}-Box.
     Kommandos im Titel müssen robust sein.
     Wird kein \arg{Referenztitel} angegeben, so wird der \arg{Titel} als Referenztitel für Querverweise verwendet. Die gesternte Variante
     der Umgebung wird durch das Emblem \say{\libx@box@get{#2@s}{Emblem}} von den
-    normalen Boxen abgesetzt.
-    
+    normalen Boxen abgesetzt. Die Bedeutung von \arg{Boxargs} wird in \boxref*{bem:optbracekey} erklärt.
+
     Die englische Umgebung trägt den Namen \T{#3}. Der Bezeichner für \cmd{autoref} befindet sich
     in \cmdlink{#4name} (\@nameuse{#4name}), die Liste aller Beispiele kann durch \cmdlink{listof#4} gesetzt werden. Der Titel der Liste befindet sich in \cmd{#4listname} (\@nameuse{#4listname}).\par{}
     Der interne Stil der Box trägt den Bezeichner \T{#5}, die interne Id ist \T{#2}, die Datei aller Boxen dieses Typs trägt das Suffix \T{#6}.
@@ -262,7 +288,7 @@ sie einen Zweck erfüllen oder abgesichert wurden (Beispiel: \cmdref{SetBoxPlain
 
 \begin{command}{CurrentBoxStyle}{}
     Dieses Makro sollte nicht neu definiert werden.
-    Es enthält den Bezeichner des aktuell geladenen Stils (\CurrentBoxStyle). 
+    Es enthält den Bezeichner des aktuell geladenen Stils (\CurrentBoxStyle).
 \end{command}
 
 \subsection{Eigene Boxen definieren}
@@ -274,7 +300,7 @@ Hinweis: das definieren eigener Boxen ist aktuell noch etwas umständlich, sofer
 \begin{command}{RegisterBox}{\manArg{Boxkeys}\manArg{Tikzkeys}\manArg{Boxname}\manArg{Titel}\manArg{GroupId}}
     Erzeugt eine neue Box mit den entsprechenden Parametern. Die (wichtigsten) gültigen Parameter für \arg{Boxkeys} sind \autoref{tbl:boxkeys} zu entnehmen. Die \arg{Tikzkeys} erlauben es beliebige Ti\textit{k}z-Kommandos an die Box zu übergeben.
     Der \arg{Boxname} bezeichnet den späteren Namen der Umgebung, durch die die Box erzeugt werden soll.
-    Der \arg{Titel} bezeichnet nicht den Titel der jeweiligen Box, sondern 
+    Der \arg{Titel} bezeichnet nicht den Titel der jeweiligen Box, sondern
     das Präfix (wie \T{Definition}).
     Die \arg{GroupId} muss ein eindeutiger (am Besten möglichst kurzer) Bezeichner sein, der intern für die Persistierung und Handhabung der
     Box verwendet wird.
@@ -358,4 +384,6 @@ Dies ist der aktuelle Stand der Dokumentation.
 \phantomsection\label{mrk:listofdefs}%
 \listofdefinitions
 \listoftheorems
+\listofremarks
+\listofsummaries
 \end{document}

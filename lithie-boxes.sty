@@ -4,7 +4,7 @@
 %% Florian Sihler, 30.09.2020
 %%
 %% Standalone and improved box-module of lilly
-%% boxes. This variant won't use the 
+%% boxes. This variant won't use the
 %% tcbtheorems lib to allow more flexibility.
 
 %% Options
@@ -141,7 +141,7 @@
     \@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
         \newcounter{@libx@box@\libx@get{ListMen}@id}%
         \AtEndDocument{\bgroup\edef\libx@boxid{#5}% just to carry for sub commands
-            \foreach \i in {1,...,\arabic{@libx@box@\libx@get{ListMen}@id}}{% 
+            \foreach \i in {1,...,\arabic{@libx@box@\libx@get{ListMen}@id}}{%
                 \@nameuse{libx@box@\libx@get{ListMen}@contentsline@\i}%
             }%
         \egroup}%
@@ -149,20 +149,11 @@
 % Define the main environment of the box
 \globaldefs=1%
     % NOTE: #1 is short form!
-    \newenvironment{#3}[2][]{%
+    \newenvironment{#3}{%
         \edef\libx@boxid{#5}%
-        \ifx!##1!%
-            \def\libx@curbox@shorttitle{##2}%
-        \else%
-            \def\libx@curbox@shorttitle{##1}%
-        \fi%
-% First we check if the box is disabled
-        \libx@if{BoxEnabled}{%
-            \libx@read@box@default{#5}{##2}{#2}%
-        }{% 
-            % the expandafter hinders the tokens to be read when libx@if gets expanded and is false
-            \expandafter\libx@read@box@hidden%
-        }\ignorespaces%
+        \@ifnextchar(%
+            {\@libx@boxconsume@with@boxopt{#2}{#4}{#5}}%
+            {\@libx@boxconsume@with@boxopt{#2}{#4}{#5}()}%
     }{% end of defined environment
         \libx@if{BoxEnabled}{%
             \libx@read@box@default@end{#5}%
@@ -170,11 +161,33 @@
             \endlibx@read@box@hidden%
         }%
     }%
-    % these mappings are used (internally) for user commands 
+    % these mappings are used (internally) for user commands
     % for easier access
     \@namedef{@libx@map@envshort@#3}{#5}
 \globaldefs=0%
 \egroup}
+
+\def\@libx@boxconsume@with@boxopt#1#2#3(#4){
+    \@ifnextchar[%
+        {\@libx@boxconsume@with@bothopt{#1}{#2}{#3}(#4)}%
+        {\@libx@boxconsume@with@bothopt{#1}{#2}{#3}(#4)[]}
+}
+
+% #1 tikzkeys #2 Title #3 GroupId box opt #4 box opt #5 Referenztitel #6 Titel
+\def\@libx@boxconsume@with@bothopt#1#2#3(#4)[#5]#6{%
+    \ifx!#5!%
+        \def\libx@curbox@shorttitle{#6}%
+    \else%
+        \def\libx@curbox@shorttitle{#5}%
+    \fi%
+% First we check if the box is disabled
+    \libx@if{BoxEnabled}{%
+        \libx@read@box@default{#3}{#6}{#1}{#4}%
+    }{%
+        % the expandafter hinders the tokens to be read when libx@if gets expanded and is false
+        \expandafter\libx@read@box@hidden%
+    }\ignorespaces%
+}
 
 % The boxes
 \NewEnviron{libx@read@box@hidden}{}
@@ -213,7 +226,7 @@
 }
 
 
-% id | num | short | long 
+% id | num | short | long
 \def\libx@loadmark#1#2#3#4{%
     \expandafter\gdef\csname @libx@box@marker@#1@num\endcsname{#2}%
     \expandafter\gdef\csname @libx@box@marker@#1@short\endcsname{#3}%
@@ -237,8 +250,8 @@
 \def\libx@marker@getshort#1#2{\@nameuse{@libx@box@marker@#1#2@short}}
 \def\libx@marker@getlong#1#2{\@nameuse{@libx@box@marker@#1#2@long}}
 
-% #1 id, #2 title, #3 default tikz args
-\def\libx@read@box@default#1#2#3{\begingroup%
+% #1 id, #2 title, #3 default tikz args, #4 further box args
+\def\libx@read@box@default#1#2#3#4{\begingroup%
     \edef\libx@boxid{#1}%
     \libx@get{PreCode}%
     \libx@phantomsection%
@@ -265,7 +278,7 @@
                 before title pre={%
                     \@libx@box@title@pre{#2}%
                     \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
-                }%
+                },#4%
             }{#2}%
     \libx@storemark{#2}%
 \endgroup
@@ -367,7 +380,7 @@
 
 % TODO: restructure?
 % TODO: allow without emblem and 'other' second style?
-% #1 internal list name #2 internal list men #3 list of title text 
+% #1 internal list name #2 internal list men #3 list of title text
 % #4 Emblem for starred variant #5 color
 % #6 style to use #7 id
 % #8 environment name
