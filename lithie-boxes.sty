@@ -75,13 +75,11 @@
     custom list/.is if=libx@CustomList@,
     box enabled/.is if=libx@BoxEnabled@,
     list name/.store in = \libx@box@ListName,
-    list text/.store in =\libx@box@ListText,
     list men/.store in =\libx@box@ListMen,
     defaults/.style={%
         name=noname,title={\noexpand\libx@box@Name},%
         box color=black,use style={},% mandatory!
-        emblem={},list name={\noexpand\libx@box@Name},%
-        list text={Alle \noexpand\libx@box@Name}, pre code={}, in code={},%
+        emblem={},list name={\noexpand\libx@box@Name}, pre code={}, in code={},has emblem=false,%
         out code={},post code={},custom list=true,
         list men=NO,box enabled=true,style derivative={}%
     }
@@ -137,7 +135,7 @@
     \edef\libx@boxid{#5}%
     \pgfkeys{/libx@keys,defaults,#1,name=#3,title=#4}%
     \forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
-            Outcode,PostCode,UseStyle,Emblem,ListName,ListText,ListMen,StyleDerivative}%
+            Outcode,PostCode,UseStyle,Emblem,ListName,ListMen,StyleDerivative}%
     \forcsvlist{\libx@persistif{\libx@boxid}}{HasEmblem,CustomList,BoxEnabled}%
     % setup id counter:
     \@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
@@ -401,7 +399,7 @@
         lines before break=3,before skip=0pt,boxrule=0mm,toprule=0.5mm,%
         bottomtitle=0.5mm,bottomrule=1.1mm,after skip=0pt,%
         enlarge top by=0.55\baselineskip,enlarge bottom by=0.55\baselineskip,%
-        sharp corners=south,breakable, colback=\libx@get{BoxColor}!5!white,colframe=\libx@get{BoxColor},tikz={#1}%
+        sharp corners=south,breakable, colback=\libx@get{BoxColor}!4!white,colframe=\libx@get{BoxColor},tikz={#1}%
     },%
     lithie@box@style@default@plain/.style={%
         enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
@@ -793,10 +791,10 @@
 \fi
 
 % ----------------------------------------------
-% User commands
+% Further User commands
 
 \let\LoadBoxStyle\libx@LoadBoxStyle
 \let\RegisterBox\libx@RegisterBox
 \let\RegisterNewDefaultStyle\libx@RegisterNewDefaultStyle
-
+\let\CurrentBoxStyle\libx@currentstyle
 \endinput

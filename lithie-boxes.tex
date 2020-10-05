@@ -6,9 +6,10 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
-\usepackage{microtype,hyperref,array,enumitem}
+\usepackage{microtype,hyperref,array,enumitem,booktabs}
 
 \usepackage[main=ngerman,english]{babel}
+\addto\captionsngerman{\renewcommand{\tablename}{Tabelle}\renewcommand{\tableautorefname}{\tablename}}
 
 \usepackage[hyperref,enumitem,addons]{color-palettes}
 \usepackage[cpalette,upshape,numinpar]{sopra-listings}
@@ -24,7 +25,7 @@
 \makeindex[title=Befehlsübersicht,columns=2,columnsep=0.75cm]\renewcommand{\indexname}{Befehlsübersicht}
 
 
-\def\say#1{\glqq{#1}\grqq{}}
+\def\say#1{\glqq{}#1\grqq{}}
 
 \def\cmd#1{\texttt{\paletteA{\textbackslash#1}}}
 \def\cmdlink#1{\phantomsection\label{cmd:#1}\cmd{#1}}
@@ -35,6 +36,7 @@
 \def\envref#1{\hyperref[env:#1]{\env{#1}}}
 
 
+\def\optstar{\textit{\(\langle\,\)\T{\paletteA{*}}\(\rangle\)}}
 \def\arg#1{\textit{\paletteB{#1}}}
 \def\manArg#1{\texttt{\{\,\arg{#1}\,\}}}
 \def\optArg#1{\texttt{[\,\arg{#1}\,]}}
@@ -45,7 +47,7 @@
 
 \newenvironment{command}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2@\cmdref{#2}}\cmdlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
 
-\newenvironment{environment}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2@\envref{#2}}\envlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
+\newenvironment{environment}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2@\envref{#2}\textsuperscript{\,\textsf{(env)}}}\envlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
 
 
 \setlength{\parindent}{0pt}
@@ -60,7 +62,7 @@
 \maketitle
 
 \begin{abstract}
-    Dieses Paket ist die eigenständige, (immens) verbesserte und polierte Variante des Box-Mechanismus des \href{https://github.com/EagleoutIce/LILLY}{Lilly-Frameworks}. Die Namen einiger Bezeichner innerhalb dieses Dokuments hängen von der konfigurierten Sprache ab. Da dieses Dokument in deutscher Sprache gefasst wurde, sind die hier angegebenen Standardbezeichner auch jeweils in deutscher Sprache gesetzt.
+    Dieses Paket ist die eigenständige, (immens) verbesserte und polierte Variante des Box-Mechanismus des \href{https://github.com/EagleoutIce/LILLY}{Lilly-Frameworks}. Die Namen einiger Bezeichner innerhalb dieses Dokuments hängen von der konfigurierten Sprache ab. Da dieses Dokument in deutscher Sprache gefasst wurde, sind die hier angegebenen Standardbezeichner auch jeweils in deutscher Sprache gesetzt. Das Paket bietet eine Unterstützung für \href{https://github.com/EagleoutIce/color-palettes}{color-palettes}, die Quellcode-Ausschnitte in diesem Dokument wurden mit \T{sopra-listings} aus der \href{https://github.com/EagleoutIce/sopra-collection}{sopra-collection} gesetzt.
 \end{abstract}
 
 \tableofcontents
@@ -125,11 +127,201 @@ Die Stile können durch normale \LaTeX-Gruppen begrenzt werden. Nach dem Verlass
     Back to normal.
 \end{definition}
 
+Darüber hinaus besitzt jede Box eine \say{Plain}-Variante (diese kann und wird auch vom jeweiligen Stil geändert). Für mehr Informationen über die Verwendung siehe \cmdref{SetBoxPlain} oder die \hyperref[sec:packetoptions]{Paketoption} \T{autostyle}.
+
 \subsection{Nummerierung}
 
 Die Nummerierung der Boxen kann durch \hyperref[sec:packetoptions]{Paketoptionen} kontrolliert werden. So sorgt \T{lockhigh} zum Beispiel dafür, dass die Nummerierung sich an der höheren Gliederungsebene im Dokument orientiert.
 Diese Option wird auch in dieser Dokumentation verwendet. Mit \T{nolock} können diese Sperren deaktiviert werden.
 
+\section{Nutzerbefehle}
+
+\subsection{Die Standardboxen}
+
+Hinweis für die Beispiele: Die dokumentation macht \emph{nicht} von der \hyperref[sec:packetoptions]{Paketoptionen} \T{autostyle} gebrauch. Die Farben werden allerdings durch die Palette \say{\CurrentPalette}.
+
+\makeatletter
+% #1 eng id #2 ger id #3 eng name % #4 eng plural #5 internal style % #6 file ending
+% #7 full title
+\def\PresentBoxEnv#1#2#3#4#5#6#7{%
+\edef\libx@boxid{#2}%
+\begin{environment}{\@nameuse{@libx@#1@envname}}{\optArg{Referenztitel}\manArg{Titel}}
+    \index{#3@\envref{#3}\textsuperscript{\,\textsf{(eng. $\rightarrow$ \@nameuse{@libx@#1@envname})}}}%
+    Setzt eine \say{\libx@get{Title}}-Box.
+    Kommandos im Titel müssen robust sein.
+    Wird kein \arg{Referenztitel} angegeben, so wird der \arg{Titel} als Referenztitel für Querverweise verwendet. Die gesternte Variante
+    der Umgebung wird durch das Emblem \say{\libx@box@get{#2@s}{Emblem}} von den
+    normalen Boxen abgesetzt.
+    
+    Die englische Umgebung trägt den Namen \T{#3}. Der Bezeichner für \cmd{autoref} befindet sich
+    in \cmdlink{#4name} (\@nameuse{#4name}), die Liste aller Beispiele kann durch \cmdlink{listof#4} gesetzt werden. Der Titel der Liste befindet sich in \cmd{#4listname} (\@nameuse{#4listname}).\par{}
+    Der interne Stil der Box trägt den Bezeichner \T{#5}, die interne Id ist \T{#2}, die Datei aller Boxen dieses Typs trägt das Suffix \T{#6}.
+
+    Beispiel:
+    \begin{\@nameuse{@libx@#1@envname}}{Trooper-Box für #7}
+        Ich bin eine Beispiel-Box-Fox. Für die \say{\libx@get{Title}}-Box. Ach ja und ich bin Text um zu Erzwingen, dass ein Zeilenumbruch in der Box stattfindet und man auch sieht wie sich das mit nem Zeilenumbruch so verhält.
+    \end{\@nameuse{@libx@#1@envname}}
+\end{environment}
+}
+\makeatother
+\PresentBoxEnv{def}{def}{definition}{definitions}{Definition}{ldefs}{Definition}
+\PresentBoxEnv{rem}{bem}{remark}{remarks}{Remark}{lrem}{Bemerkung}
+\PresentBoxEnv{the}{sat}{theorem}{theorems}{Theorem}{ltheo}{Satz}
+\PresentBoxEnv{exa}{bei}{example}{examples}{Example}{lexa}{Beispiel}
+\PresentBoxEnv{lem}{lem}{lemma}{lemmas}{Lemma}{llem}{Lemma}
+\PresentBoxEnv{pro}{bew}{proof}{proofs}{Proof}{lpro}{Beweis}
+\PresentBoxEnv{sum}{zsf}{summary}{summaries}{Summary}{lsum}{Zusammenfassung}
+
+\subsection{Referenzen}
+
+Um eine Unabhängigkeit vom Befehl \cmd{autoref} zu erzielen gibt es im Folgenden Referenzbefehle die in der Lage sind, die selbe Ausgabe zu erzeugen. Diese sind allerdings nicht von den \cmd{<Box>name}-Befehlen beeinflusst\footnote{\def\definitionsname{Walter}Das heißt, dass eine um-definition von \cmdref{definitionsname} die Ausgabe von \cmd{autoref} verändert, aber nicht die von \cmdref{boxref}. Beispiel (\cmdref{definitionsname} wurde auf \say{\definitionsname} geändert): \autoref{def:example} (\cmd{autoref}), \boxref*{def:example} (\cmdref{boxref}).}.
+
+\begin{command}{boxref}{\optstar\manArg{anchor}}
+    Erzeugt einen Querverweis analog zu \cmd{nameref} oder \cmd{ref}. Angezeigt wird
+    der Boxbezeichner samt Nummer wie auch des Titels: \T{\cmd{boxref}\{def:example\}} erzeugt: \say{\boxref{def:example}}. Mit dem Stern wird allerdings nur die Kurzform ausgegeben (gleicht \cmd{autoref}). So ergibt \T{\cmd{boxref*}\{def:example\}} die Ausgabe: \say{\boxref*{def:example}}.
+    Der Befehl ist robust.
+\end{command}
+
+\begin{command}{boxnameref}{\optstar\manArg{anchor}}
+    Erzeugt einen Querverweis analog zu \cmd{nameref} oder \cmd{ref}. Nach aktuellem Stand entspricht die Variante ohne Stern der von \cmdref{boxref}. Mit Stern ergibt sich allerdings nur noch der eigentliche Titel \T{\cmd{boxnameref*}\{def:example\}} der Box als Ausgabe: \say{\boxnameref*{def:example}}.
+    Der Befehl ist robust.
+\end{command}
+
+\subsection{Verändern bestehender Boxen}
+
+Die folgenden Befehle sind in sofern noch unvollständig, als dass sie es (noch) nicht erlauben, alle Eigenschaften einer Box zu modifizieren. Sie bieten (hauptsächlich) ein freundliches Interface internen Befehle \cmd{libx@update@boxdata} und \cmd{libx@update@boxif}.
+Hinweis: Die eigentliche Signatur mancher Befehle mag hier (was optionale Argumente angeht) von der präsentierten Abweichen. Dies liegt daran,
+dass manche Optionen für die Zukunft bereits eingebaut wurden, ohne dass
+sie einen Zweck erfüllen oder abgesichert wurden (Beispiel: \cmdref{SetBoxPlain}).
+
+\begin{command}{SetBoxPlain}{\optstar\manArg{Boxbezeichner}}
+    Sorgt dafür, dass die Box in der \say{Plain}-Variante gesetzt wird. Interessant ist, dass die \say{gesternte} Box-Variante unabhängig von der normalen auf Plain gesetzt werden kann (und umgekehrt). Liefert man aber den optionalen Stern für \cmd{SetBoxPlain}, so wird die Variante für beide Umgebungen aktualisiert. Betrachten wir ein Beispiel:
+\SetBoxPlain{definition}%
+\begin{definition}{Ich bin die Plaine-Ihräine}
+    Und ich bin der Text der das Böxoli ziert.\par{}
+    Ich bin die Sonne, die Wonne, der Glanz, da um mich tanzt; die Welt in der Hand und es trifft sich zum
+    Schank; ach dann und wann ein jed-wed jeder der Lächeln noch kann.
+\end{definition}
+\SetBoxPlain[]{definition}%
+    Wie leicht sichtbar ist, wird im geladenen Stil (\CurrentBoxStyle) ein Endsymbol gesetzt um zu signalisieren, dass die Box hier vorbei ist.
+    Möchte man wieder zur \say{normalen} Variante so ist dies aktuell möglich, in dem man ein leeres optionales Argument übergibt. Also:
+    \T{\cmd{SetBoxPlain}[]\{definition\}} (als Beispiel).
+\end{command}
+
+\begin{command}{SetBoxesPlain}{\optstar\manArg{Boxliste}}
+    Dieser Befehl arbeitet analog zu \cmdref{SetBoxPlain}, erlaubt es aber mittels Kommata separiert, mehrere Boxbezeichner zu übergeben. Für jeden einzelnen wird dann \cmdref{SetBoxPlain} entsprechend ausgeführt.
+\end{command}
+
+\begin{command}{SetBoxDisabled}{\optstar\manArg{true/false}\manArg{Boxbezeichner}}
+    Sorgt dafür, dass die Box nicht gesetzt wird. Interessant ist, dass die \say{gesternte} Box-Variante unabhängig von der normalen auf versteckt werden kann (und umgekehrt). Liefert man aber den optionalen Stern für \cmd{SetBoxDisabled}, so werden beide Umgebungen versteckt.
+    Möchte man die Boxen wieder anzeigen so genügt das Übergeben von \T{true}\footnote{Natürlich wirkt das nicht intuitiv, \T{true} zu übergeben, damit die Box wieder angezeigt wird. Dies kann sich in kommenden Versionen noch ändern.}: \T{\cmd{SetBoxDisabled}[true]\{definition\}}.
+\end{command}
+
+\begin{command}{SetBoxesDisabled}{\optstar\manArg{true/false}\manArg{Boxliste}}
+    Dieser Befehl arbeitet analog wie \cmdref{SetBoxesPlain} zu \cmdref{SetBoxPlain}, erlaubt es aber mittels Kommata separiert, mehrere Boxbezeichner zu übergeben. Für jeden einzelnen wird dann \cmdref{SetBoxDisabled} entsprechend ausgeführt.
+\end{command}
+
+
+\begin{command}{SetBoxColor}{\optstar\manArg{Boxbezeichner}\manArg{Farbe}}
+    Ändert die Farbe der angegebenen Box. Interessant ist, dass die \say{gesternte} Box-Variante unabhängig von der normalenverändert werden kann (und umgekehrt). Liefert man aber den optionalen Stern für \cmd{SetBoxPlain}, so wird die Farbe für beide Umgebungen aktualisiert.
+    Setzen wir zum Beispiel die Farbe der Definitionen auf ein knalliges gift-grün:
+{\makeatletter\xdef\oldcol{\libx@box@get{def}{BoxColor}}
+    \SetBoxColor{definition}{lime}
+\begin{definition}{Beispieldefinition}
+    Hilfe ich bin ein verzauberter Giftzwerg!
+\end{definition}
+\SetBoxColor{definition}{\oldcol}%
+}
+\end{command}
+
+\subsection{Stile}
+
+\begin{command}{LoadBoxStyle}{\manArg{Bezeichner}}
+    Lädt eine Datei mit der Bezeichnung: {\makeatletter\say{\T{\arg{Bezeichner}{\libx@loadstyle@ending}}}}. Gesucht wird an den \cmd{input}-Pfaden.
+\end{command}
+
+\begin{command}{CurrentBoxStyle}{}
+    Dieses Makro sollte nicht neu definiert werden.
+    Es enthält den Bezeichner des aktuell geladenen Stils (\CurrentBoxStyle). 
+\end{command}
+
+\subsection{Eigene Boxen definieren}
+
+Hinweis: das definieren eigener Boxen ist aktuell noch etwas umständlich, sofern man \say{abgefahrene Sachen} machen will (wie der Block am Ende eines Beweises; siehe \envref{beweis}). In diesem Fall kann aktuell nur der Quellcode des Pakets selbst als Beispiel herhalten.
+
+\begin{command}{RegisterBox}{\manArg{Boxkeys}\manArg{Tikzkeys}\manArg{Boxname}\manArg{Titel}\manArg{GroupId}}
+    Erzeugt eine neue Box mit den entsprechenden Parametern. Die (wichtigsten) gültigen Parameter für \arg{Boxkeys} sind \autoref{tbl:boxkeys} zu entnehmen. Die \arg{Tikzkeys} erlauben es beliebige Ti\textit{k}z-Kommandos an die Box zu übergeben.
+    Der \arg{Boxname} bezeichnet den späteren Namen der Umgebung, durch die die Box erzeugt werden soll.
+    Der \arg{Titel} bezeichnet nicht den Titel der jeweiligen Box, sondern 
+    das Präfix (wie \T{Definition}).
+    Die \arg{GroupId} muss ein eindeutiger (am Besten möglichst kurzer) Bezeichner sein, der intern für die Persistierung und Handhabung der
+    Box verwendet wird.
+
+    Betrachten wir einmal ein Beispiel, wie eine Box erzeugt werden kann\footnote{Dieses Beispiel ist im Verhältnis zu den anderen Boxen etwas einfacher gehalten}. Da wir noch nicht wissen, wie mit \cmdref{RegisterNewDefaultStyle} eigene Stile definiert werden können, verwenden wir hier den Stil der Definition.
+\begin{latex}[morekeywords={[1]{\\RegisterBox,\\newlistof,\\protect}}]
+\newlistof{codeliste}{lcode}{Alle Codeboxen}%
+\RegisterBox{%
+    list name=codeliste,%
+    list men=lcode,%
+    has emblem=true,%
+    in code=\noindent,%
+    emblem=\protect!**!\faCode,%
+    box color=purple,%
+    use style=libx@box@Definition}%
+{}{code}{Code}{cde}%
+\end{latex}
+\newlistof{codeliste}{lcode}{Alle Codeboxen}%
+\RegisterBox{%
+    list name=codeliste,%
+    list men=lcode,%
+    has emblem=true,%
+    in code=\noindent,%
+    emblem=\protect\faCode,%
+    box color=purple,%
+    use style=libx@box@Definition%
+}{}{code}{Code}{cde}%
+Setzen wir doch mal unsere Code-Box:
+\begin{latex}[morekeywords={[3]{code}}]
+\begin{code}{Ich bin eine Codebox!}
+Super Code nicht wahr?
+    \begin{java*}
+System.out.println("Hallo Welt!");
+    \end{java*}
+\end{code}
+\end{latex}
+Wir erhalten:
+\begin{code}{Ich bin eine Codebox!}
+Super Code nicht wahr?
+    \begin{java}
+System.out.println("Hallo Welt!");
+    \end{java}
+\end{code}
+\end{command}
+
+\begin{table}[tbhp]
+    \renewcommand{\arraystretch}{1.5}%
+    \centering\begin{tabular}{>{\ttfamily}p{0.15\linewidth}>{\ttfamily}p{0.075\linewidth}>{\ttfamily}p{0.1\linewidth}p{0.57\linewidth}}
+        \toprule
+            Schlüssel & Typ & Default & Beschreibung \\
+        \midrule
+            box color & color & black & Die Farbe der Box. Muss einige gültige Farbe sein. \\
+            pre code & code & & (\LaTeX-)Code der vor dem Beginn der Box ausgeführt werden soll. \\
+            in code & code & & (\LaTeX-)Code der innerhalb der Box vor dem Beginn des eigentlichen Inhalts (aber nach dem Titel) ausgeführt werden soll. \\
+            out code & code & & (\LaTeX-)Code der vor dem Verlassen der Box ausgeführt werden soll (aber nach dem eigentlichen Inhalt). \\
+            post code & code & & (\LaTeX-)Code der nach dem Ende der Box ausgeführt werden soll. \\
+            use style & style & & Der durch \cmdref{RegisterNewDefaultStyle} definierte Stil. Dies kann auch einer der bereits bestehenden Stile sein. Auch wenn der Parameter optional erscheint, so ist er dennoch verpflichtend. Es gilt zu beachten, dass der Stil auch die (volle) Kontrolle über den Zähler besitzt. \\
+            emblem & code & & Das zu setzende Emblem (wird zum Beispiel bei der gesternten Variante von \envref{definition} als \cmd{faStar} gesetzt.). Der Code sollte durch \cmd{protect} abgesichert werden, wenn es sich um problematische Makros handelt. \\
+            has emblem & bool & false & Eigentliche Flagge, die angibt ob das Emblem auch gesetzt werden soll. Dies sorgt auch dafür, dass in den Listen Platz für ein Emblem gehalten wird. So wird zum Beispiel dafür gesorgt, dass die Einrückung auch für Definitionen auch ohne Emblem korrekt ist.\\
+            custom list & bool & true & Gibt an ob sich die Box in einer Liste registrieren soll. Ist dieser Wert auf \say{wahr}, so ist es unabdingbar \T{list name}, \T{list text} und \T{list men} zu setzen und mit den Informationen der zugrundeliegenden Liste zu füllen. \\
+            list name & text & & Der Name der zugrundeliegenden Liste (muss extra mit z.B. \cmd{newlistof} aus dem Paket \T{tocloft} definiert werden). Es können auch bestehende Listen verwendet werden. \\
+            list men & text & & Die Dateibezeichnung der Liste. Die Regeln gelten analog zu \T{list name}. \\
+        \bottomrule
+    \end{tabular}
+    \caption[Optionen für die Boxkeys in \cmdref{RegisterBox}.]{Optionen für die Boxkeys in \cmdref{RegisterBox}. Hier sind nur die wichtigsten Schlüssel aufgeführt. Manch andere wie \T{name} werden durch andere Befehle bereits gesetzt.}
+    \label{tbl:boxkeys}
+\end{table}
+
+% TODO: geladenen Pakete/abhängigkeiten?
 \section{Paketoptionen}
 \label{sec:packetoptions}
 
