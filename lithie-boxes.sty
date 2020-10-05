@@ -44,8 +44,37 @@
 
 \ProcessOptions*\relax%
 
+% ----------------------------------------
+% koma-script abstraction (for tocloft)
+
+\newif\iflibx@comp@koma@
+
+\@ifclassloaded{scrartcl}{\libx@comp@koma@true}{}
+\@ifclassloaded{scrreprt}{\libx@comp@koma@true}{}
+\@ifclassloaded{scrbook}{\libx@comp@koma@true}{}
+
+\iflibx@comp@koma@
+    \typeout{Koma-Script detected. lithie-boxes using a fallback mechanism}%
+    %\KOMAoption{listof}{entryprefix}%
+    % important: dropping the optional reset
+    \def\libx@newlistof#1#2#3{%
+        \newcounter{#1}%
+        \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{1.5em}{2.3em}{##1}{##2}}%
+        \expandafter\gdef\csname listof#1\endcsname{\bgroup%
+            \def\contentsname{#3}% may?
+            \let\libx@starttoc\@starttoc%
+            \def\@starttoc####1{\libx@starttoc{#2}}%
+            % TODO: change?
+            \tableofcontents%
+        \egroup}
+    }%
+\else
+    \RequirePackage{tocloft}
+    \let\libx@newlistof\newlistof
+\fi
+
 %% Packages
-\RequirePackage{tcolorbox,environ,tocloft,calc,fontawesome,translator}
+\RequirePackage{tcolorbox,environ,calc,fontawesome,translator}
 \tcbuselibrary{skins,breakable,hooks}
 
 %% lengths
@@ -358,9 +387,6 @@
     \@libx@addcontentsline{\arabic{#1}}{#2}{#3}{#4}%
 }
 
-
-
-
 % ----------------------------------------
 % box definitions
 
@@ -386,8 +412,10 @@
 % #8 environment name
 % #9 title
 \def\libx@RegisterBoxPair#1#2#3#4#5#6#7#8#9{%
-    \newlistof{#1}{#2}{#3}%
-    \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
+    \libx@newlistof{#1}{#2}{#3}%
+    \iflibx@comp@koma@\else%
+        \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
+    \fi%
     % set name
     \expandafter\providecommand\csname #1name\endcsname{#9}%
     % \expandafter\protected@edef\csname cft#2titlefont\endcsname{\@nameuse{cft#2titlefont}\selectfont}%
@@ -438,7 +466,7 @@
 
 % #1 is prefix, #2 is number, #3 is text
 \def\libx@default@typeset@title#1#2#3{\bgroup%
-    \def\libx@tmp@title{\libx@get{Emblem} #2 #3~}%
+    \def\libx@tmp@title{\libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\,~}#2 #3~}%
     \textbf{\textsc{\libx@title@strut{}\libx@tmp@title} \hfill \parbox[t]{\linewidth-\widthof{\libx@tmp@title}-1em}{\raggedleft\textbf{#1}}}%
 \egroup}
 
