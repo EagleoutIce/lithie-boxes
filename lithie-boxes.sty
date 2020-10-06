@@ -48,6 +48,7 @@
 \DeclareOption{autoenv}{ \def\libx@environments@trans{} }
 
 \newif\iflibx@forcekomadisabled@
+\newif\iflibx@comp@koma@
 \DeclareOption{koma}{ \libx@comp@koma@true\libx@forcekomadisabled@false }
 \DeclareOption{nokoma}{ \libx@forcekomadisabled@true }
 
@@ -68,8 +69,6 @@
 % ----------------------------------------
 % koma-script abstraction (for tocloft)
 
-\newif\iflibx@comp@koma@
-
 \@ifclassloaded{scrartcl}{\libx@comp@koma@true}{}
 \@ifclassloaded{scrreprt}{\libx@comp@koma@true}{}
 \@ifclassloaded{scrbook}{\libx@comp@koma@true}{}
@@ -78,10 +77,11 @@
     \libx@comp@koma@false
 \fi
 
+
 \iflibx@comp@koma@
     \def\libx@listof@heading#1{\section*{#1\@mkboth{#1}{#1}}}
     \AtBeginDocument{\let\libx@starttoc\@starttoc}
-    \typeout{Koma-Script detected. lithie-boxes using a fallback mechanism}%
+    \typeout{Koma-Script detected. lithie-boxes using a fallback mechanism.}%
     %\KOMAoption{listof}{entryprefix}%
     % important: dropping the optional reset
     \def\libx@newlistof#1#2#3{%
@@ -188,6 +188,10 @@
     \libx@persistif{\libx@boxid}{#2}%
 \egroup}
 
+\long\def\libx@preatend#1{%
+\gpreto{\@enddocumenthook}{#1}%
+}
+
 % #1 Boxkeys, #2 tikzkeys for box
 % #3 Boxname (set boxnamekey)
 % #4 Title (boxtitlekey)
@@ -201,10 +205,12 @@
     % setup id counter:
     \@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
         \newcounter{@libx@box@\libx@get{ListMen}@id}%
-        \AtEndDocument{\bgroup\edef\libx@boxid{#5}% just to carry for sub commands
+        \libx@preatend{\bgroup\makeatletter\edef\libx@boxid{#5}% just to carry for sub commands
+            \ifnum\arabic{@libx@box@\libx@get{ListMen}@id}=0\else
             \foreach \i in {1,...,\arabic{@libx@box@\libx@get{ListMen}@id}}{%
                 \@nameuse{libx@box@\libx@get{ListMen}@contentsline@\i}%
             }%
+            \fi
         \egroup}%
     }{}
 % Define the main environment of the box
