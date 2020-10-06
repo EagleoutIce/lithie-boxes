@@ -306,7 +306,6 @@ sie einen Zweck erfüllen oder abgesichert wurden (Beispiel: \cmdref{SetBoxPlain
 Hinweis: das definieren eigener Boxen ist aktuell noch etwas umständlich, sofern man \say{abgefahrene Sachen} machen will (wie der Block am Ende eines Beweises; siehe \envref{beweis}). In diesem Fall kann aktuell nur der Quellcode des Pakets selbst als Beispiel herhalten.
 
 
-
 \begin{command}{RegisterBox}{\manArg{Boxkeys}\manArg{Tikzkeys}\manArg{Boxname}\manArg{Titel}\manArg{GroupId}}
     Erzeugt eine neue Box mit den entsprechenden Parametern. Die (wichtigsten) gültigen Parameter für \arg{Boxkeys} sind \autoref{tbl:boxkeys} zu entnehmen. Die \arg{Tikzkeys} erlauben es beliebige Ti\textit{k}z-Kommandos an die Box zu übergeben.
     Der \arg{Boxname} bezeichnet den späteren Namen der Umgebung, durch die die Box erzeugt werden soll.
@@ -375,6 +374,20 @@ Wir haben also den Nummer der Definition benutzt, sind aber nicht in der Liste e
 
 \begin{command}{RegisterNewDefaultStyle}{\manArg{Name}\manArg{Options}}
     Erzeugt einen neuen Stil der zum Beispiel von \cmdref{RegisterBox} verwendet werden kann. Die \arg{Options} bezeichnen weitere tcolorbox-Argumente. Erzeugt wird der Stil \T{libx@box@\arg{Name}}.
+\end{command}
+
+\subsection{Weitere Befehle}
+
+\begin{command}{libxlistofheading}{\manArg{Command}}
+    Dieser Befehl ist nur dann von Relevanz wenn die Koma-Script-Kompatibilität aktiv ist (sonst gibt er eine Warnung aus und bleibt ohne Bedeutung). Er erlaubt es den Titel eines \cmd{listof<enboxpl>}-Befehls zu konfigurieren. Die Standardkonfiguration ist die Folgende:
+\begin{latex*}[morekeywords={[5]{\\libxlistofheading}},morekeywords={[2]{\\@mkboth}}]
+\libxlistofheading{\section*{#1\@mkboth{#1}{#1}}}%
+\end{latex*}
+    Hierbei wird \T{\#1} automatisch durch den jeweiligen Titel ersetzt. Möchte man also nun einfach, dass die Listen sich als \cmd{subsection} auch im \cmd{tableofcontents} registrieren und davor noch \say{Hallo Welt} schreiben, so wäre folgender Befehl möglich:
+\begin{latex*}[morekeywords={[5]{\\libxlistofheading}}]
+\libxlistofheading{\subsection{#1} Hallo Welt}%
+\end{latex*}
+    Ein Beispiel dazu lässt sich in der \T{example.pdf} finden, die sich \href{https://media.githubusercontent.com/media/EagleoutIce/lithie-boxes/gh-pages/example.pdf}{hier} befinden sollte.
 \end{command}
 
 % TODO: geladenen Pakete/abhängigkeiten?

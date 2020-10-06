@@ -77,9 +77,12 @@
     \libx@comp@koma@false
 \fi
 
-
+\def\libxlistofheading#1{%
+    \PackageWarning{lithie-boxes}{This command is only available with the koma-compatibilities.}%
+}
 \iflibx@comp@koma@
-    \def\libx@listof@heading#1{\section*{#1\@mkboth{#1}{#1}}}
+    \def\libxlistofheading#1{\def\libx@listof@heading##1{#1}}
+    \libxlistofheading{\section*{#1\@mkboth{#1}{#1}}}
     \AtBeginDocument{\let\libx@starttoc\@starttoc}
     \typeout{Koma-Script detected. lithie-boxes using a fallback mechanism.}%
     %\KOMAoption{listof}{entryprefix}%

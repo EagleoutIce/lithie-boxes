@@ -133,7 +133,7 @@
     \listofremarks
     \listoftheorems
     \listofexamples
-    \listoflemmas
+    % \listoflemmas % see below :D
     \listofsummaries
     \listofproofs
 
@@ -165,5 +165,18 @@
             \end{zusammenfassung}
         \end{beweis}
     \end{definition}
+
+\clearpage
+\section{Beispiel aus der Dokumentation}
+
+\begin{lemma}(float*=t,width=\textwidth){Ich bin ein fliegendes Lemma}
+    Määäääääääääääääää\-ääääääääääääääääää\-ääääää\-ääääääääääääää\-äääääääääääääääääää\-äääääh
+\end{lemma}
+
+Hier befindet sich nun noch das versprochene Beispiel aus der Dokumentation, mit umdefiniertem Titelkopf:
+{
+    \libxlistofheading{\subsection{#1} Hallo Welt}%
+    \listoflemmas
+}
 
 \end{document}
