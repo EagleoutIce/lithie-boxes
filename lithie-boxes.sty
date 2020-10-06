@@ -590,6 +590,15 @@
     \libx@tmp%
 }
 
+\def\libx@provide@translation#1#2#3{%
+    \@ifundefined{#1}{%
+        % we have to do this to avoid warnings with hyperref
+        \expandafter\translatelet\csname #1@@listof\endcsname{#2}%
+        \expandafter\translatelet\csname #1@@name\endcsname{#3}%
+        \@namedef{#1}{\@nameuse{#1@@listof} \@nameuse{#1@@name}}%
+    }{}%
+}
+
 % ----------------------------------------
 % default boxes
 % TODO: option keep env names to leave env names in another language?
@@ -599,7 +608,7 @@
 \libx@translateenv{def}{definition}
 
 % note if this order is wrong redef of '\definitionslistname' is needed
-\providecommand\definitionslistname{\translate{List of} \translate{Definitions}}
+\libx@provide@translation{definitionslistname}{List of}{Definitions}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {definitions}{ldefs}{\definitionslistname}{\faStar}%
@@ -614,7 +623,7 @@
 
 \libx@translateenv{rem}{remark}
 
-\providecommand\remarkslistname{\translate{List of} \translate{Remarks}}
+\libx@provide@translation{remarkslistname}{List of}{Remarks}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {remarks}{lrem}{\remarkslistname}{\faStar}%
@@ -629,7 +638,7 @@
 
 \libx@translateenv{the}{theorem}
 
-\providecommand\theoremslistname{\translate{List of} \translate{Theorems}}
+\libx@provide@translation{theoremslistname}{List of}{Theorems}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {theorems}{ltheo}{\theoremslistname}{\faStar}%
@@ -644,7 +653,7 @@
 
 \libx@translateenv{exa}{example}
 
-\providecommand\exampleslistname{\translate{List of} \translate{Examples}}
+\libx@provide@translation{exampleslistname}{List of}{Examples}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {examples}{lexa}{\exampleslistname}{\faStar}%
@@ -659,7 +668,7 @@
 
 \libx@translateenv{lem}{lemma}
 
-\providecommand\lemmaslistname{\translate{List of} \translate{Lemmas}}
+\libx@provide@translation{lemmaslistname}{List of}{Lemmas}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {lemmas}{llem}{\lemmaslistname}{\faStar}%
@@ -673,7 +682,7 @@
 
 \libx@translateenv{pro}{proof}
 
-\providecommand\proofslistname{\translate{List of} \translate{Proofs}}
+\libx@provide@translation{proofslistname}{List of}{Proofs}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {proofs}{lpro}{\proofslistname}{\faStar}%
@@ -688,7 +697,7 @@
 \libx@translateenv{sum}{summary}
 
 % synopses
-\providecommand\summarieslistname{\translate{List of} \translate{Summaries}}
+\libx@provide@translation{summarieslistname}{List of}{Summaries}
 \libx@RegisterBoxPair%
 % List definition and emblem:
 {summaries}{lsum}{\summarieslistname}{\faStar}%
