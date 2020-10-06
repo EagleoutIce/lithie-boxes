@@ -414,6 +414,10 @@ Analog lassen sie sich mit \packagelink{koma} erzwingen.
 Für Übersetzungen verwendet dieses Paket die Hilfe von \href{https://ctan.org/pkg/translator}{translator}, welches die
 Sprache aus dem Befehl \cmd{languagename} extrahiert. Je nach Installation kann es allerdings sein, dass die Sprache falsch erkannt wird\footnote{Dies sollte nicht geschehen, wenn die gewünschte Sprache der Dokumentklasse selbst übergeben wird.}! In diesem Fall erzwingt \packagelink{german} das Setzen in deutscher Sprache (dies beeinflusst \packageref{autoenv}, hat aber keinen Einfluss auf die Umgebungsnamen wenn diese mit \packageref{englishenv} auf Englisch gezwungen werden) und analog \packagelink{english} das Setzen in englischer Sprache (mit denselben Wechselwirkungen mit \packageref{autoenv} und \packageref{englishenv}). Die Option \packageref{autolang} ist der Standard und versucht die Sprache aus \cmd{languagename} zu extrahieren\footnote{Das Paket \href{https://ctan.org/pkg/iflang}{iflang} wird nicht verwendet.}.
 
+\paragraph{Textfluss}
+
+Der Paketautor\footnote{Das bin ich :P}, hat eine große Freude an rechteckigen Paragraphen. Diese können aber vor allem in Boxen zu einem schlechteren Textfluss beitragen, weswegen die Option \packagelink{noparfill} (Standard) derartige Vorkehrungen \say{zunichte} macht. Möchte man dennoch derartige Optionen so genügt es, die Option \packagelink{parfill} anzugeben\footnote{Hinweis: Simpel gesagt setzt \packageref{noparfill} nur das in \cmd{@@libx@noparfill} hinterlegte Makro.}.
+
 \section{Versionierung}
 \subsection{Version 1.0}
 Initiale Version mit den Boxen \envref{definition}, \envref{bemerkung}, \envref{satz}, \envref{beispiel}, \envref{lemma}, \envref{beweis} und \envref{zusammenfassung}. Auch

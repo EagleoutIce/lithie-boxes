@@ -56,6 +56,13 @@
 \DeclareOption{english}{ \def\libx@language{English} }
 \DeclareOption{autolang}{ \def\libx@language{} }
 
+\@ifundefined{@@libx@noparfill}{%
+    \def\@@libx@noparfill{\parfillskip=\z@ plus 1fil}
+}{}
+\let\libx@parfill@\@@libx@noparfill
+\DeclareOption{parfill}{ \def\libx@parfill@{} }
+\DeclareOption{noparfill}{ \let\libx@parfill@\@@libx@noparfill }
+
 \ProcessOptions*\relax%
 
 % ----------------------------------------
@@ -444,12 +451,12 @@
     \expandafter\providecommand\csname #1name\endcsname{#9}%
     % \expandafter\protected@edef\csname cft#2titlefont\endcsname{\@nameuse{cft#2titlefont}\selectfont}%
 % Register no star
-    \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,in code=\noindent,%
+    \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,in code=\libx@parfill@\noindent,%
     box color=#5,use style=libx@box@#6}{}{#8}{#9}{#7}%
     % if the emblem is empty we do not define the starred variant!
     \ifx!#4!\else%
         \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,emblem=\protect#4,%
-    in code=\noindent,box color=#5,use style=libx@box@#6}{}{#8*}{#9}{#7@s}%
+    in code=\libx@parfill@\noindent,box color=#5,use style=libx@box@#6}{}{#8*}{#9}{#7@s}%
     \fi
 }
 
