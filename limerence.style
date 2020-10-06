@@ -6,7 +6,7 @@
 \tcbset{%
     lithie@box@style@limerence/.style={% TODO: change attachment?
         breakable,lines before break=3,width=\linewidth,enhanced jigsaw,sharp corners,%
-        boxrule=0pt,fonttitle={},coltitle={black},attach title to upper,%
+        boxrule=0pt,fonttitle={\normalsize},coltitle={black},attach title to upper,%
         % TODO: allow better opacity fill
         opacityfill=0.45,top=3pt,bottom=3pt,right=5pt,frame hidden,%
         % TODO: allow flexible back color
@@ -19,8 +19,8 @@
         lithie@box@style@limerence@extra@arrows=\libx@get{BoxColor}%
     },%
     lithie@box@style@limerence@plain/.style={%
-        breakable,lines before break=3,enhanced jigsaw,sharp corners,%
-        boxrule=0pt,fonttitle={},coltitle={black},attach title to upper,%
+        breakable,lines before break=3,enhanced jigsaw,,width=\linewidth,sharp corners,%
+        boxrule=0pt,fonttitle={\normalsize},coltitle={black},attach title to upper,%
         opacityfill=0,boxsep=0pt,top=0pt,bottom=0pt,right=0pt,left=0pt,frame hidden,%
         after title app={\hbox{}~\vspace*{-.85\baselineskip}%
             \newline\unskip\widowpenalties=3 10000 10000 150},%
@@ -34,13 +34,13 @@
     lithie@box@style@limerence@extra@arrows/.style={%
         extras first and middle={overlay={% 0.33pt offset to buffer
             \begin{scope}[shift={(frame.south west)}]
-                \path[fill=#1] (0,0pt) -- ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) -- 
+                \path[fill=#1] (0,0pt) -- ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) --
                     ++(\libx@limerence@border@width/2,\libx@limerence@border@width) |- (0,.33pt) -- cycle;
             \end{scope}
         }},%
         extras middle and last={overlay={%
             \begin{scope}[shift={(frame.north west)}]
-                \path[fill=#1] (0,0pt) -- ++(\libx@limerence@border@width/2,\libx@limerence@border@width) -- 
+                \path[fill=#1] (0,0pt) -- ++(\libx@limerence@border@width/2,\libx@limerence@border@width) --
                     ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) |- (0,-.33pt) -- cycle;
             \end{scope}
         }}%

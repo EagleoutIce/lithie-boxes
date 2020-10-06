@@ -74,6 +74,9 @@
     use style=libx@box@Definition%
 }{}{code}{Code}{cde}%
 
+\renewcommand*{\thefootnote}{$\langle$\textbf{\arabic{footnote}}$\rangle$}
+\renewcommand*{\thempfootnote}{$\langle$\textbf{\doublealph{mpfootnote}}$\rangle$}
+
 
 \begin{document}
 \maketitle
@@ -124,7 +127,7 @@ Das Ergebnis ist das Folgende:
     Ich bin ein Beispielsatz.
 \end{satz*}
 
-Eine Auflistung aller Boxen gibt es mittels des Befehls \cmdref{listof<enboxpl>} wobei \T{enboxpl} den englischen Plural des Boxtitels bezeichnet\footnote{Der Befehl ändert sich auch nicht durch eine andere Sprache oder Optionen, da Bezeichner wie \cmd{listofbemerkungen} sehr seltsam wirken.}. So ist die Ausgabe von \cmdref{listofdefinitions} exemplarisch \hyperref[mrk:listofdefs]{am Ende} aufgeführt.
+Eine Auflistung aller Boxen gibt es mittels des Befehls \cmd{listof<enboxpl>} wobei \T{enboxpl} den englischen Plural des Boxtitels bezeichnet\footnote{Der Befehl ändert sich auch nicht durch eine andere Sprache oder Optionen, da Bezeichner wie \cmd{listofbemerkungen} sehr seltsam wirken.}. So ist die Ausgabe von \cmdref{listofdefinitions} exemplarisch \hyperref[mrk:listofdefs]{am Ende} aufgeführt.
 
 \subsection{Stile}
 
@@ -170,10 +173,10 @@ Hinweis für die Beispiele: Die dokumentation macht \emph{nicht} von der \hyperr
     Dies ist der Text einer fliegenden Zusammen!**!fassung.
 \end{zusammenfassung}
 \end{latex}
-    Die Ausgabe findet sich in \boxref{zsf:floatingex}. Möchte man in einem Zweispaltigen Dokument eine Definition die beide Spalten überspannt so gilt es einfach \T{float*} anstelle von \T{float} zu verwenden. Über \T{floatplacement} können Platzierungshinweise analog zum Optionalen Argument bei Umgebungen wie \env{figure} angegeben werden. Für mehr Informationen empfiehlt sich die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox}.
+    Die Ausgabe findet sich in \boxref{zsf:floatingex}. Möchte man in einem Zweispaltigen Dokument eine Definition die beide Spalten überspannt so gilt es einfach \T{float*} anstelle von \T{float} zu verwenden\footnote{Wichtig! Wie auch die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox} darauf hinweis, ist im Falle einer wirklich über beide Spalten gehende Box auch noch \T{width=\cmd{textwidth}} anzufügen.}. Über \T{floatplacement} oder \T{float=htbp}, können Platzierungshinweise analog zum optionalen Argument bei Umgebungen wie \env{figure} angegeben werden. Für mehr Informationen empfiehlt sich die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox}.
     Natürlich kann so auch ein Referenztitel übergeben werden:
 \begin{latex}
-\begin{zusammenfassung}(float*,floatplacement=b)[Und ich der Referenztitel]
+\begin{zusammenfassung}(float*=b, width=\textwidth)[Und ich der Referenztitel]
             {Ich bin auch eine fliegende Zusammen!**!fassung}
     Dies ist der Text einer fliegenden Zusammen!**!fassung.
 \end{zusammenfassung}
@@ -187,7 +190,7 @@ Wichtige Anmerkung: Die Schlüssel \T{before upper app} und \T{before title pre}
     \label{zsf:floatingex}Dies ist der Text einer fliegenden Zusammenfassung.
 \end{zusammenfassung}
 
-\begin{zusammenfassung}(float*,floatplacement=b)[Und ich der Referenztitel]
+\begin{zusammenfassung}(float*=b, width=\textwidth)[Und ich der Referenztitel]
             {Ich bin auch eine fliegende Zusammenfassung}
     \label{zsf:floatingex2}Dies ist der Text einer fliegenden Zusammenfassung.
 \end{zusammenfassung}
