@@ -66,6 +66,8 @@
 
 \ProcessOptions*\relax%
 
+
+% TODO: TRANSLATE IN TABLE OF CONTENTS (SIDEBAR) ETC. MAKE WITH translatelet
 % ----------------------------------------
 % koma-script abstraction (for tocloft)
 
@@ -191,8 +193,9 @@
     \libx@persistif{\libx@boxid}{#2}%
 \egroup}
 
+
 \long\def\libx@preatend#1{%
-\gpreto{\@enddocumenthook}{#1}%
+\gpreto{\enddocument}{#1}%
 }
 
 % #1 Boxkeys, #2 tikzkeys for box
