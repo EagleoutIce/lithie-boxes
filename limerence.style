@@ -1,7 +1,7 @@
 % limerence box-styles
 
 % is defined to allow importing this style multiple times
-\def\libx@limerence@border@width{3.41415pt}
+\def\libx@limerence@border@width{2.71pt}
 
 \tcbset{%
     lithie@box@style@limerence/.style={% TODO: change attachment?
@@ -48,14 +48,19 @@
 }
 
 \def\libx@style@limerence@titledivider{%
-    {\normalcolor~--~}%
+    {~--~}%
+}
+
+\def\@libx@limerence@typeset@title@prefix#1#2{%
+    \textcolor{\libx@get{BoxColor}}{\textsf{\textbf{\footnotesize#1}}}#2%
 }
 \def\libx@limerence@typeset@title#1#2#3{%
-    \textsf{\libx@title@strut\textcolor{\libx@get{BoxColor}}{%
-        \libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\,~}#2 #3%
-        \ifx!#1!\else\libx@style@limerence@titledivider\fi%
-    }% we do not use the width again as we want to save space :D
-    {#1}}\nopagebreak\smallskip\\*%
+    {\libx@title@strut%
+        \@libx@limerence@typeset@title@prefix{%
+            \libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\,~}#2 #3%
+        }{\ifx!#1!\else\libx@style@limerence@titledivider\fi}%
+        % we do not use the width again as we want to save space :D
+    {#1}}\nopagebreak\\*%
 }
 
 
