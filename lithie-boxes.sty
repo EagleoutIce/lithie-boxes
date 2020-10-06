@@ -7,6 +7,11 @@
 %% boxes. This variant won't use the
 %% tcbtheorems lib to allow more flexibility.
 
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lithie-boxes}[2020/10/06 EagleoutIce - lilly box-port and improbement]
+
+\def\libx@version{1.0}
+
 %% Options
 %% -----------------------------------------------------------------------------
 
@@ -42,6 +47,15 @@
 \DeclareOption{englishenv}{ \def\libx@environments@trans{English} }%defaults for trans
 \DeclareOption{autoenv}{ \def\libx@environments@trans{} }
 
+\newif\iflibx@forcekomadisabled@
+\DeclareOption{koma}{ \libx@comp@koma@true\libx@forcekomadisabled@false }
+\DeclareOption{nokoma}{ \libx@forcekomadisabled@true }
+
+\def\libx@language{}
+\DeclareOption{german}{ \def\libx@language{German} }
+\DeclareOption{english}{ \def\libx@language{English} }
+\DeclareOption{autolang}{ \def\libx@language{} }
+
 \ProcessOptions*\relax%
 
 % ----------------------------------------
@@ -53,20 +67,25 @@
 \@ifclassloaded{scrreprt}{\libx@comp@koma@true}{}
 \@ifclassloaded{scrbook}{\libx@comp@koma@true}{}
 
+\iflibx@forcekomadisabled@
+    \libx@comp@koma@false
+\fi
+
 \iflibx@comp@koma@
+    \def\libx@listof@heading#1{\section*{#1\@mkboth{#1}{#1}}}
+    \AtBeginDocument{\let\libx@starttoc\@starttoc}
     \typeout{Koma-Script detected. lithie-boxes using a fallback mechanism}%
     %\KOMAoption{listof}{entryprefix}%
     % important: dropping the optional reset
     \def\libx@newlistof#1#2#3{%
         \newcounter{#1}%
-        \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{1.5em}{2.3em}{##1}{##2}}%
+        \expandafter\newlength\csname cft#1numwidth\endcsname
+        \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{\@nameuse{cft#1numwidth}}{\@nameuse{cft#1numwidth}}{##1}{##2}}%
         \expandafter\gdef\csname listof#1\endcsname{\bgroup%
             \def\contentsname{#3}% may?
-            \let\libx@starttoc\@starttoc%
-            \def\@starttoc####1{\libx@starttoc{#2}}%
-            % TODO: change?
-            \tableofcontents%
-        \egroup}
+            \libx@listof@heading{\contentsname}%
+            \libx@starttoc{#2}%
+        \egroup}%
     }%
 \else
     \RequirePackage{tocloft}
@@ -76,6 +95,12 @@
 %% Packages
 \RequirePackage{tcolorbox,environ,calc,fontawesome,translator}
 \tcbuselibrary{skins,breakable,hooks}
+
+\expandafter\ifx\expandafter!\libx@language!%
+    \languagepath{\languagename,English}
+\else%
+    \languagepath{\libx@language,\languagename,English}%
+\fi
 
 %% lengths
 \newlength\libx@numwidth%
@@ -116,7 +141,7 @@
 
 % #1 boxid, #2 key
 \def\libx@persist#1#2{%
-\expandafter\protected@xdef\csname libx@box@persist@#1@#2\endcsname{\@nameuse{libx@box@#2}}%
+    \expandafter\protected@xdef\csname libx@box@persist@#1@#2\endcsname{\@nameuse{libx@box@#2}}%
 }
 
 \def\libx@box@get#1#2{\@nameuse{libx@box@persist@#1@#2}}
@@ -413,9 +438,8 @@
 % #9 title
 \def\libx@RegisterBoxPair#1#2#3#4#5#6#7#8#9{%
     \libx@newlistof{#1}{#2}{#3}%
-    \iflibx@comp@koma@\else%
-        \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
-    \fi%
+    % kept for compat :D
+    \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
     % set name
     \expandafter\providecommand\csname #1name\endcsname{#9}%
     % \expandafter\protected@edef\csname cft#2titlefont\endcsname{\@nameuse{cft#2titlefont}\selectfont}%
@@ -500,8 +524,6 @@
 
 % ----------------------------------------
 % translations
-\languagealias{ngerman}{German}
-\languagealias{german}{German1997,German}
 
 \providetranslation[to=German]{List of}{Alle}
 

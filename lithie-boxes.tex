@@ -1,5 +1,5 @@
 \errorcontextlines 999999
-\documentclass{article}
+\documentclass[ngerman]{article}
 \usepackage[a4paper,total={18cm,25.5cm}]{geometry}
 
 \usepackage[T1]{fontenc}
@@ -22,7 +22,8 @@
 \UsePalette{GreenWater}
 
 \usepackage{imakeidx}
-\makeindex[title=Befehlsübersicht,columns=2,columnsep=0.75cm]\renewcommand{\indexname}{Befehlsübersicht}
+\newcommand{\idxname}{Befehlsübersicht}
+\makeindex[title=\idxname,columns=2,columnsep=0.75cm]
 
 
 \def\say#1{\glqq{}#1\grqq{}}
@@ -75,7 +76,6 @@
 
 
 \begin{document}
-
 \maketitle
 
 \begin{abstract}
@@ -405,6 +405,14 @@ Die Option \packagelink{germanenv} sorgt dafür, dass die Umgebungen unabhängig
 Bezeichner in deutscher Sprache erhalten. Analog verfährt die Option \packagelink{englishenv} mit der englischen Sprache für die Umgebungen.
 Die Option \packagelink{autoenv} wechselt wieder zur Standardkonfiguration, welche den Namen anhand der Dokumentsprache herausfindet\footnote{Wichtig: Es ist die konfigurierte Sprache zum Ladezeitpunkt des Pakets von Relevanz. Es empfiehlt sich also Pakete wie \T{babel} vor diesem Paket zu laden, wenn man von der automatischen Spracherkennung Gebrauch machen möchte.}.
 
+\paragraph{Koma-Script}
+Das Paket versucht automatisch zu erkennen ob das Koma-Script geladen wird und dann entsprechende Maßnahmen zu ergreifen um bestmöglich kompatibel zu sein (mock von \T{tocloft}, \ldots).
+Sollte die Erkennung allerdings Schieflaufen oder zu ungewollten Problemen führen (oder andere Pakete ohnehin einige Optionen vernichten), so kann mit \packagelink{nokoma} die Anwendung der Kompatibilitätsmaßnahmen deaktiviert werden.
+Analog lassen sie sich mit \packagelink{koma} erzwingen.
+
+\paragraph{Sprache}
+Für Übersetzungen verwendet dieses Paket die Hilfe von \href{https://ctan.org/pkg/translator}{translator}, welches die
+Sprache aus dem Befehl \cmd{languagename} extrahiert. Je nach Installation kann es allerdings sein, dass die Sprache falsch erkannt wird\footnote{Dies sollte nicht geschehen, wenn die gewünschte Sprache der Dokumentklasse selbst übergeben wird.}! In diesem Fall erzwingt \packagelink{german} das Setzen in deutscher Sprache (dies beeinflusst \packageref{autoenv}, hat aber keinen Einfluss auf die Umgebungsnamen wenn diese mit \packageref{englishenv} auf Englisch gezwungen werden) und analog \packagelink{english} das Setzen in englischer Sprache (mit denselben Wechselwirkungen mit \packageref{autoenv} und \packageref{englishenv}). Die Option \packageref{autolang} ist der Standard und versucht die Sprache aus \cmd{languagename} zu extrahieren\footnote{Das Paket \href{https://ctan.org/pkg/iflang}{iflang} wird nicht verwendet.}.
 
 \section{Versionierung}
 \subsection{Version 1.0}
@@ -412,7 +420,7 @@ Initiale Version mit den Boxen \envref{definition}, \envref{bemerkung}, \envref{
 Befehle wie \cmdref{boxref} und \cmdref{LoadBoxStyle} wurden eingeführt.
 
 \clearpage\appendix
-\addcontentsline{toc}{section}{\indexname}
+\addcontentsline{toc}{section}{\idxname}
 \printindex
 
 \addcontentsline{toc}{section}{Beispielhafte Listen}
