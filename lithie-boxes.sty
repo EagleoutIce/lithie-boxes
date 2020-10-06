@@ -342,17 +342,16 @@
                 },#4%
             }{#2}%
     \libx@storemark{#2}%
-\endgroup
     \libx@get{InCode}%
 \setlength\linewidth{\tcbtextwidth}}
 
-\def\libx@read@box@default@end#1{\begingroup%
+\def\libx@read@box@default@end#1{%
     \edef\libx@boxid{#1}%
 % execute the post codes
     \libx@get{OutCode}%
     \end{\libx@get{UseStyle}}%
-    \libx@get{PostCode}%
-\endgroup\ignorespacesafterend}
+    \libx@get{PostCode}\endgroup%
+\ignorespacesafterend}
 
 
 % #1: title

@@ -75,7 +75,7 @@
 }{}{code}{Code}{cde}%
 
 \renewcommand*{\thefootnote}{$\langle$\textbf{\arabic{footnote}}$\rangle$}
-\renewcommand*{\thempfootnote}{$\langle$\textbf{\doublealph{mpfootnote}}$\rangle$}
+\renewcommand*{\thempfootnote}{$\langle$\textbf{\alph{mpfootnote}}$\rangle$}
 
 
 \begin{document}
@@ -173,7 +173,8 @@ Hinweis für die Beispiele: Die dokumentation macht \emph{nicht} von der \hyperr
     Dies ist der Text einer fliegenden Zusammen!**!fassung.
 \end{zusammenfassung}
 \end{latex}
-    Die Ausgabe findet sich in \boxref{zsf:floatingex}. Möchte man in einem Zweispaltigen Dokument eine Definition die beide Spalten überspannt so gilt es einfach \T{float*} anstelle von \T{float} zu verwenden\footnote{Wichtig! Wie auch die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox} darauf hinweis, ist im Falle einer wirklich über beide Spalten gehende Box auch noch \T{width=\cmd{textwidth}} anzufügen.}. Über \T{floatplacement} oder \T{float=htbp}, können Platzierungshinweise analog zum optionalen Argument bei Umgebungen wie \env{figure} angegeben werden. Für mehr Informationen empfiehlt sich die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox}.
+    Die Ausgabe findet sich in \boxref{zsf:floatingex}.
+    Möchte man in einem Zweispaltigen Dokument eine Definition die beide Spalten überspannt so gilt es einfach \T{float*} anstelle von \T{float} zu verwenden\footnote{Wichtig! Wie auch die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox} darauf hinweis, ist im Falle einer wirklich über beide Spalten gehende Box auch noch \T{width=\cmd{textwidth}} anzufügen.}. Über \T{floatplacement} oder \T{float=htbp}, können Platzierungshinweise analog zum optionalen Argument bei Umgebungen wie \env{figure} angegeben werden. Für mehr Informationen empfiehlt sich die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox}.
     Natürlich kann so auch ein Referenztitel übergeben werden:
 \begin{latex}
 \begin{zusammenfassung}(float*=b, width=\textwidth)[Und ich der Referenztitel]
