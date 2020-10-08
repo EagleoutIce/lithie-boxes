@@ -272,11 +272,11 @@
         % gobble the star:
         \def\libx@pageref{\protect\@ifstar\pageref\pageref}%
         \def\libx@phantomsection{}%
-    }{%
-        \let\libx@hypertarget\hypertarget%
-        \let\libx@pageref\pageref%
-        \let\libx@phantomsection\phantomsection%
-        \let\libx@hyperref\hyperref%
+    }{% TODO: adapt to redefinitions
+        \def\libx@hypertarget{\hypertarget}%
+        \def\libx@pageref{\pageref}%
+        \def\libx@phantomsection{\phantomsection}%
+        \def\libx@hyperref{\hyperref}%
     }%
 }
 
