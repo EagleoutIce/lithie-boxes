@@ -22,7 +22,8 @@
         breakable,lines before break=3,enhanced jigsaw,,width=\linewidth,sharp corners,%
         boxrule=0pt,fonttitle={\normalsize},coltitle={black},attach title to upper,hyphenationfix=true,%
         opacityfill=0,boxsep=0pt,top=0pt,bottom=0pt,right=0pt,left=0pt,frame hidden,%
-        after title app={\hbox{}~\vspace*{-.85\baselineskip}%
+        enlarge top by=0.2\baselineskip,enlarge bottom by=0.2\baselineskip,%
+        after title app={\hbox{}~\vspace*{-\baselineskip}%
             \newline\unskip\widowpenalties=3 10000 10000 150},%
         tikz={#1},%
         % as guides:
