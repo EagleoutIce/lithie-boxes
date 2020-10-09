@@ -340,14 +340,16 @@
         }%
     }%
     \@libx@tmpnr%
+    \stepcounter{@libx@box@\libx@get{ListMen}@id}%
 % we check if we use the box style
     \begin{\libx@get{UseStyle}}%
             [% Tikz arguments:
                 #3%
             ]{% Title (braces guard):
-                \libx@hypertarget{@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}{\libx@get{Title}}%
+                {\libx@get{Title}}%
             }{% Further arguments for tcolorbox
                 before upper app={\ignorespacesafterend},%
+                hypertarget=@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id},
                 before title pre={%
                     \@libx@box@title@pre{#2}%
                     \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
@@ -368,7 +370,6 @@
 % #1: title
 \def\@libx@box@title@pre#1{%
     \libx@if{CustomList}{%
-        \stepcounter{@libx@box@\libx@get{ListMen}@id}%
         \libx@if{HasEmblem}{%
             % We register with emblem
             \expandafter\@libx@box@list@add@element@emblem%
