@@ -798,7 +798,7 @@
 % ref box with given label
 % if starred hide title
 \newcommand*\boxref{%
-    \@ifstar\libx@num@nameref\libx@nameref%
+    \@ifstar\libx@num@nameref\libx@long@nameref%
 }
 \robustify{\boxref}
 
@@ -824,13 +824,26 @@
 % Note: this is a reimplementation as the behaviour might change
 % note without star this is same as boxref (allows better let's)
 \newcommand*\boxnameref{%
-    \@ifstar\libx@short@nameref\libx@nameref%
+    \@ifstar\libx@short@nameref\libx@long@nameref%
 }
 \robustify{\boxnameref}
 
 \def\@libx@short@nameref#1 (#2)#3\@nil{#2}
 
 \def\libx@thirdoffive#1#2#3#4#5{#3}
+\def\libx@long@nameref#1{%
+    % assure nameref:
+    \libx@namerefprobe{}%
+    % we directly access the label def
+    \ifcsname r@#1\endcsname%
+        \protected@edef\libx@tmp{\@nameuse{r@#1}}%
+        \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
+        \libx@hyperref[#1]{\libx@tmp}%
+    \else%
+        \typeout{Warning boxref-short '#1' not found.}%
+    \fi%
+}
+
 \def\libx@short@nameref#1{%
     % assure nameref:
     \libx@namerefprobe{}%
