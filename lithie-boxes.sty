@@ -105,7 +105,7 @@
 \fi
 
 %% Packages
-\RequirePackage{tcolorbox,environ,calc,fontawesome,translator,bookmark}
+\RequirePackage{bookmark,tcolorbox,environ,calc,fontawesome,translator}
 \tcbuselibrary{skins,breakable,hooks}
 
 \expandafter\ifx\expandafter!\libx@language!%
@@ -812,7 +812,7 @@
     \ifcsname r@#1\endcsname%
         \protected@edef\libx@tmp{\@nameuse{r@#1}}%
         \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
-        \protected@edef\libx@tmp{\noexpand\@libx@num@nameref\libx@tmp\noexpand\@nil}%
+        \protected@edef\libx@tmp{\noexpand\@libx@num@nameref\libx@tmp\noexpand\relax()\noexpand\relax\noexpand\@nil}%
         \libx@hyperref[#1]{\libx@tmp}%
     \else%
         \typeout{Warning boxref-num '#1' not found.}%
