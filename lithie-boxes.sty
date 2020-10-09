@@ -105,7 +105,7 @@
 \fi
 
 %% Packages
-\RequirePackage{tcolorbox,environ,calc,fontawesome,translator}
+\RequirePackage{tcolorbox,environ,calc,fontawesome,translator,bookmark}
 \tcbuselibrary{skins,breakable,hooks}
 
 \expandafter\ifx\expandafter!\libx@language!%
@@ -397,7 +397,7 @@
 
 \def\@libx@box@list@add@element@emblem#1#2#3#4#5#6{%
     \refstepcounter{#1}%
-    \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp\makebox[.45cm][c]{#5}\libx@sp\ignorespaces#4}%
+    \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp\makebox[.45cm][c]{\scriptsize#5}\libx@sp\ignorespaces#4}%
 }
 
 % TODO: store current catcode?
