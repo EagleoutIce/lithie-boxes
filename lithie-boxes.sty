@@ -219,23 +219,23 @@
             \fi
         \egroup}%
         % chapter spacing in list as all commands are appended in the end we step the internal boxid as it is used only on the command-inside
-        \AtEndPreamble{
-            \ifcsname chapter\endcsname
+        \AtEndPreamble{%
+            \ifcsname chapter\endcsname%
             \xpreto\chapter{% only increment if already got one
-                \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
+                \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax%
                 \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
                 \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
                 \noexpand\fi%
             }%
             \else
             \xpreto\section{% only increment if already got one
-                \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
+                \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax%
                 \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
                 \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
                 \noexpand\fi%
             }%
             \fi%
-        }
+        }%
     }{}
 % Define the main environment of the box
 \globaldefs=1%
