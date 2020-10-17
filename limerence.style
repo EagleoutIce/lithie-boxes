@@ -29,7 +29,7 @@
         % as guides:
         lithie@box@style@limerence@extra@arrows=black,%
         % padding to give them space to breathe:
-        pad before break*=2mm,pad after break=2mm,%
+        pad before break*=3mm,pad after break=3mm,%
         after upper={\nobreak\null\nobreak\hfill\nobreak$\rfloor$}%
     },%
     lithie@box@style@limerence@extra@arrows/.style={%
