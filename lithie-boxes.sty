@@ -908,15 +908,18 @@
 \providecommand\libxthecolor{paletteC}
 \providecommand\libxlemcolor{paletteC}
 \providecommand\libxsumcolor{paletteD}
+\providecommand\libxprocolor{gray}
+\providecommand\libxremcolor{gray}
+\providecommand\libxexacolor{gray}
 
 \def\libx@cpalette@hook{%
 \libx@setboth@boxcolor{\@libx@def@envname}{\libxdefcolor}%
 \libx@setboth@boxcolor{\@libx@the@envname}{\libxthecolor}%
 \libx@setboth@boxcolor{\@libx@lem@envname}{\libxlemcolor}%
 \libx@setboth@boxcolor{\@libx@sum@envname}{\libxsumcolor}%
-\libx@setboth@boxcolor{\@libx@pro@envname}{gray}%
-\libx@setboth@boxcolor{\@libx@rem@envname}{gray}%
-\libx@setboth@boxcolor{\@libx@exa@envname}{gray}%
+\libx@setboth@boxcolor{\@libx@pro@envname}{\libxprocolor}%
+\libx@setboth@boxcolor{\@libx@rem@envname}{\libxremcolor}%
+\libx@setboth@boxcolor{\@libx@exa@envname}{\libxexacolor}%
 }
 \fi
 
