@@ -833,7 +833,7 @@
 }
 \robustify{\boxref}
 
-\def\@libx@num@nameref#1 (#2)#3\@nil{#1}
+\long\def\@libx@num@nameref#1 (#2)#3\@nil{#1}
 
 \def\libx@thirdoffive#1#2#3#4#5{#3}
 \def\libx@num@nameref#1{%
@@ -843,7 +843,7 @@
     \ifcsname r@#1\endcsname%
         \protected@edef\libx@tmp{\@nameuse{r@#1}}%
         \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
-        \protected@edef\libx@tmp{\noexpand\@libx@num@nameref\libx@tmp\noexpand\relax()\noexpand\relax\noexpand\@nil}%
+        \protected@edef\libx@tmp{\noexpand\@libx@num@nameref\libx@tmp ?? ()X\noexpand\@nil}%
         \libx@hyperref[#1]{\libx@tmp}%
     \else%
         \typeout{Warning boxref-num '#1' not found.}%
