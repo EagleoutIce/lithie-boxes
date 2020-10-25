@@ -435,6 +435,12 @@ Sprache aus dem Befehl \cmd{languagename} extrahiert. Je nach Installation kann 
 
 Der Paketautor\footnote{Das bin ich :P}, hat eine große Freude an rechteckigen Paragraphen. Diese können aber vor allem in Boxen zu einem schlechteren Textfluss beitragen, weswegen die Option \packagelink{noparfill} (Standard) derartige Vorkehrungen \say{zunichte} macht. Möchte man dennoch derartige Optionen so genügt es, die Option \packagelink{parfill} anzugeben\footnote{Hinweis: Simpel gesagt setzt \packageref{noparfill} nur das in \cmd{@@libx@noparfill} hinterlegte Makro.}.
 
+\paragraph{Bestehende Umgebungen}
+
+Manche Pakete definieren bereits Umgebungen welche den Namen von Boxumgebungen tragen, was dann natürlich
+zu Konflikten führt. Mit der Option \packagelink{overwrite} wird das Paket die bestehenden Umgebungen
+überschreiben (und keinen Fehler ausgeben, wenn noch keine Umgebung mit dem Namen existiert. In diesem Fall wird einfach eine neue erstellt). Dieses Verhalten kann mit \packagelink{nooverwrite} unterdrückt werden.
+
 \section{Versionierung}
 \subsection{Version 1.0}
 Initiale Version mit den Boxen \envref{definition}, \envref{bemerkung}, \envref{satz}, \envref{beispiel}, \envref{lemma}, \envref{beweis} und \envref{zusammenfassung}. Auch

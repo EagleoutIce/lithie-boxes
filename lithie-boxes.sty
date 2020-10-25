@@ -57,6 +57,10 @@
 \DeclareOption{english}{ \def\libx@language{English} }
 \DeclareOption{autolang}{ \def\libx@language{} }
 
+\newif\iflibx@modes@overwrite@
+\DeclareOption{overwrite}{ \libx@modes@overwrite@true }
+\DeclareOption{nooverwrite}{ \libx@modes@overwrite@false }
+
 \@ifundefined{@@libx@noparfill}{%
     \def\@@libx@noparfill{\parfillskip=\z@ plus 1fil}
 }{}
@@ -240,7 +244,13 @@
 % Define the main environment of the box
 \globaldefs=1%
     % NOTE: #1 is short form!
-    \newenvironment{#3}{%
+    \let\libx@newboxenv\newenvironment%
+    \iflibx@modes@overwrite@% check if already there
+        \ifcsname#3\endcsname%
+            \let\libx@newboxenv\renewenvironment%
+        \fi%
+    \fi
+    \libx@newboxenv{#3}{%
         \edef\libx@boxid{#5}%
         \@ifnextchar(%
             {\@libx@boxconsume@with@boxopt{#2}{#4}{#5}}%
