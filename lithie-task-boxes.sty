@@ -1,0 +1,59 @@
+%% lithie-task-boxes.sty
+%%
+%% -----------------------------------------
+%% Florian Sihler, 30.09.2020
+%%
+%% Dependent brother
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lithie-task-boxes}[2020/10/06 EagleoutIce - lilly box-port of task boxes]
+
+\RequirePackage{varwidth}
+
+\translatelet{\@libx@tskstyle}{Task}
+\newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle}[4][]{%
+    enforce breakable, %enforce breakable für: Mehr Seiten
+    enhanced jigsaw, before skip=2mm,after skip=2mm,
+    colback=white,colframe=black!50,boxrule=0.2mm,
+    attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight},
+    varwidth boxed title*=-3cm,
+    boxed title style={
+        frame code={
+            \path[fill=white!30!black]
+                ([yshift=-1mm,xshift=-1mm]frame.north west)
+                arc[start angle=0,end angle=180,radius=1mm]
+                ([yshift=-1mm,xshift=1mm]frame.north east)
+                arc[start angle=180,end angle=0,radius=1mm];
+            \path[left color=white!40!black,right color=white!40!black,
+                middle color=white!55!black]
+                ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east)
+                [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+                -- (frame.south east) -- (frame.south west)
+                -- ([xshift=-1mm,yshift=-1mm]frame.north west)
+                [sharp corners]-- cycle;
+        },interior engine=empty,
+    },
+    %lithie@box@style@default\libx@get{StyleDerivative}={#1},
+    fonttitle=\bfseries, #3,%
+    title={#2 \thetcbcounter{} \ifthenelse{\equal{#4}{}}{}{--~} #4}%
+}%
+
+\providetranslation[to=German]{task}{aufgabe}
+\providetranslation[to=German]{tasks}{aufgaben}
+\providetranslation[to=German]{Task}{Aufgabe}
+\providetranslation[to=German]{Tasks}{Aufgaben}
+
+\libx@translateenv{tsk}{task}
+
+% note if this order is wrong redef of '\tasksslistname' is needed
+\libx@provide@translation{tasksslistname}{List of}{Tasks}
+\libx@RegisterBoxPair%
+% List tasks and emblem:
+{tasks}{ltasks}{\tasksslistname}{\faStar}%
+% color, style, id:
+{black}{addon@\@libx@tskstyle}{tsk}%
+% environment name and Prefix:
+{\@libx@tsk@envname}{\translate{Task}}
+
+
+\endinput
