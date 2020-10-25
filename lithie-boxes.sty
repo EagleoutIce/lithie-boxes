@@ -539,7 +539,8 @@
 % get the new stlyes
 \pgfqkeys{/tcb/new}{%
     lithie@box@style@default@init/.style={%
-        auto counter,lithie@box@number@within%
+        auto counter,lithie@box@number@within,%
+        reset counter on overlays%
     },%
     lithie@box@style@other@init/.style={%
         use counter from=#1%
