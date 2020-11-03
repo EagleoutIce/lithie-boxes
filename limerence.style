@@ -6,7 +6,7 @@
 \tcbset{%
     lithie@box@style@limerence/.style={% TODO: change attachment?
         breakable,lines before break=3,width=\linewidth,enhanced jigsaw,sharp corners,%
-        boxrule=0pt,fonttitle={\normalsize},coltitle={black},attach title to upper,%
+        boxrule=0pt,fonttitle={\normalsize\sffamily\smaller},coltitle={black},attach title to upper,%
         % TODO: allow better opacity fill
         opacityfill=0.45,top=3pt,bottom=3pt,right=5pt,frame hidden,%
         % TODO: allow flexible back color
