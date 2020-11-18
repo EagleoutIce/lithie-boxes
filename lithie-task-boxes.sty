@@ -8,35 +8,177 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{lithie-task-boxes}[2020/10/06 EagleoutIce - lilly box-port of task boxes]
 
-\RequirePackage{varwidth}
+\newif\iflibx@tb@boxes@style@plain@{}
+\DeclareOption{plainstyle}{\libx@tb@boxes@style@plain@true}
+\DeclareOption{normalstyle}{\libx@tb@boxes@style@plain@false}
+
+\newif\iflibx@tb@boxes@showub@{}
+\DeclareOption{showub}{\libx@tb@boxes@showub@true}
+\DeclareOption{hideub}{\libx@tb@boxes@showub@false}
+
+\newif\iflibx@tb@boxes@isbm@{}
+\DeclareOption{isbm}{\libx@tb@boxes@isbm@true}
+\DeclareOption{noisbm}{\libx@tb@boxes@isbm@false}
+
+% TODO: use as toc
+\ProcessOptions*\relax%
+
+\def\libx@taskbox@border@width{2.71pt}
+\def\libx@taskbox@border@width@large{6.71pt}
+
+\newcounter{libx@tsk@ubnum@}
+
+\colorlet{tskcolor}{black!50!white}
+\colorlet{tskcolorA}{black}
+\colorlet{tskcolorB}{white}
+
+\def\tsksub{\@ifstar\@tsksub@star\@tsksub}
+\newcommand*\@tsksub@star[2][]{%
+    \ifx\\#1\\\stepcounter{libx@tsk@ubnum@}%
+    \else\setcounter{libx@tsk@ubnum@}{#1}\fi%
+    \def\libx@currentub{#2}%
+    \pdfbookmark[0]{\thelibx@tsk@ubnum@\ #2}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@}%
+}
+
+\newcommand*\@tsksub[2][]{%
+    \ifx\\#1\\\stepcounter{libx@tsk@ubnum@}%
+    \else\setcounter{libx@tsk@ubnum@}{#1}\fi%
+    \def\libx@currentub{#2}%
+    \section*{#2}%
+}
+
+\iflibx@tb@boxes@style@plain@\else
+\RequirePackage{varwidth}\fi
+
+\RequirePackage{bookmark}
+
+\iflibx@tb@boxes@showub@%
+\def\libx@tb@boxes@boxnumber{\thelibx@tsk@ubnum@.\thetcbcounter}
+\else%
+\def\libx@tb@boxes@boxnumber{\thetcbcounter}%
+\fi
 
 \translatelet{\@libx@tskstyle}{Task}
-\newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle}[4][]{%
+
+\tcbset{
+    lithie@box@style@taskbox@plain/.style={%
+        lithie@box@style@default@plain,fonttitle=\normalsize\normalcolor\sffamily\small,%
+        % as guides:
+        lithie@box@style@taskbox@extra@arrows=tskcolor,%
+        % padding to give them space to breathe:
+        pad before break*=3mm,pad after break=3mm,lines before break=3,%
+        after upper={\nobreak\null\nobreak\hfill\nobreak\rlap{\hyperref[@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter]{\textcolor{gray}{\raisebox{.65pt}{$\diamondsuit$}\color{gray}~\(\mathsf{\libx@tb@boxes@boxnumber}\)}}}}%
+    },%
+    lithie@box@style@taskbox@extra@arrows/.style={%
+        extras first and middle={overlay={% 0.33pt offset to buffer
+            \begin{scope}[shift={(frame.south west)}]
+                \path[fill=#1] (0,0pt) -- ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) --
+                    ++(\libx@taskbox@border@width/2,\libx@taskbox@border@width) |- (0,.33pt) -- cycle;
+            \end{scope}
+        }},%
+        extras middle and last={overlay={%
+            \begin{scope}[shift={(frame.north west)}]
+                \path[fill=#1] (0,0pt) -- ++(\libx@taskbox@border@width/2,\libx@taskbox@border@width) --
+                    ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) |- (0,-.33pt) -- cycle;
+            \end{scope}
+        }}%
+    }%
+}
+
+\iflibx@tb@boxes@style@plain@%
+\def\@libx@tskstyle@suffix{plain}%
+\else\def\@libx@tskstyle@suffix{normal}\fi
+
+
+\newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle @plain}[4][]{lithie@box@style@taskbox@plain,%
+    before title pre={%
+    \label{@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter}%
+    \iflibx@tb@boxes@isbm@\pdfbookmark[1]{\libx@tb@boxes@boxnumber\ - #4}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@ @\thetcbcounter}\fi},
+    title={\textbf{#2 \libx@tb@boxes@boxnumber{}} \ifthenelse{\equal{#4}{}}{}{--~} #4},tikz={#1},%
+}%
+
+\newlength\libx@tb@ulnumwidth
+\iflibx@tb@boxes@showub@%
+\setlength{\libx@tb@ulnumwidth}{22mm}
+\else
+\setlength{\libx@tb@ulnumwidth}{15mm}
+\fi
+
+\newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle @normal}[4][]{%
     enforce breakable, %enforce breakable für: Mehr Seiten
-    enhanced jigsaw, before skip=2mm,after skip=2mm,
-    colback=white,colframe=black!50,boxrule=0.2mm,
-    attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight},
-    varwidth boxed title*=-3cm,
+    enhanced jigsaw, before skip=4mm,after skip=4mm,
+    colback=white,colframe=tskcolor,boxrule=0.4mm,
+    attach boxed title to top left={xshift=\linewidth-\tcboxedtitlewidth-0.75cm,yshift*=1mm-\tcboxedtitleheight},
+    varwidth boxed title*=-3cm,lines before break=3,
     boxed title style={
         frame code={
-            \path[fill=white!30!black]
-                ([yshift=-1mm,xshift=-1mm]frame.north west)
-                arc[start angle=0,end angle=180,radius=1mm]
-                ([yshift=-1mm,xshift=1mm]frame.north east)
-                arc[start angle=180,end angle=0,radius=1mm];
-            \path[left color=white!40!black,right color=white!40!black,
-                middle color=white!55!black]
-                ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east)
-                [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
-                -- (frame.south east) -- (frame.south west)
-                -- ([xshift=-1mm,yshift=-1mm]frame.north west)
+            \fill[white!25!tskcolor]
+                ([yshift=-1.02mm,xshift=-1.33mm]frame.north west)
+                arc[start angle=0,end angle=180,radius=1.02mm];
+            \fill[white!35!tskcolor] ([yshift=-1.02mm,xshift=1.33mm]frame.north east)
+                arc[start angle=180,end angle=0,radius=1.02mm];
+            \path[left color=white!25!tskcolor,right color=white!35!tskcolor,
+                middle color=white!25!tskcolor]
+                ([xshift=-2.33mm]frame.north west) -- ([xshift=2.33mm]frame.north east)
+                [rounded corners=1mm]-- ([xshift=2mm,yshift=-1mm]frame.north east)
+                -- ([xshift=2mm]frame.south east) -- ([xshift=-2mm]frame.south west)
+                -- ([xshift=-2mm,yshift=-1mm]frame.north west)
                 [sharp corners]-- cycle;
         },interior engine=empty,
     },
+    extras first={overlay={% 0.33pt offset to buffer
+    \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
+        \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
+            ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
+    \end{scope}
+
+    \path[fill=tskcolorA] ([xshift=6mm]frame.north west)
+                             arc[start angle=0,end angle=180,radius=.76mm];
+    \path[fill=tskcolorB!75!tskcolorA] ([xshift=\libx@tb@ulnumwidth+4.1mm]frame.north west)
+                            arc[start angle=180,end angle=0,radius=.76mm];
+    \path[left color=tskcolorA,right color=tskcolorB!75!tskcolorA,
+    middle color=tskcolorB!15!tskcolorA]
+        ([xshift=5.05mm,yshift=.75mm]frame.north west) -- ++(\libx@tb@ulnumwidth,0)
+        [rounded corners=.65mm] -- ++(-.75mm,-.75mm)
+        -- ++(0,-7.5mm) -- ++(-\libx@tb@ulnumwidth+1.5mm,0)
+        -- ++(0,7.5mm)
+        [sharp corners]-- cycle;
+    \path (frame.north west)++(\libx@tb@ulnumwidth/2+5mm,-7.5mm/2) node[white] {\bfseries\libx@tb@boxes@boxnumber};
+    }},
+    extras middle={overlay={% 0.33pt offset to buffer
+            \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
+                \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
+                    ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
+            \end{scope}
+        }},%
+    extras middle and last={overlay={%
+        \begin{scope}[shift={(frame.north)},yshift=0.125cm]
+            \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
+                ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
+        \end{scope}
+    }},%
+    extras unbroken={overlay={% 0.33pt offset to buffer
+        \path[fill=tskcolorA] ([xshift=6mm]frame.north west)
+                             arc[start angle=0,end angle=180,radius=.76mm];
+        \path[fill=tskcolorB!75!tskcolorA] ([xshift=\libx@tb@ulnumwidth+4.1mm]frame.north west)
+                             arc[start angle=180,end angle=0,radius=.76mm];
+        \path[left color=tskcolorA,right color=tskcolorB!75!tskcolorA,
+        middle color=tskcolorB!15!tskcolorA]
+            ([xshift=5.05mm,yshift=.75mm]frame.north west) -- ++(\libx@tb@ulnumwidth,0)
+            [rounded corners=.65mm] -- ++(-.75mm,-.75mm)
+            -- ++(0,-7.5mm) -- ++(-\libx@tb@ulnumwidth+1.5mm,0)
+            -- ++(0,7.5mm)
+            [sharp corners]-- cycle;
+        \path (frame.north west)++(\libx@tb@ulnumwidth/2+5mm,-7.5mm/2) node[white] {\bfseries\libx@tb@boxes@boxnumber};
+    }},
+    before title pre={%
+    \label{@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter}%
+    \iflibx@tb@boxes@isbm@\pdfbookmark[1]{\libx@tb@boxes@boxnumber\ - #4}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@ @\thetcbcounter}\fi},
     %lithie@box@style@default\libx@get{StyleDerivative}={#1},
     fonttitle=\bfseries, #3,%
-    title={#2 \thetcbcounter{} \ifthenelse{\equal{#4}{}}{}{--~} #4}%
+    title={\strut#4}%
 }%
+
 
 \providetranslation[to=German]{task}{aufgabe}
 \providetranslation[to=German]{tasks}{aufgaben}
@@ -51,7 +193,7 @@
 % List tasks and emblem:
 {tasks}{ltasks}{\tasksslistname}{\faStar}%
 % color, style, id:
-{black}{addon@\@libx@tskstyle}{tsk}%
+{tskcolor}{addon@\@libx@tskstyle @\@libx@tskstyle@suffix}{tsk}%
 % environment name and Prefix:
 {\@libx@tsk@envname}{\translate{Task}}
 
