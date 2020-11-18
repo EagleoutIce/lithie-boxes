@@ -20,8 +20,25 @@
 \DeclareOption{isbm}{\libx@tb@boxes@isbm@true}
 \DeclareOption{noisbm}{\libx@tb@boxes@isbm@false}
 
+\newif\iflibx@tb@boxes@cpalette@{}
+\DeclareOption{cpalette}{\libx@tb@boxes@cpalette@true}
+\DeclareOption{nocpalette}{\libx@tb@boxes@cpalette@false}
+
 % TODO: use as toc
 \ProcessOptions*\relax%
+
+\iflibx@tb@boxes@cpalette@
+\let\libx@tsk@old@cpl@hooks\cpl@hooks%
+\def\cpl@hooks{% Add to the hook
+    \libx@tsk@old@cpl@hooks%
+    \libx@task@cpalette@hook%
+}
+\def\libx@task@cpalette@hook{%
+\colorlet{tskcolorA}{paletteA}%
+\colorlet{tskcolorB}{paletteB}%
+}
+\AtBeginDocument{\libx@task@cpalette@hook}%
+\fi%
 
 \def\libx@taskbox@border@width{2.71pt}
 \def\libx@taskbox@border@width@large{6.71pt}
