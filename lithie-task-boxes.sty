@@ -123,25 +123,14 @@
 
 \newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle @normal}[4][]{%
     enforce breakable, %enforce breakable für: Mehr Seiten
-    enhanced jigsaw, before skip=2mm plus 2mm minus 1mm,after skip=4mm plus 1mm minus 2mm,
+    enhanced jigsaw, before skip=2mm plus 2mm,after skip=4mm plus 1mm minus 1mm,
     colback=white,colframe=tskcolor,boxrule=0.4mm,
-    attach boxed title to top left={xshift=\linewidth-\tcboxedtitlewidth-0.75cm,yshift*=1mm-\tcboxedtitleheight},
+    attach boxed title to top left={xshift=3mm+\libx@tb@ulnumwidth,yshift*=
+    .25mm-\tcboxedtitleheight},coltitle=tskcolor,
     varwidth boxed title*=-3cm,lines before break=4,
     boxed title style={
-        frame code={
-            \fill[white!25!tskcolor]
-                ([yshift=-1.02mm,xshift=-1.33mm]frame.north west)
-                arc[start angle=0,end angle=180,radius=1.02mm];
-            \fill[white!35!tskcolor] ([yshift=-1.02mm,xshift=1.33mm]frame.north east)
-                arc[start angle=180,end angle=0,radius=1.02mm];
-            \path[left color=white!25!tskcolor,right color=white!35!tskcolor,
-                middle color=white!25!tskcolor]
-                ([xshift=-2.33mm]frame.north west) -- ([xshift=2.33mm]frame.north east)
-                [rounded corners=1mm]-- ([xshift=2mm,yshift=-1mm]frame.north east)
-                -- ([xshift=2mm]frame.south east) -- ([xshift=-2mm]frame.south west)
-                -- ([xshift=-2mm,yshift=-1mm]frame.north west)
-                [sharp corners]-- cycle;
-        },interior engine=empty,
+        frame empty,
+        interior engine=empty,
     },
     extras first={overlay={% 0.33pt offset to buffer
     \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
@@ -192,7 +181,7 @@
     \label{@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter}%
     \iflibx@tb@boxes@isbm@\pdfbookmark[1]{\libx@tb@boxes@boxnumber\ - #4}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@ @\thetcbcounter}\fi},
     %lithie@box@style@default\libx@get{StyleDerivative}={#1},
-    fonttitle=\bfseries, #3,%
+    fonttitle={\mdseries\sffamily\small}, #3,%
     title={\strut#4}%
 }%
 
