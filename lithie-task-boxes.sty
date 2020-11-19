@@ -34,6 +34,7 @@
     \libx@task@cpalette@hook%
 }
 \def\libx@task@cpalette@hook{%
+\colorlet{tskcolor}{paletteA!20!black!45!white}%
 \colorlet{tskcolorA}{paletteA}%
 \colorlet{tskcolorB}{paletteB}%
 }
@@ -45,7 +46,7 @@
 
 \newcounter{libx@tsk@ubnum@}
 
-\colorlet{tskcolor}{black!50!white}
+\colorlet{tskcolor}{black!40!white}
 \colorlet{tskcolorA}{black}
 \colorlet{tskcolorB}{white}
 
@@ -118,38 +119,52 @@
 \iflibx@tb@boxes@showub@%
 \setlength{\libx@tb@ulnumwidth}{22mm}
 \else
-\setlength{\libx@tb@ulnumwidth}{15mm}
+\setlength{\libx@tb@ulnumwidth}{13.25mm}
 \fi
+
+\def\libx@tsk@numfieldbox{%
+    \path[fill=tskcolorA] ([xshift=6mm]frame.north west)
+    arc[start angle=0,end angle=180,radius=.75mm];
+    \path[fill=tskcolorB!65!tskcolorA] ([xshift=\libx@tb@ulnumwidth+4.1mm]frame.north west)
+    arc[start angle=180,end angle=0,radius=.75mm];
+    \path[left color=tskcolorA,right color=tskcolorB!65!tskcolorA,
+    middle color=tskcolorB!20!tskcolorA]
+    ([xshift=5mm,yshift=.75mm]frame.north west) -- ++(\libx@tb@ulnumwidth,0)
+    [rounded corners=.75mm] -- ++(-.75mm,-.75mm)
+    -- ++(0,-7.5mm) -- ++(-\libx@tb@ulnumwidth+1.5mm,0)
+    -- ++(0,7.5mm)
+    [sharp corners]-- cycle;
+    \path (frame.north west)++(\libx@tb@ulnumwidth/2+5mm,-7.5mm/2) node[white] {\bfseries\libx@tb@boxes@boxnumber};%
+}
 
 \newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle @normal}[4][]{%
     enforce breakable, %enforce breakable für: Mehr Seiten
-    enhanced jigsaw, before skip=2mm plus 2mm,after skip=4mm plus 1mm minus 1mm,
+    enhanced jigsaw, before skip=2mm plus 2mm minus 1mm,after skip=4mm plus 1mm minus 2mm,
     colback=white,colframe=tskcolor,boxrule=0.4mm,
-    attach boxed title to top left={xshift=3mm+\libx@tb@ulnumwidth,yshift*=
-    .25mm-\tcboxedtitleheight},coltitle=tskcolor,
-    varwidth boxed title*=-3cm,lines before break=4,
+    attach boxed title to top left={xshift=\linewidth-\tcboxedtitlewidth-0.75cm,yshift*=1mm-\tcboxedtitleheight},
+    varwidth boxed title*=-4.5cm,lines before break=4,arc=0.75mm,%
     boxed title style={
-        frame empty,
-        interior engine=empty,
+        frame code={
+            \fill[tskcolor]
+                ([yshift=-1mm,xshift=-1.25mm]frame.north west)
+                arc[start angle=0,end angle=180,radius=1mm];
+            \fill[white!34!tskcolor] ([yshift=-1mm,xshift=1.25mm]frame.north east)
+                arc[start angle=180,end angle=0,radius=1mm];
+            \path[left color=tskcolor,right color=white!34!tskcolor,
+                middle color=tskcolor]
+                ([xshift=-2.5mm]frame.north west) -- ([xshift=2.5mm]frame.north east)
+                [rounded corners=1mm]-- ([xshift=2mm,yshift=-1mm]frame.north east)
+                -- ([xshift=.75mm]frame.south east) -- ([xshift=-.75mm]frame.south west)
+                -- ([xshift=-2mm,yshift=-1mm]frame.north west)
+                [sharp corners]-- cycle;
+        },interior engine=empty,
     },
     extras first={overlay={% 0.33pt offset to buffer
     \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
         \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
             ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
     \end{scope}
-
-    \path[fill=tskcolorA] ([xshift=6mm]frame.north west)
-                             arc[start angle=0,end angle=180,radius=.76mm];
-    \path[fill=tskcolorB!75!tskcolorA] ([xshift=\libx@tb@ulnumwidth+4.1mm]frame.north west)
-                            arc[start angle=180,end angle=0,radius=.76mm];
-    \path[left color=tskcolorA,right color=tskcolorB!75!tskcolorA,
-    middle color=tskcolorB!15!tskcolorA]
-        ([xshift=5.05mm,yshift=.75mm]frame.north west) -- ++(\libx@tb@ulnumwidth,0)
-        [rounded corners=.65mm] -- ++(-.75mm,-.75mm)
-        -- ++(0,-7.5mm) -- ++(-\libx@tb@ulnumwidth+1.5mm,0)
-        -- ++(0,7.5mm)
-        [sharp corners]-- cycle;
-    \path (frame.north west)++(\libx@tb@ulnumwidth/2+5mm,-7.5mm/2) node[white] {\bfseries\libx@tb@boxes@boxnumber};
+    \libx@tsk@numfieldbox%
     }},
     extras middle={overlay={% 0.33pt offset to buffer
             \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
@@ -163,26 +178,15 @@
                 ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
         \end{scope}
     }},%
-    extras unbroken={overlay={% 0.33pt offset to buffer
-        \path[fill=tskcolorA] ([xshift=6mm]frame.north west)
-                             arc[start angle=0,end angle=180,radius=.76mm];
-        \path[fill=tskcolorB!75!tskcolorA] ([xshift=\libx@tb@ulnumwidth+4.1mm]frame.north west)
-                             arc[start angle=180,end angle=0,radius=.76mm];
-        \path[left color=tskcolorA,right color=tskcolorB!75!tskcolorA,
-        middle color=tskcolorB!15!tskcolorA]
-            ([xshift=5.05mm,yshift=.75mm]frame.north west) -- ++(\libx@tb@ulnumwidth,0)
-            [rounded corners=.65mm] -- ++(-.75mm,-.75mm)
-            -- ++(0,-7.5mm) -- ++(-\libx@tb@ulnumwidth+1.5mm,0)
-            -- ++(0,7.5mm)
-            [sharp corners]-- cycle;
-        \path (frame.north west)++(\libx@tb@ulnumwidth/2+5mm,-7.5mm/2) node[white] {\bfseries\libx@tb@boxes@boxnumber};
+    extras unbroken={overlay={%
+        \libx@tsk@numfieldbox%
     }},
     before title pre={%
     \label{@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter}%
     \iflibx@tb@boxes@isbm@\pdfbookmark[1]{\libx@tb@boxes@boxnumber\ - #4}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@ @\thetcbcounter}\fi},
     %lithie@box@style@default\libx@get{StyleDerivative}={#1},
-    fonttitle={\mdseries\sffamily\small}, #3,%
-    title={\strut#4}%
+    fonttitle=\bfseries, #3,%
+    title={\small\strut#4}%
 }%
 
 
