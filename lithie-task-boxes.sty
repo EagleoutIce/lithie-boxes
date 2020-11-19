@@ -34,7 +34,7 @@
     \libx@task@cpalette@hook%
 }
 \def\libx@task@cpalette@hook{%
-\colorlet{tskcolor}{paletteA!20!black!45!white}%
+\colorlet{tskcolor}{paletteA!20!black!50!white}%
 \colorlet{tskcolorA}{paletteA}%
 \colorlet{tskcolorB}{paletteB}%
 }
@@ -139,18 +139,19 @@
 
 \newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle @normal}[4][]{%
     enforce breakable, %enforce breakable für: Mehr Seiten
-    enhanced jigsaw, before skip=2mm plus 2mm minus 1mm,after skip=4mm plus 1mm minus 2mm,
-    colback=white,colframe=tskcolor,boxrule=0.4mm,
-    attach boxed title to top left={xshift=\linewidth-\tcboxedtitlewidth-0.75cm,yshift*=1mm-\tcboxedtitleheight},
+    enhanced jigsaw, before skip=2mm plus 3mm minus 1mm,after skip=4mm plus 2mm minus 2mm,
+    colback=white,colframe=tskcolor,boxrule=0.4mm,%
+    enlargepage flexible=\baselineskip,%
+    attach boxed title to top left={xshift=\linewidth-\tcboxedtitlewidth-0.75cm,yshift*=1mm-\tcboxedtitleheight},top=2.55mm,bottom=2.55mm,
     varwidth boxed title*=-4.5cm,lines before break=4,arc=0.75mm,%
     boxed title style={
         frame code={
             \fill[tskcolor]
                 ([yshift=-1mm,xshift=-1.25mm]frame.north west)
                 arc[start angle=0,end angle=180,radius=1mm];
-            \fill[white!34!tskcolor] ([yshift=-1mm,xshift=1.25mm]frame.north east)
+            \fill[white!24!tskcolor] ([yshift=-1mm,xshift=1.25mm]frame.north east)
                 arc[start angle=180,end angle=0,radius=1mm];
-            \path[left color=tskcolor,right color=white!34!tskcolor,
+            \path[left color=tskcolor,right color=white!24!tskcolor,
                 middle color=tskcolor]
                 ([xshift=-2.5mm]frame.north west) -- ([xshift=2.5mm]frame.north east)
                 [rounded corners=1mm]-- ([xshift=2mm,yshift=-1mm]frame.north east)
