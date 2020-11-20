@@ -86,6 +86,11 @@
 \def\libxlistofheading#1{%
     \PackageWarning{lithie-boxes}{This command is only available with the koma-compatibilities.}%
 }
+
+\@ifpackageloaded{microtype}{%
+    \def\lbix@ls@microtypehook{\microtypesetup{protrusion=false}}
+}{\def\lbix@ls@microtypehook{}}%
+
 \iflibx@comp@koma@
     \def\libxlistofheading#1{\def\libx@listof@heading##1{#1}}
     \libxlistofheading{\section*{#1\@mkboth{#1}{#1}}}
@@ -98,6 +103,7 @@
         \expandafter\newlength\csname cft#1numwidth\endcsname
         \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{\@nameuse{cft#1numwidth}}{\@nameuse{cft#1numwidth}}{##1}{##2}}%
         \expandafter\gdef\csname listof#1\endcsname{\bgroup%
+            \lbix@ls@microtypehook%
             \def\contentsname{#3}% may?
             \libx@listof@heading{\contentsname}%
             \libx@starttoc{#2}%
