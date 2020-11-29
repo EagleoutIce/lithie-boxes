@@ -168,12 +168,16 @@
     \libx@tsk@numfieldbox%
     }},
     extras middle={overlay={% 0.33pt offset to buffer
-            \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
-                \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
-                    ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
-            \end{scope}
+    \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
+        \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
+            ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
+    \end{scope}
+    \begin{scope}[shift={(frame.north)},yshift=0.125cm]
+        \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
+            ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
+    \end{scope}
         }},%
-    extras middle and last={overlay={%
+    extras last={overlay={%
         \begin{scope}[shift={(frame.north)},yshift=0.125cm]
             \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
                 ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
