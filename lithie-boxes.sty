@@ -422,16 +422,17 @@
 }
 
 % NOTE: we don't use numwidth as this allows us to save space on multiline
+\def\libx@list@numberformat#1{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#1}\libx@sp}
 \def\libx@sp{\hskip.1cm}
 % #5 will be dropped as it is the emblem
 \def\@libx@box@list@add@element#1#2#3#4#5#6{%
     \refstepcounter{#1}%
-    \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp#4}%
+    \libx@addcontentsline{#6}{#2}{#1}{\libx@list@numberformat{#3}#4}%
 }
 
 \def\@libx@box@list@add@element@emblem#1#2#3#4#5#6{%
     \refstepcounter{#1}%
-    \libx@addcontentsline{#6}{#2}{#1}{\makebox[\libx@numwidth+\libx@numwidth@offset][r]{#3}\libx@sp\makebox[.45cm][c]{\scriptsize#5}\libx@sp\ignorespaces#4}%
+    \libx@addcontentsline{#6}{#2}{#1}{\libx@list@numberformat{#3}\makebox[.45cm][c]{\scriptsize#5}\libx@sp\ignorespaces#4}%
 }
 
 % TODO: store current catcode?
