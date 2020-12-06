@@ -345,6 +345,8 @@
 \def\libx@storemark#1{%
     % global lock the counter value
     \edef\@libx@markertag{\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
+    % update autoref label
+    \edef\@currentlabel{\thetcbcounter}%
     % stored signature: <num>:<short>:<long>
     \def\@libx@tmp@store{{\thetcbcounter}{\libx@curbox@shorttitle}{#1}}%
     \expandafter\expandafter\expandafter\xdef%
