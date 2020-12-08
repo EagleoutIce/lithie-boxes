@@ -16,10 +16,9 @@
 
 \usepackage[lockhigh,cpalette]{lithie-boxes}
 \LoadBoxStyle{limerence}
+\libxLimerenceNormalSize% unmodded sf
 
-% TODO: more list of-options showing multiple?
-% TODO: no tocloft if koma?
-\UsePalette{GreenWater}
+\UsePalette{Peach}
 
 \usepackage{imakeidx}
 \newcommand{\idxname}{Befehlsübersicht}
@@ -103,7 +102,7 @@ Betrachten wir die Darstellung einer Definition durch \envref{definition}:
     \label{def:example}Dies ist der Text innerhalb der Definition.
 \end{definition}
 
-Ein Verweis auf \autoref{def:example}.
+Ein Verweis auf \autoref{def:example}. Eine tolle \boxref{def:example}.
 \end{latex}
 
 Die Struktur ist hierbei für alle Boxen dieselbe. Wir der \arg{Referenztitel} nicht angegebenen, so wird der \say{lange} Titel gewählt (analog zu Befehlen wie \cmd{section}). Das Ergebnis des eben gezeigten Listings ist das Folgende (Linien zur Trennung eingefügt)\footnote{Der Befehl \cmd{autoref} entstammt dem Paket \T{hyperref} welches nicht geladen werden oder sein muss um die Boxen zu verwenden. Für weitere Befehle siehe \cmdref{boxref} oder \cmdref{boxnameref}.}: \\
@@ -301,6 +300,10 @@ sie einen Zweck erfüllen oder abgesichert wurden (Beispiel: \cmdref{SetBoxPlain
     Es enthält den Bezeichner des aktuell geladenen Stils (\CurrentBoxStyle).
 \end{command}
 
+\begin{command}[v1.1]{RefreshBoxStyle}{}
+    Lädt den \cmdref{CurrentBoxStyle} noch einmal. Kann dazu verwendet werden um nachträglich definierte Boxen mit einzugliedern.
+\end{command}
+
 \subsection{Eigene Boxen definieren}
 
 Hinweis: das definieren eigener Boxen ist aktuell noch etwas umständlich, sofern man \say{abgefahrene Sachen} machen will (wie der Block am Ende eines Beweises; siehe \envref{beweis}). In diesem Fall kann aktuell nur der Quellcode des Pakets selbst als Beispiel herhalten.
@@ -445,6 +448,10 @@ zu Konflikten führt. Mit der Option \packagelink{overwrite} wird das Paket die 
 \subsection{Version 1.0}
 Initiale Version mit den Boxen \envref{definition}, \envref{bemerkung}, \envref{satz}, \envref{beispiel}, \envref{lemma}, \envref{beweis} und \envref{zusammenfassung}. Auch
 Befehle wie \cmdref{boxref} und \cmdref{LoadBoxStyle} wurden eingeführt.
+
+\subsection{Version 1.1}
+Ein paar kleine Verbesserungen wie ein Befehl \cmdref{RefreshBoxStyle} wurden vorgenommen.
+Limerence kann nun die Titelschriftgröße mit \cmd{libxLimerenceNormalSize} und \cmd{libxLimerenceSmallerSize} ändern.
 
 \clearpage\appendix
 \phantomsection\addcontentsline{toc}{section}{\idxname}

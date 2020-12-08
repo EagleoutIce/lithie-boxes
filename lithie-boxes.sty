@@ -8,9 +8,9 @@
 %% tcbtheorems lib to allow more flexibility.
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{lithie-boxes}[2020/10/06 EagleoutIce - lilly box-port and improvement]
+\ProvidesPackage{lithie-boxes}[2020/12/08 EagleoutIce - lilly box-port and improvement]
 
-\def\libx@version{1.0}
+\def\libx@version{1.1}
 
 %% Options
 %% -----------------------------------------------------------------------------
@@ -443,6 +443,8 @@
 \def\libx@loadstyle@ending{.style}
 \def\libx@LoadBoxStyle#1{\typeout{Loading box style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}\gdef\libx@currentstyle{#1}}
 
+\def\libx@RefreshBoxStyle{\typeout{Refreshing box style: '\libx@currentstyle\libx@loadstyle@ending'...}\makeatletter\input{\libx@currentstyle\libx@loadstyle@ending}}
+
 \def\@libx@getcurtar#1{% we expect i and curboxid to be set
 #1:\libx@get{ListMen}\i%
 }
@@ -597,42 +599,6 @@
 
 \providetranslation[to=German]{List of}{Alle}
 
-\providetranslation[to=German]{definition}{definition}
-\providetranslation[to=German]{definitions}{definitionen}
-\providetranslation[to=German]{Definition}{Definition}
-\providetranslation[to=German]{Definitions}{Definitionen}
-
-\providetranslation[to=German]{remark}{bemerkung}
-\providetranslation[to=German]{remarks}{bemerkungen}
-\providetranslation[to=German]{Remark}{Bemerkung}
-\providetranslation[to=German]{Remarks}{Bemerkungen}
-
-\providetranslation[to=German]{theorem}{satz}
-\providetranslation[to=German]{theorems}{sätze}
-\providetranslation[to=German]{Theorem}{Satz}
-\providetranslation[to=German]{Theorems}{Sätze}
-
-\providetranslation[to=German]{example}{beispiel}
-\providetranslation[to=German]{examples}{beispiele}
-\providetranslation[to=German]{Example}{Beispiel}
-\providetranslation[to=German]{Examples}{Beispiele}
-
-
-\providetranslation[to=German]{lemma}{lemma}
-\providetranslation[to=German]{lemmas}{lemmata}
-\providetranslation[to=German]{Lemma}{Lemma}
-\providetranslation[to=German]{Lemmas}{Lemmata}
-
-\providetranslation[to=German]{proof}{beweis}
-\providetranslation[to=German]{proofs}{beweise}
-\providetranslation[to=German]{Proof}{Beweis}
-\providetranslation[to=German]{Proofs}{Beweise}
-
-\providetranslation[to=German]{summary}{zusammenfassung}
-\providetranslation[to=German]{summaries}{zusammenfassungen}
-\providetranslation[to=German]{Summary}{Zusammenfassung}
-\providetranslation[to=German]{Summaries}{Zusammenfassungen}
-
 \def\libx@translateenv#1#2{
     % empty auto:
     \expandafter\ifx\expandafter!\libx@environments@trans!%
@@ -654,7 +620,26 @@
 
 % ----------------------------------------
 % default boxes
-% TODO: option keep env names to leave env names in another language?
+
+% \def\@libx@alldefaultboxes@{}
+
+% \def\libx@DefineDefaultBox#1{%
+%     \ifcsname @libx@defaultbox@#1@\endcsname%
+%         \@nameuse{@libx@defaultbox@#1@}%
+%     \else%
+%         \PackageError{lithie-boxes}{The requested default-box '#1' does not exist.}
+%         {You may use one of: '\@libx@alldefaultboxes@'.}%
+%     \fi%
+% }
+
+% \long\def\libx@RegisterDefaultBox
+
+%% ---
+\providetranslation[to=German]{definition}{definition}
+\providetranslation[to=German]{definitions}{definitionen}
+\providetranslation[to=German]{Definition}{Definition}
+\providetranslation[to=German]{Definitions}{Definitionen}
+
 \translatelet{\@libx@defstyle}{Definition}
 \libx@RegisterNewDefaultStyle{\@libx@defstyle}{}
 
@@ -670,6 +655,11 @@
 % environment name and Prefix:
 {\@libx@def@envname}{\translate{Definition}}
 
+% ---
+\providetranslation[to=German]{remark}{bemerkung}
+\providetranslation[to=German]{remarks}{bemerkungen}
+\providetranslation[to=German]{Remark}{Bemerkung}
+\providetranslation[to=German]{Remarks}{Bemerkungen}
 
 \translatelet{\@libx@remstyle}{Remark}
 \libx@RegisterNewDefaultStyle{\@libx@remstyle}{}
@@ -685,6 +675,11 @@
 % environment name and Prefix:
 {\@libx@rem@envname}{\translate{Remark}}
 
+%% ---
+\providetranslation[to=German]{theorem}{satz}
+\providetranslation[to=German]{theorems}{sätze}
+\providetranslation[to=German]{Theorem}{Satz}
+\providetranslation[to=German]{Theorems}{Sätze}
 
 \translatelet{\@libx@theostyle}{Theorem}
 \libx@RegisterNewDefaultStyle{\@libx@theostyle}{}
@@ -700,6 +695,11 @@
 % environment name and Prefix:
 {\@libx@the@envname}{\translate{Theorem}}
 
+%% ---
+\providetranslation[to=German]{example}{beispiel}
+\providetranslation[to=German]{examples}{beispiele}
+\providetranslation[to=German]{Example}{Beispiel}
+\providetranslation[to=German]{Examples}{Beispiele}
 
 \translatelet{\@libx@exastyle}{Example}
 \libx@RegisterNewDefaultStyle{\@libx@exastyle}{}
@@ -715,6 +715,11 @@
 % environment name and Prefix:
 {\@libx@exa@envname}{\translate{Example}}
 
+%% ---
+\providetranslation[to=German]{lemma}{lemma}
+\providetranslation[to=German]{lemmas}{lemmata}
+\providetranslation[to=German]{Lemma}{Lemma}
+\providetranslation[to=German]{Lemmas}{Lemmata}
 
 \translatelet{\@libx@lemstyle}{Lemma}
 \libx@RegisterNewDefaultStyle{\@libx@lemstyle}{}
@@ -730,6 +735,12 @@
 % environment name and Prefix:
 {\@libx@lem@envname}{\translate{Lemma}}
 
+%% ---
+\providetranslation[to=German]{proof}{beweis}
+\providetranslation[to=German]{proofs}{beweise}
+\providetranslation[to=German]{Proof}{Beweis}
+\providetranslation[to=German]{Proofs}{Beweise}
+
 \translatelet{\@libx@prostyle}{Proof}
 \libx@RegisterNewDefaultStyle{\@libx@prostyle}{after upper={\quad\nobreak\null\nobreak\hfill\nobreak\faSquareO}}
 
@@ -743,6 +754,12 @@
 {cyan}{\@libx@prostyle}{bew}%
 % environment name and Prefix:
 {\@libx@pro@envname}{\translate{Proof}}
+
+%% ---
+\providetranslation[to=German]{summary}{zusammenfassung}
+\providetranslation[to=German]{summaries}{zusammenfassungen}
+\providetranslation[to=German]{Summary}{Zusammenfassung}
+\providetranslation[to=German]{Summaries}{Zusammenfassungen}
 
 \translatelet{\@libx@sumstyle}{Summary}
 \libx@RegisterNewDefaultStyle{\@libx@sumstyle}{}
@@ -958,4 +975,5 @@
 \let\RegisterBox\libx@RegisterBox
 \let\RegisterNewDefaultStyle\libx@RegisterNewDefaultStyle
 \let\CurrentBoxStyle\libx@currentstyle
+\let\RefreshBoxStyle\libx@RefreshBoxStyle
 \endinput

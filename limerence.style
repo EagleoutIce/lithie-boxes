@@ -52,8 +52,13 @@
     {~--~}%
 }
 
+% in case of reload :P
+\providecommand*{\@libx@limerence@titlesize}{\footnotesize}
+\def\libxLimerenceNormalSize{\let\@libx@limerence@titlesize\normalsize}
+\def\libxLimerenceSmallerSize{\let\@libx@limerence@titlesize\normalsize}
+
 \def\@libx@limerence@typeset@title@prefix#1#2{%
-    \textcolor{\libx@get{BoxColor}}{\textsf{\textbf{\footnotesize#1}}}#2%
+    \textcolor{\libx@get{BoxColor}}{\textsf{\textbf{\@libx@limerence@titlesize#1}}}#2%
 }
 \def\libx@limerence@typeset@title#1#2#3{%
     {\libx@title@strut%
