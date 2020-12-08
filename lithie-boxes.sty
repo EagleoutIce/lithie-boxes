@@ -443,7 +443,7 @@
 \def\libx@loadstyle@ending{.style}
 \def\libx@LoadBoxStyle#1{\typeout{Loading box style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}\gdef\libx@currentstyle{#1}}
 
-\def\libx@RefreshBoxStyle{\typeout{Refreshing box style: '\libx@currentstyle\libx@loadstyle@ending'...}\makeatletter\input{\libx@currentstyle\libx@loadstyle@ending}}
+\def\libx@RefreshBoxStyle{\typeout{Refreshing box style: '\libx@currentstyle\libx@loadstyle@ending'...}\@libx@updatestyle}
 
 \def\@libx@getcurtar#1{% we expect i and curboxid to be set
 #1:\libx@get{ListMen}\i%

@@ -1,7 +1,9 @@
 
-% use #1 to #4
+% use #1 to ##4
+\def\@libx@updatestyle{%
 \libx@UpdateAllBoxStyles{%
-    lithie@box@style@default\libx@get{StyleDerivative}={#1},#3,%
+    lithie@box@style@default\libx@get{StyleDerivative}={##1},##3,%
     libx@style@defaults@\libx@get{UseStyle},%
-    title={\libx@default@typeset@title{#4}{#2}{\thetcbcounter}}%
-}
+    title={\libx@default@typeset@title{##4}{##2}{\thetcbcounter}}%
+}}
+\@libx@updatestyle

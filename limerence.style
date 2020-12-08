@@ -69,10 +69,11 @@
     {#1}}\nopagebreak\\*%
 }
 
-
+\def\@libx@updatestyle{%
 % use #1 to #4
 \libx@UpdateAllBoxStyles{%
-    lithie@box@style@limerence\libx@get{StyleDerivative}={#1},%
-    libx@style@defaults@\libx@get{UseStyle},#3,%
-    title={\libx@limerence@typeset@title{#4}{#2}{\thetcbcounter}}%
-}
+    lithie@box@style@limerence\libx@get{StyleDerivative}={##1},%
+    libx@style@defaults@\libx@get{UseStyle},##3,%
+    title={\libx@limerence@typeset@title{##4}{##2}{\thetcbcounter}}%
+}}
+\@libx@updatestyle
