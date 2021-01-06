@@ -349,7 +349,7 @@
     \edef\@currentlabel{\thetcbcounter}%
     % stored signature: <num>:<short>:<long>
     \def\@libx@tmp@store{{\thetcbcounter}{\libx@curbox@shorttitle}{#1}}%
-    \expandafter\expandafter\expandafter\xdef%
+    \expandafter\expandafter\expandafter\protected@xdef%
             \expandafter\csname\@libx@markertag\endcsname{\@libx@tmp@store}%
     % we mirror it to auxout:
     \protected@write\@auxout{}{\protect\libx@loadmark{\expandafter\protect\@libx@markertag}\@libx@tmp@store}%
