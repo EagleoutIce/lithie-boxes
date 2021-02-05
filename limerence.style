@@ -2,7 +2,7 @@
 
 % is defined to allow importing this style multiple times
 \def\libx@limerence@border@width{2.71pt}
-
+\colorlet{libx@limerence@box@backcolor}{gray!20!white}
 \tcbset{%
     lithie@box@style@limerence/.style={% TODO: change attachment?
         breakable,lines before break=3,width=\linewidth,enhanced jigsaw,sharp corners,%
@@ -10,7 +10,7 @@
         % TODO: allow better opacity fill
         opacityfill=0.45,top=3pt,bottom=3pt,right=5pt,frame hidden,%
         % TODO: allow flexible back color
-        colback=gray!20!white,grow to right by=\libx@limerence@border@width,%
+        colback=libx@limerence@box@backcolor,grow to right by=\libx@limerence@border@width,%
         enlarge left by=-\libx@limerence@border@width,
         after title app={\hbox{}~\vspace*{-.85\baselineskip}%
             \newline\unskip\widowpenalties=3 10000 10000 150},%
