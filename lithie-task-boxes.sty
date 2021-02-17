@@ -85,21 +85,21 @@
         lithie@box@style@taskbox@extra@arrows=tskcolor,%
         % padding to give them space to breathe:
         pad before break*=3mm,pad after break=3mm,lines before break=4,%
-        after upper={\nobreak\null\nobreak\hfill\nobreak\rlap{\hyperref[@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter]{\textcolor{gray}{\raisebox{.65pt}{$\diamondsuit$}\color{gray}~\(\mathsf{\libx@tb@boxes@boxnumber}\)}}}}%
+        after upper={\nobreak\null\nobreak\hfill\nobreak\rlap{\hyperref[@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter]{\textcolor{gray}{\raisebox{.65pt}{$\diamondsuit$}\color{gray}~$\mathsf{\libx@tb@boxes@boxnumber}$}}}}%
     },%
     lithie@box@style@taskbox@extra@arrows/.style={%
-        extras first and middle={overlay={% 0.33pt offset to buffer
-            \begin{scope}[shift={(frame.south west)}]
-                \path[fill=#1] (0,0pt) -- ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) --
-                    ++(\libx@taskbox@border@width/2,\libx@taskbox@border@width) |- (0,.33pt) -- cycle;
-            \end{scope}
-        }},%
-        extras middle and last={overlay={%
-            \begin{scope}[shift={(frame.north west)}]
-                \path[fill=#1] (0,0pt) -- ++(\libx@taskbox@border@width/2,\libx@taskbox@border@width) --
-                    ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) |- (0,-.33pt) -- cycle;
-            \end{scope}
-        }}%
+extras first and middle={overlay={% 0.33pt offset to buffer
+\begin{scope}[shift={(frame.south west)}]
+    \path[fill=#1] (0,\z@) -- ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) --
+        ++(\libx@taskbox@border@width/2,\libx@taskbox@border@width) |- (0,.33pt) -- cycle;
+\end{scope}
+}},%
+extras middle and last={overlay={%
+\begin{scope}[shift={(frame.north west)}]
+    \path[fill=#1] (0,\z@) -- ++(\libx@taskbox@border@width/2,\libx@taskbox@border@width) --
+        ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) |- (0,-.33pt) -- cycle;
+\end{scope}
+}}%
     }%
 }
 
@@ -112,7 +112,7 @@
     before title pre={%
     \label{@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter}%
     \iflibx@tb@boxes@isbm@\pdfbookmark[1]{\libx@tb@boxes@boxnumber\ - #4}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@ @\thetcbcounter}\fi},
-    title={\textbf{#2 \libx@tb@boxes@boxnumber{}} \ifthenelse{\equal{#4}{}}{}{--~} #4},tikz={#1},%
+    title={\textbf{#2 \libx@tb@boxes@boxnumber{}} \ifthenelse{\equal{#4}{}}{}{--~}#4},tikz={#1},%
 }%
 
 \newlength\libx@tb@ulnumwidth
@@ -162,24 +162,24 @@
     },
     extras first={overlay={% 0.33pt offset to buffer
     \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
-        \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
+        \path[fill=tskcolor] (0,\z@) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
             ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
     \end{scope}
     \libx@tsk@numfieldbox%
     }},
     extras middle={overlay={% 0.33pt offset to buffer
     \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
-        \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
+        \path[fill=tskcolor] (0,\z@) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
             ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
     \end{scope}
     \begin{scope}[shift={(frame.north)},yshift=0.125cm]
-        \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
+        \path[fill=tskcolor] (0,\z@) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
             ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
     \end{scope}
         }},%
     extras last={overlay={%
         \begin{scope}[shift={(frame.north)},yshift=0.125cm]
-            \path[fill=tskcolor] (0,0pt) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
+            \path[fill=tskcolor] (0,\z@) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
                 ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
         \end{scope}
     }},%

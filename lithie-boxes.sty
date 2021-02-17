@@ -533,15 +533,15 @@
 \tcbset{%
     lithie@box@style@default/.style={%
         enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
-        lines before break=3,before skip=0pt,boxrule=0mm,toprule=0.5mm,%
-        bottomtitle=0.5mm,bottomrule=1.1mm,after skip=0pt,%
+        lines before break=3,before skip=\z@,boxrule=0mm,toprule=0.5mm,%
+        bottomtitle=0.5mm,bottomrule=1.1mm,after skip=\z@,%
         enlarge top by=0.55\baselineskip,enlarge bottom by=0.55\baselineskip,%
         sharp corners=south,breakable, colback=\libx@get{BoxColor}!4!white,colframe=\libx@get{BoxColor},tikz={#1}%
     },%
     lithie@box@style@default@plain/.style={%
         enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
-        lines before break=3,before skip=0pt,boxrule=0mm,%
-        enlarge top by=0.2\baselineskip,enlarge bottom by=0.2\baselineskip,attach title to upper={\medskip\nobreak\par\nobreak},coltitle=black,boxsep=0pt,left=0pt,right=0pt,%
+        lines before break=3,before skip=\z@,boxrule=0mm,%
+        enlarge top by=0.2\baselineskip,enlarge bottom by=0.2\baselineskip,attach title to upper={\medskip\nobreak\par\nobreak},coltitle=black,boxsep=\z@,left=\z@,right=\z@,%
         opacityback=0,opacityframe=0,%
         breakable,tikz={#1}%
     }%
@@ -562,7 +562,7 @@
 
 % #1 is prefix, #2 is number, #3 is text
 \def\libx@default@typeset@title#1#2#3{\bgroup%
-    \def\libx@tmp@title{\libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\,~}#2 #3~}%
+    \def\libx@tmp@title{\libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3~}%
     \textbf{\textsc{\libx@title@strut{}\libx@tmp@title} \hfill \parbox[t]{\linewidth-\widthof{\libx@tmp@title}-1em}{\raggedleft\textbf{#1}}}%
 \egroup}
 
