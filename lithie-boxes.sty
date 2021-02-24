@@ -780,6 +780,12 @@
 % ----------------------------------------
 % Utility control
 
+\def\@libx@decodeenv#1{%
+    \ifcsname @libx@map@envshort@#1\endcsname
+        \@nameuse{@libx@map@envshort@#1}%
+    \else\PackageError{lithie-boxes}{No box-mapping for '#1'}{Maybe the box was not loaded yet?}\fi
+}
+
 % TODO: make more of them
 % starred variant sets both
 % #1 derivative to use
@@ -794,7 +800,7 @@
 }
 
 \newcommand*{\libx@set@boxplain}[2][@plain]{%
-    \libx@update@boxdata{\@nameuse{@libx@map@envshort@#2}}{StyleDerivative}{#1}%
+    \libx@update@boxdata{\@libx@decodeenv{#2}}{StyleDerivative}{#1}%
 }
 
 % ----------------------------------------
@@ -824,7 +830,7 @@
 }
 
 \newcommand*{\libx@set@boxdisabled}[2][false]{%
-    \libx@update@boxif{\@nameuse{@libx@map@envshort@#2}}{BoxEnabled}{#1}%
+    \libx@update@boxif{\@libx@decodeenv{#2}}{BoxEnabled}{#1}%
 }
 
 % ----------------------------------------
@@ -856,7 +862,7 @@
 }
 
 \def\libx@set@boxcolor#1#2{%
-    \libx@update@boxdata{\@nameuse{@libx@map@envshort@#1}}{BoxColor}{#2}%
+    \libx@update@boxdata{\@libx@decodeenv{#1}}{BoxColor}{#2}%
 }
 
 
