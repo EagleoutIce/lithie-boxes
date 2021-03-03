@@ -215,7 +215,7 @@
 % #5 GroupId
 \def\libx@RegisterBox#1#2#3#4#5{\bgroup%
     \edef\libx@boxid{#5}%
-    \typeout{Register #3 with Title #4 and GroupId #5}%
+    \typeout{Reg: #3, t: #4, g: #5}%
     \pgfkeys{/libx@keys,defaults,#1,name=#3,title=#4}%
     \forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
             Outcode,PostCode,UseStyle,Emblem,ListName,ListMen,StyleDerivative}%
