@@ -161,7 +161,7 @@ Das Paket schiebt ein paar Abstraktionen zwischen dem Setzen einer Box und dem E
 
 \subsection{Die Standardboxen}
 
-Hinweis für die Beispiele: Die dokumentation macht \emph{nicht} von der \hyperref[sec:packetoptions]{Paketoptionen} \packageref{autostyle} gebrauch. Die Farben werden allerdings durch die Palette \say{\CurrentPalette}.
+Hinweis für die Beispiele: Die Dokumentation macht \emph{nicht} von der \hyperref[sec:packetoptions]{Paketoptionen} \packageref{autostyle} gebrauch. Die Farben werden allerdings durch die Palette \say{\CurrentPalette}.
 
 \begin{bemerkung*}(after=\bigskip){Bezüglich des Klammerarguments}
     \label{bem:optbracekey}Jede Box unterstützt auch das Argument \arg{Boxargs}. Dieses ist ebenfalls optional, erlaubt es aber weitere Argumente an die zugrundeliegende Box zu übergeben!
@@ -173,7 +173,7 @@ Hinweis für die Beispiele: Die dokumentation macht \emph{nicht} von der \hyperr
 \end{zusammenfassung}
 \end{latex}
     Die Ausgabe findet sich in \boxref{zsf:floatingex}.
-    Möchte man in einem Zweispaltigen Dokument eine Definition die beide Spalten überspannt so gilt es einfach \T{float*} anstelle von \T{float} zu verwenden\footnote{Wichtig! Wie auch die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox} darauf hinweis, ist im Falle einer wirklich über beide Spalten gehende Box auch noch \T{width=\cmd{textwidth}} anzufügen.}. Über \T{floatplacement} oder \T{float=htbp}, können Platzierungshinweise analog zum optionalen Argument bei Umgebungen wie \env{figure} angegeben werden. Für mehr Informationen empfiehlt sich die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox}.
+    Möchte man in einem Zweispaltigen Dokument eine Definition die beide Spalten überspannt so gilt es einfach \T{float*} anstelle von \T{float} zu verwenden\footnote{Wichtig! Wie auch die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox} darauf hinweist, ist im Falle einer wirklich über beide Spalten gehende Box auch noch \T{width=\cmd{textwidth}} anzufügen.}. Über \T{floatplacement} oder \T{float=htbp}, können Platzierungshinweise analog zum optionalen Argument bei Umgebungen wie \env{figure} angegeben werden. Für mehr Informationen empfiehlt sich die Dokumentation von \href{https://www.ctan.org/pkg/tcolorbox}{tcolorbox}.
     Natürlich kann so auch ein Referenztitel übergeben werden:
 \begin{latex}
 \begin{zusammenfassung}(float*=b, width=\textwidth)[Und ich der Referenztitel]
@@ -200,7 +200,7 @@ Wichtige Anmerkung: Der Schlüssel \T{hypertarget} sollte nur mit äußerster Vo
 % #7 full title
 \def\PresentBoxEnv#1#2#3#4#5#6#7{%
 \edef\libx@boxid{#2}%
-\begin{environment}{\@nameuse{@libx@#1@envname}}{\cusArg{(}{Boxargs}{)}\optArg{Referenztitel}\manArg{Titel}}
+\begin{environment}{\@nameuse{@libx@#1@envname}}{\label{env:#3}\cusArg{(}{Boxargs}{)}\optArg{Referenztitel}\manArg{Titel}}
     \index{#3?\envref{#3}\textsuperscript{\,\textsf{(eng. $\rightarrow$ \@nameuse{@libx@#1@envname})}}}%
     Setzt eine \say{\libx@get{Title}}-Box.
     Kommandos im Titel müssen robust sein.
