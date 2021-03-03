@@ -46,12 +46,12 @@
 \long\def\imp#1{\emph{\paletteD{#1}}}
 
 \def\packageOption#1{\T{\normalcolor#1}}
-\def\packagelink#1{\phantomsection\label{po:#1}\index{#1@\protect\packageref{#1}}\packageref{#1}}
+\def\packagelink#1{\phantomsection\label{po:#1}\index{#1?\protect\packageref{#1}}\packageref{#1}}
 \def\packageref#1{\hyperref[po:#1]{\packageOption{#1}}}
 
-\newenvironment{command}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2@\cmdref{#2}}\cmdlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
+\newenvironment{command}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2?\cmdref{#2}}\cmdlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
 
-\newenvironment{environment}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2@\envref{#2}\textsuperscript{\,\textsf{(env)}}}\envlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
+\newenvironment{environment}[3][v1.0]{\leavevmode\\[-\baselineskip]\hspace*{-1.75em}\index{#2?\envref{#2}\textsuperscript{\,\textsf{(env)}}}\envlink{#2}$\,$#3\hfill{}\texttt{#1}\nopagebreak\smallskip\\*}{\bigskip\par{}}
 
 
 \setlength{\parindent}{0pt}
@@ -201,7 +201,7 @@ Wichtige Anmerkung: Der Schlüssel \T{hypertarget} sollte nur mit äußerster Vo
 \def\PresentBoxEnv#1#2#3#4#5#6#7{%
 \edef\libx@boxid{#2}%
 \begin{environment}{\@nameuse{@libx@#1@envname}}{\cusArg{(}{Boxargs}{)}\optArg{Referenztitel}\manArg{Titel}}
-    \index{#3@\envref{#3}\textsuperscript{\,\textsf{(eng. $\rightarrow$ \@nameuse{@libx@#1@envname})}}}%
+    \index{#3?\envref{#3}\textsuperscript{\,\textsf{(eng. $\rightarrow$ \@nameuse{@libx@#1@envname})}}}%
     Setzt eine \say{\libx@get{Title}}-Box.
     Kommandos im Titel müssen robust sein.
     Wird kein \arg{Referenztitel} angegeben, so wird der \arg{Titel} als Referenztitel für Querverweise verwendet. Die gesternte Variante
