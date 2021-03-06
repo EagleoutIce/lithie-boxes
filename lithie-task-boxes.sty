@@ -25,7 +25,7 @@
 \DeclareOption{nocpalette}{\libx@tb@boxes@cpalette@false}
 
 % TODO: use as toc
-\ProcessOptions*\relax%
+\ProcessOptions*
 
 \iflibx@tb@boxes@cpalette@
 \let\libx@tsk@old@cpl@hooks\cpl@hooks%
@@ -38,8 +38,8 @@
 \colorlet{tskcolorA}{paletteA}%
 \colorlet{tskcolorB}{paletteB}%
 }
-\AtBeginDocument{\libx@task@cpalette@hook}%
-\fi%
+\AtBeginDocument{\libx@task@cpalette@hook}
+\fi
 
 \def\libx@taskbox@border@width{2.71pt}
 \def\libx@taskbox@border@width@large{6.71pt}
@@ -52,15 +52,15 @@
 
 \def\tsksub{\@ifstar\@tsksub@star\@tsksub}
 \newcommand*\@tsksub@star[2][]{%
-    \ifx\\#1\\\stepcounter{libx@tsk@ubnum@}%
+    \ifx!#1!\stepcounter{libx@tsk@ubnum@}%
     \else\setcounter{libx@tsk@ubnum@}{#1}\fi%
     \def\libx@currentub{#2}%
     \pdfbookmark[0]{\thelibx@tsk@ubnum@\ #2}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@}%
 }
 
 \newcommand*\@tsksub[2][]{%
-    \ifx\\#1\\\stepcounter{libx@tsk@ubnum@}%
-    \else\setcounter{libx@tsk@ubnum@}{#1}\fi%
+    \ifx!#1!\stepcounter{libx@tsk@ubnum@}%
+    \else\setcounter{libx@tsk@ubnum@}{#1}\fi
     \def\libx@currentub{#2}%
     \section*{#2}%
 }
@@ -70,10 +70,10 @@
 
 \RequirePackage{bookmark}
 
-\iflibx@tb@boxes@showub@%
+\iflibx@tb@boxes@showub@
 \def\libx@tb@boxes@boxnumber{\thelibx@tsk@ubnum@.\thetcbcounter}
-\else%
-\def\libx@tb@boxes@boxnumber{\thetcbcounter}%
+\else
+\def\libx@tb@boxes@boxnumber{\thetcbcounter}
 \fi
 
 \translatelet{\@libx@tskstyle}{Task}
@@ -211,6 +211,4 @@ extras middle and last={overlay={%
 {tskcolor}{addon@\@libx@tskstyle @\@libx@tskstyle@suffix}{tsk}%
 % environment name and Prefix:
 {\@libx@tsk@envname}{\translate{Task}}
-
-
 \endinput
