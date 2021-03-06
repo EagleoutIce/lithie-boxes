@@ -18,22 +18,22 @@
 \def\libx@boxes@lockstyle@{}
 \DeclareOption{lockhigh}{% lock on high
 \@ifundefined{chapter}{%
-    \def\libx@boxes@lockstyle@{section}%
-}{%
-    \def\libx@boxes@lockstyle@{chapter}%
-}%
+    \def\libx@boxes@lockstyle@{section}
+}{
+    \def\libx@boxes@lockstyle@{chapter}
+}
 }
 \DeclareOption{locklow}{% lock on low
-\@ifundefined{chapter}{%
-    \def\libx@boxes@lockstyle@{subsection}%
-}{%
-    \def\libx@boxes@lockstyle@{section}%
-}%
+\@ifundefined{chapter}{
+    \def\libx@boxes@lockstyle@{subsection}
+}{
+    \def\libx@boxes@lockstyle@{section}
+}
 }
 
 \DeclareOption{nolock}{ \def\libx@boxes@lockstyle@{} }
 
-\newif\iflibx@cpalette@%
+\newif\iflibx@cpalette@
 \DeclareOption{cpalette}{ \libx@cpalette@true }
 \DeclareOption{nocpalette}{ \libx@cpalette@false }
 
@@ -66,7 +66,7 @@
 \let\libx@parfill@\@@libx@noparfill
 \DeclareOption{parfill}{ \def\libx@parfill@{} }
 \DeclareOption{noparfill}{ \let\libx@parfill@\@@libx@noparfill }
-\def\libx@parskip@{\setlength{\parskip}{\smallskipamount}}
+\def\libx@parskip@{\parskip=\smallskipamount}
 
 \ProcessOptions*
 
@@ -175,16 +175,16 @@
 
 % #1 boxud, #2 key
 \def\libx@persistif#1#2{\begingroup\globaldefs=1% true/false set must be global too
-\expandafter\newif\csname iflibx@box@persist@#1@#2@\endcsname%
+\expandafter\newif\csname iflibx@box@persist@#1@#2@\endcsname
 % we assgign the same value as the general if
-\@nameuse{iflibx@#2@}%
-    \@nameuse{libx@box@persist@#1@#2@true}%
+\csname iflibx@#2@\endcsname
+    \csname libx@box@persist@#1@#2@true\endcsname
 \else
-    \@nameuse{libx@box@persist@#1@#2@false}%
+    \csname libx@box@persist@#1@#2@false\endcsname
 \fi\endgroup}
 
-\def\libx@box@if#1#2{\@nameuse{iflibx@box@persist@#1@#2@}}
-\def\libx@if#1#2#3{\@nameuse{iflibx@box@persist@\libx@boxid @#1@}#2\else#3\fi}
+\def\libx@box@if#1#2{\csname iflibx@box@persist@#1@#2@\endcsname}
+\def\libx@if#1#2#3{\csname iflibx@box@persist@\libx@boxid @#1@\endcsname #2\else#3\fi}
 
 % #1 box id, #2 datafield, #3 new value
 \def\libx@update@boxdata#1#2#3{\begingroup
@@ -323,7 +323,7 @@
   \fi
   \ifdefined\nameref
     \let\libx@nameref\nameref
-    \def\libx@namerefprobe#1{}%
+    \let\libx@namerefprobe\@gobble
   \fi
 }
 
@@ -338,7 +338,7 @@
 % #1 long title
 \def\libx@storemark#1{%
     % global lock the counter value
-    \edef\@libx@markertag{\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
+    \protected@edef\@libx@markertag{\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
     % update autoref label
     \edef\@currentlabel{\thetcbcounter}%
     % stored signature: <num>:<short>:<long>
@@ -414,7 +414,7 @@
         {\libx@curbox@shorttitle}% title
         {\libx@get{Emblem}}% may be ignored
         {@libx@box@\libx@get{ListMen}@id}% the id will be used to shiput list add
-        \ignorespacesafterend%
+        \ignorespacesafterend
     }{}% Do nothing
 }
 
@@ -552,8 +552,8 @@
 
 % #1 is prefix, #2 is number, #3 is text
 \def\libx@default@typeset@title#1#2#3{\begingroup%
-    \def\libx@tmp@title{\libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3~}%
-    \textbf{\textsc{\libx@title@strut{}\libx@tmp@title} \hfill \parbox[t]{\linewidth-\widthof{\libx@tmp@title}-1em}{\raggedleft\textbf{#1}}}%
+    \sbox0{\libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3~}%
+    \textbf{\textsc{\libx@title@strut{}\usebox0} \hfill \parbox[t]{\linewidth-\wd0-1em}{\raggedleft\textbf{#1}}}%
 \endgroup}
 
 
@@ -573,9 +573,7 @@
 % #1 Name of style
 % #2 style update (#1-#4)
 \def\libx@UpdateBoxStyle#1#2{%
-    \renewtcolorbox[lithie@box@style@other@init={libx@box@#1}]{libx@box@#1}[4][]{%
-        #2%
-    }%
+    \renewtcolorbox[lithie@box@style@other@init={libx@box@#1}]{libx@box@#1}[4][]{#2}%
 }
 % simple swap for consume
 \def\@libx@UpdateHelper#1#2{\libx@UpdateBoxStyle{#2}{#1}}
@@ -604,7 +602,7 @@
         % we have to do this to avoid warnings with hyperref
         \expandafter\translatelet\csname #1@@listof\endcsname{#2}%
         \expandafter\translatelet\csname #1@@name\endcsname{#3}%
-        \@namedef{#1}{\@nameuse{#1@@listof} \@nameuse{#1@@name}}%
+        \@namedef{#1}{\csname #1@@listof\endcsname\ \csname #1@@name\endcsname}%
     \fi
 }
 
@@ -822,8 +820,7 @@
 
 % ref box with given label
 % if starred hide title
-\newcommand*\boxref{\@ifstar\libx@num@nameref\libx@long@nameref}
-\robustify{\boxref}
+\DeclareRobustCommand*\boxref{\@ifstar\libx@num@nameref\libx@long@nameref}
 
 \long\def\@libx@num@nameref#1 (#2)#3\@nil{#1}
 
@@ -846,8 +843,7 @@
 % allow rename as with normal nameref?
 % Note: this is a reimplementation as the behaviour might change
 % note without star this is same as boxref (allows better let's)
-\newcommand*\boxnameref{\@ifstar\libx@short@nameref\libx@long@nameref}
-\robustify{\boxnameref}
+\DeclareRobustCommand*\boxnameref{\@ifstar\libx@short@nameref\libx@long@nameref}
 
 \def\@libx@short@nameref#1 (#2)#3\@nil{#2}
 
