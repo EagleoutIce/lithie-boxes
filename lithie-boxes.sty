@@ -101,7 +101,7 @@
     \def\libx@newlistof#1#2#3{%
         \newcounter{#1}%
         \expandafter\newlength\csname cft#1numwidth\endcsname
-        \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{\@nameuse{cft#1numwidth}}{\@nameuse{cft#1numwidth}}{##1}{##2}}%
+        \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{\csname cft#1numwidth\endcsname}{\csname cft#1numwidth\endcsname}{##1}{##2}}%
         \expandafter\gdef\csname listof#1\endcsname{\begingroup
             \lbix@ls@microtypehook
             \def\contentsname{#3}% may?
@@ -163,13 +163,13 @@
 
 % #1 boxid, #2 key
 \def\libx@persist#1#2{%
-    \expandafter\protected@xdef\csname libx@box@persist@#1@#2\endcsname{\@nameuse{libx@box@#2}}%
+    \expandafter\protected@xdef\csname libx@box@persist@#1@#2\endcsname{\csname libx@box@#2\endcsname}%
 }
 
 \def\libx@box@get#1#2{\csname libx@box@persist@#1@#2\endcsname}
 \def\libx@get#1{\csname libx@box@persist@\libx@boxid @#1\endcsname}
 \def\libx@get@ifempty#1#2#3{%
-    \protected@edef\@libx@tmp{\@nameuse{libx@box@persist@\libx@boxid @#1}}%
+    \protected@edef\@libx@tmp{\csname libx@box@persist@\libx@boxid @#1\endcsname}%
     \ifx\@libx@tmp\@empty#2\else#3\fi
 }
 
@@ -757,7 +757,7 @@
 
 \def\@libx@decodeenv#1{%
     \ifcsname @libx@map@envshort@#1\endcsname
-        \@nameuse{@libx@map@envshort@#1}%
+        \csname @libx@map@envshort@#1\endcsname
     \else\PackageError{lithie-boxes}{No box-mapping for '#1'}{Maybe the box was not loaded yet?}\fi
 }
 
@@ -829,8 +829,8 @@
     % assure nameref:
     \libx@namerefprobe{}%
     % we directly access the label def
-    \ifcsname r@#1\endcsname%
-        \protected@edef\libx@tmp{\@nameuse{r@#1}}%
+    \ifcsname r@#1\endcsname
+        \protected@edef\libx@tmp{\csname r@#1\endcsname}%
         \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
         \protected@edef\libx@tmp{\noexpand\@libx@num@nameref\libx@tmp ?? ()\noexpand\@nil}%
         \libx@hyperref[#1]{\libx@tmp}%
