@@ -8,7 +8,6 @@
     lithie@box@style@limerence/.style={%
         breakable,lines before break=3,width=\linewidth,enhanced jigsaw,sharp corners,%
         boxrule=\z@,fonttitle={\normalsize},coltitle=black,attach title to upper,%
-        % TODO: allow better opacity fill
         opacityfill=.45,top=3pt,bottom=3pt,right=5pt,frame hidden,%
         colback=libx@limerence@box@backcolor,grow to right by=\libx@limerence@border@width,%
         enlarge left by=-\libx@limerence@border@width,
@@ -59,12 +58,12 @@
     \textcolor{\libx@get{BoxColor}}{\textsf{\textbf{\@libx@limerence@titlesize#1}}}#2%
 }
 \def\libx@limerence@typeset@title#1#2#3{%
-    {\usebox\libx@title@strut
-        \@libx@limerence@typeset@title@prefix{%
-            \libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3%
-        }{\ifx!#1!\else\libx@style@limerence@titledivider\fi}%
-        % we do not use the width again as we want to save space :D
-    {#1}}\nopagebreak\\*%
+{\usebox\libx@title@strut
+    \@libx@limerence@typeset@title@prefix{%
+        \libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3%
+    }{\ifx!#1!\else\libx@style@limerence@titledivider\fi}%
+    % we do not use the width again as we want to save space :D
+{#1}}\nopagebreak\\*%
 }
 
 \def\@libx@updatestyle{%

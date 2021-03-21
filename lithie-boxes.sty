@@ -1,20 +1,14 @@
 %% lithie-boxes.sty
-%%
-%% -----------------------------------------
-%% Florian Sihler, 30.09.2020
-%%
+%% Author: Florian Sihler, 30.09.2020
 %% Standalone and improved box-module of lilly
 %% boxes. This variant won't use the
 %% tcbtheorems lib to allow more flexibility.
-
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{lithie-boxes}[2020/12/08 EagleoutIce - lilly box-port and improvement]
 \def\libx@version{1.1}
 
 %% Options
 %% ------------------------
-
-% TODO: different numbering for singles?
 \def\libx@boxes@lockstyle@{}
 \DeclareOption{lockhigh}{% lock on high
 \@ifundefined{chapter}{\def\libx@boxes@lockstyle@{section}}{\def\libx@boxes@lockstyle@{chapter}}%
@@ -59,11 +53,8 @@
 \DeclareOption{parfill}{ \def\libx@parfill@{} }
 \DeclareOption{noparfill}{ \let\libx@parfill@\@@libx@noparfill }
 \def\libx@parskip@{\parskip=\smallskipamount}
-
 \ProcessOptions*
 
-
-% TODO: TRANSLATE IN TABLE OF CONTENTS (SIDEBAR) ETC. MAKE WITH translatelet
 % ----------------------------------------
 % koma-script abstraction (for tocloft)
 
@@ -72,7 +63,6 @@
 \@ifclassloaded{scrbook}{\libx@comp@koma@true}{}
 
 \iflibx@forcekomadisabled@ \libx@comp@koma@false \fi
-
 \def\libxlistofheading#1{%
     \PackageWarning{lithie-boxes}{This command is only available with the koma-compatibilities.}%
 }
@@ -82,27 +72,25 @@
 }{\def\lbix@ls@microtypehook{}}%
 
 \iflibx@comp@koma@
-    \def\libxlistofheading#1{\def\libx@listof@heading##1{#1}}
-    \libxlistofheading{\section*{#1\@mkboth{#1}{#1}}}
-    \AtBeginDocument{\let\libx@starttoc\@starttoc}
-    \typeout{Koma-Script detected. lithie-boxes using a fallback mechanism.}%
-    %\KOMAoption{listof}{entryprefix}%
-    % important: dropping the optional reset
-    \def\libx@newlistof#1#2#3{%
-        \newcounter{#1}%
-        \expandafter\newlength\csname cft#1numwidth\endcsname
-        \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{\csname cft#1numwidth\endcsname}{\csname cft#1numwidth\endcsname}{##1}{##2}}%
-        \expandafter\gdef\csname listof#1\endcsname{\begingroup
-            \lbix@ls@microtypehook
-            \def\contentsname{#3}% may?
-            \libx@listof@heading{\contentsname}%
-            \libx@starttoc{#2}%
-        \endgroup}%
-    }%
+\def\libxlistofheading#1{\def\libx@listof@heading##1{#1}}
+\libxlistofheading{\section*{#1\@mkboth{#1}{#1}}}
+\AtBeginDocument{\let\libx@starttoc\@starttoc}
+\typeout{Koma-Script detected. lithie-boxes using a fallback mechanism.}%
+% important: dropping the optional reset
+\def\libx@newlistof#1#2#3{%
+    \newcounter{#1}%
+    \expandafter\newlength\csname cft#1numwidth\endcsname
+    \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{\csname cft#1numwidth\endcsname}{\csname cft#1numwidth\endcsname}{##1}{##2}}%
+    \expandafter\gdef\csname listof#1\endcsname{\begingroup
+        \lbix@ls@microtypehook
+        \def\contentsname{#3}% may?
+        \libx@listof@heading{\contentsname}%
+        \libx@starttoc{#2}%
+    \endgroup}%
+}%
 \else
-    \RequirePackage{tocloft}
-    \let\libx@newlistof\newlistof
-\fi
+\RequirePackage{tocloft}
+\let\libx@newlistof\newlistof\fi
 
 %% Packages
 \RequirePackage{bookmark,tcolorbox,environ,calc,fontawesome,translator}
@@ -125,29 +113,29 @@
 % NOTE: changed to style modification 'style derivative'
 % \newif\iflibx@UseBox@
 \pgfkeys{
-    /libx@keys/.is family, /libx@keys,
-    name/.store in = \libx@box@Name,
-    title/.store in = \libx@box@Title,
-    box color/.store in = \libx@box@BoxColor,
-    pre code/.store in = \libx@box@PreCode,
-    in code/.store in = \libx@box@InCode,
-    out code/.store in = \libx@box@OutCode,
-    post code/.store in = \libx@box@PostCode,
-    use style/.store in = \libx@box@UseStyle,
-    emblem/.store in = \libx@box@Emblem,
-    style derivative/.store in=\libx@box@StyleDerivative,
-    has emblem/.is if=libx@HasEmblem@,
-    custom list/.is if=libx@CustomList@,
-    box enabled/.is if=libx@BoxEnabled@,
-    list name/.store in = \libx@box@ListName,
-    list men/.store in =\libx@box@ListMen,
-    defaults/.style={%
-        name=noname,title={\noexpand\libx@box@Name},%
-        box color=black,use style={},% mandatory!
-        emblem={},list name={\noexpand\libx@box@Name}, pre code={}, in code={},has emblem=false,%
-        out code={},post code={},custom list=true,
-        list men=NO,box enabled=true,style derivative={}%
-    }
+/libx@keys/.is family, /libx@keys,
+name/.store in = \libx@box@Name,
+title/.store in = \libx@box@Title,
+box color/.store in = \libx@box@BoxColor,
+pre code/.store in = \libx@box@PreCode,
+in code/.store in = \libx@box@InCode,
+out code/.store in = \libx@box@OutCode,
+post code/.store in = \libx@box@PostCode,
+use style/.store in = \libx@box@UseStyle,
+emblem/.store in = \libx@box@Emblem,
+style derivative/.store in=\libx@box@StyleDerivative,
+has emblem/.is if=libx@HasEmblem@,
+custom list/.is if=libx@CustomList@,
+box enabled/.is if=libx@BoxEnabled@,
+list name/.store in = \libx@box@ListName,
+list men/.store in =\libx@box@ListMen,
+defaults/.style={%
+    name=noname,title={\noexpand\libx@box@Name},%
+    box color=black,use style={},% mandatory!
+    emblem={},list name={\noexpand\libx@box@Name}, pre code={}, in code={},has emblem=false,%
+    out code={},post code={},custom list=true,
+    list men=NO,box enabled=true,style derivative={}%
+}
 }
 
 % #1 boxid, #2 key
@@ -171,7 +159,6 @@
 \else
     \csname libx@box@persist@#1@#2@false\endcsname
 \fi\endgroup}
-
 \def\libx@box@if#1#2{\csname iflibx@box@persist@#1@#2@\endcsname}
 \def\libx@if#1#2#3{\csname iflibx@box@persist@\libx@boxid @#1@\endcsname #2\else#3\fi}
 
@@ -179,7 +166,7 @@
 \def\libx@update@boxdata#1#2#3{\begingroup
     \edef\libx@boxid{#1}%
     % This allows them to be persisted:
-    \@namedef{libx@box@#2}{#3}%
+    \expandafter\def\csname libx@box@#2\endcsname{#3}%
     \libx@persist{\libx@boxid}{#2}%
 \endgroup}
 
@@ -191,137 +178,127 @@
     \libx@persistif{\libx@boxid}{#2}%
 \endgroup}
 
-
 \long\def\libx@preatend#1{\gpreto{\enddocument}{#1}}
 
-% #1 Boxkeys, #2 tikzkeys for box
-% #3 Boxname (set boxnamekey)
-% #4 Title (boxtitlekey)
-% #5 GroupId
+% #1 Boxkeys, #2 tikzkeys for box #3 Boxname (set boxnamekey) #4 Title (boxtitlekey) #5 GroupId
 \def\libx@RegisterBox#1#2#3#4#5{\begingroup%
-    \edef\libx@boxid{#5}%
-    \typeout{Reg: #3, t: #4, g: #5}%
-    \pgfkeys{/libx@keys,defaults,#1,name=#3,title=#4}%
-    \forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
-            Outcode,PostCode,UseStyle,Emblem,ListName,ListMen,StyleDerivative}%
-    \forcsvlist{\libx@persistif{\libx@boxid}}{HasEmblem,CustomList,BoxEnabled}%
-    % setup id counter:
-    \@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
-        \newcounter{@libx@box@\libx@get{ListMen}@id}%
-        \libx@preatend{\begingroup\makeatletter\edef\libx@boxid{#5}% just to carry for sub commands
-            \ifnum\arabic{@libx@box@\libx@get{ListMen}@id}=0\else
-            \foreach \i in {1,...,\arabic{@libx@box@\libx@get{ListMen}@id}}{%
-                \@nameuse{libx@box@\libx@get{ListMen}@contentsline@\i}%
-            }%
-            \fi
-        \endgroup}%
-        % chapter spacing in list as all commands are appended in the end we step the internal boxid as it is used only on the command-inside
-        \AtEndPreamble{%
-            \ifcsname chapter\endcsname
-            \xpreto\chapter{% only increment if already got one
-                \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
-                \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
-                \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
-                \noexpand\fi
-            }%
-            \else
-            \xpreto\section{% only increment if already got one
-                \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
-                \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
-                \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
-                \noexpand\fi
-            }%
-            \fi
-        }%
-    }{}
+\edef\libx@boxid{#5}%
+\typeout{Reg: #3, t: #4, g: #5}%
+\pgfkeys{/libx@keys,defaults,#1,name=#3,title=#4}%
+\forcsvlist{\libx@persist{\libx@boxid}}{Name,Title,BoxColor,PreCode,InCode,%
+        Outcode,PostCode,UseStyle,Emblem,ListName,ListMen,StyleDerivative}%
+\forcsvlist{\libx@persistif{\libx@boxid}}{HasEmblem,CustomList,BoxEnabled}%
+% setup id counter:
+\@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
+\newcounter{@libx@box@\libx@get{ListMen}@id}%
+\libx@preatend{\begingroup\makeatletter\edef\libx@boxid{#5}% just to carry for sub commands
+    \ifnum\arabic{@libx@box@\libx@get{ListMen}@id}=0\else
+    \foreach \i in {1,...,\arabic{@libx@box@\libx@get{ListMen}@id}}{%
+        \@nameuse{libx@box@\libx@get{ListMen}@contentsline@\i}%
+    }%
+    \fi
+\endgroup}%
+% chapter spacing in list as all commands are appended in the end we step the internal boxid as it is used only on the command-inside
+\AtEndPreamble{%
+    \ifcsname chapter\endcsname
+    \xpreto\chapter{% only increment if already got one
+        \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
+        \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
+        \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
+        \noexpand\fi
+    }%
+    \else
+    \xpreto\section{% only increment if already got one
+        \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
+        \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
+        \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
+        \noexpand\fi
+    }%
+    \fi
+}%
+}{}
 % Define the main environment of the box
 \globaldefs=1%
-    % NOTE: #1 is short form!
-    \let\libx@newboxenv\newenvironment
-    \iflibx@modes@overwrite@% check if already there
-        \ifcsname#3\endcsname
-            \let\libx@newboxenv\renewenvironment
-        \fi
+% NOTE: #1 is short form!
+\let\libx@newboxenv\newenvironment
+\iflibx@modes@overwrite@% check if already there
+    \ifcsname#3\endcsname
+        \let\libx@newboxenv\renewenvironment
     \fi
-    \libx@newboxenv{#3}{%
-        \edef\libx@boxid{#5}%
-        \@ifnextchar(%
-            {\@libx@boxconsume@with@boxopt{#2}{#4}{#5}}%
-            {\@libx@boxconsume@with@boxopt{#2}{#4}{#5}()}%
-    }{% end of defined environment
-        \libx@if{BoxEnabled}{%
-            \libx@read@box@default@end{#5}%
-        }{\endlibx@read@box@hidden}%
-    }%
-    % these mappings are used (internally) for user commands
-    % for easier access
-    \@namedef{@libx@map@envshort@#3}{#5}
+\fi
+\libx@newboxenv{#3}{%
+    \edef\libx@boxid{#5}%
+    \@ifnextchar(%
+        {\@libx@boxconsume@with@boxopt{#2}{#4}{#5}}%
+        {\@libx@boxconsume@with@boxopt{#2}{#4}{#5}()}%
+}{% end of defined environment
+    \libx@if{BoxEnabled}{%
+        \libx@read@box@default@end{#5}%
+    }{\endlibx@read@box@hidden}%
+}%
+% these mappings are used (internally) for user commands
+% for easier access
+\@namedef{@libx@map@envshort@#3}{#5}
 \globaldefs=0%
 \endgroup}
 
 \def\@libx@boxconsume@with@boxopt#1#2#3(#4){
-    \@ifnextchar[%
-        {\@libx@boxconsume@with@bothopt{#1}{#2}{#3}(#4)}%
-        {\@libx@boxconsume@with@bothopt{#1}{#2}{#3}(#4)[]}
+\@ifnextchar[%
+    {\@libx@boxconsume@with@bothopt{#1}{#2}{#3}(#4)}%
+    {\@libx@boxconsume@with@bothopt{#1}{#2}{#3}(#4)[]}
 }
 
 % #1 tikzkeys #2 Title #3 GroupId box opt #4 box opt #5 Referenztitel #6 Titel
 \def\@libx@boxconsume@with@bothopt#1#2#3(#4)[#5]#6{%
-    \ifx!#5!%
-        \def\libx@curbox@shorttitle{#6}%
-    \else
-        \def\libx@curbox@shorttitle{#5}%
-    \fi
+\ifx!#5!%
+    \def\libx@curbox@shorttitle{#6}%
+\else
+    \def\libx@curbox@shorttitle{#5}%
+\fi
 % First we check if the box is disabled
-    \libx@if{BoxEnabled}{%
-        \libx@read@box@default{#3}{#6}{#1}{#4}%
-    }{%
-        % the expandafter hinders the tokens to be read when libx@if gets expanded and is false
-        \expandafter\libx@read@box@hidden
-    }\ignorespaces
+\libx@if{BoxEnabled}{%
+    \libx@read@box@default{#3}{#6}{#1}{#4}%
+}{%
+    % the expandafter hinders the tokens to be read when libx@if gets expanded and is false
+    \expandafter\libx@read@box@hidden
+}\ignorespaces
 }
 
 % The boxes
 \NewEnviron{libx@read@box@hidden}{}
 \AtEndPreamble{%
-    \@ifundefined{hypertarget}{%
-        \long\def\libx@hypertarget#1#2{\label{#1}#2}%
-        \newcommand\libx@hyperref[2][]{#2}%
-        % gobble the star:
-        \def\libx@pageref{\protect\@ifstar\pageref\pageref}%
-        \def\libx@phantomsection{}%
-    }{% adapt to redefinitions
-        \def\libx@hypertarget{\hypertarget}%
-        \def\libx@pageref{\pageref}%
-        \let\libx@phantomsection\phantomsection
-        \def\libx@hyperref{\hyperref}%
-    }%
+\@ifundefined{hypertarget}{%
+    \long\def\libx@hypertarget#1#2{\label{#1}#2}%
+    \newcommand\libx@hyperref[2][]{#2}%
+    % gobble the star:
+    \def\libx@pageref{\protect\@ifstar\pageref\pageref}%
+    \def\libx@phantomsection{}%
+}{% adapt to redefinitions
+    \def\libx@hypertarget{\hypertarget}%
+    \def\libx@pageref{\pageref}%
+    \let\libx@phantomsection\phantomsection
+    \def\libx@hyperref{\hyperref}%
+}%
 }
 
 \def\libx@setnameref#1{\protected@edef\@currentlabelname{#1}}
 \def\libx@namerefprobe#1{%
-    \PackageError{lithie-boxes}{%
-        Request for nameref-command without package loaded.%
-    }{Load namref or a package loading nameref, like hyperref.}%
-}
+\PackageError{lithie-boxes}{%
+    Request for nameref-command without package loaded.%
+}{Load namref or a package loading nameref, like hyperref.}}
 \let\libx@nameref\libx@namerefprobe
 
 \AfterEndPreamble{%
-  \ifdefined\NR@gettitle
-    \let\libx@setnameref\NR@gettitle
-  \fi
-  \ifdefined\nameref
-    \let\libx@nameref\nameref
-    \let\libx@namerefprobe\@gobble
-  \fi
+\ifdefined\NR@gettitle \let\libx@setnameref\NR@gettitle\fi
+\ifdefined\nameref \let\libx@nameref\nameref \let\libx@namerefprobe\@gobble\fi
 }
 
 
 % id | num | short | long
 \def\libx@loadmark#1#2#3#4{%
-    \expandafter\gdef\csname @libx@box@marker@#1@num\endcsname{#2}%
-    \expandafter\gdef\csname @libx@box@marker@#1@short\endcsname{#3}%
-    \expandafter\gdef\csname @libx@box@marker@#1@long\endcsname{#4}%
+\expandafter\gdef\csname @libx@box@marker@#1@num\endcsname{#2}%
+\expandafter\gdef\csname @libx@box@marker@#1@short\endcsname{#3}%
+\expandafter\gdef\csname @libx@box@marker@#1@long\endcsname{#4}%
 }
 
 % #1 long title
@@ -345,36 +322,36 @@
 
 % #1 id, #2 title, #3 default tikz args, #4 further box args
 \def\libx@read@box@default#1#2#3#4{\begingroup
-    \edef\libx@boxid{#1}%
-    \libx@get{PreCode}%
-    \libx@phantomsection
-    % Note: We do this extra to control expansion
-    % To get the correct counter value we cheat by guessing the next id of this box
-    % then we will create a marker to a command defined inside the box getting
-    % the exact counter value
-    \edef\libx@tmp@nextval{\the\numexpr\value{@libx@box@\libx@get{ListMen}@id}+1\relax}%
-    \protected@edef\@libx@tmpnr{%
-        \noexpand\libx@setnameref{%
-            % Note: this has to be a '\space' or ' ' as this is used when pattern match to drop
-            \libx@get{Title}\space\noexpand\libx@marker@getnum{\libx@get{ListMen}}{\libx@tmp@nextval}\space(\noexpand\libx@marker@getshort{\libx@get{ListMen}}{\libx@tmp@nextval})%
-        }%
+\edef\libx@boxid{#1}%
+\libx@get{PreCode}%
+\libx@phantomsection
+% Note: We do this extra to control expansion
+% To get the correct counter value we cheat by guessing the next id of this box
+% then we will create a marker to a command defined inside the box getting
+% the exact counter value
+\edef\libx@tmp@nextval{\the\numexpr\value{@libx@box@\libx@get{ListMen}@id}+1\relax}%
+\protected@edef\@libx@tmpnr{%
+    \noexpand\libx@setnameref{%
+        % Note: this has to be a '\space' or ' ' as this is used when pattern match to drop
+        \libx@get{Title}\space\noexpand\libx@marker@getnum{\libx@get{ListMen}}{\libx@tmp@nextval}\space(\noexpand\libx@marker@getshort{\libx@get{ListMen}}{\libx@tmp@nextval})%
     }%
-    \@libx@tmpnr
-    \stepcounter{@libx@box@\libx@get{ListMen}@id}%
+}%
+\@libx@tmpnr
+\stepcounter{@libx@box@\libx@get{ListMen}@id}%
 % we check if we use the box style
-    \begin{\libx@get{UseStyle}}%
-        [% Tikz arguments:
-            #3%
-        ]{% Title (braces guard):
-            {\libx@get{Title}}%
-        }{% Further arguments for tcolorbox
-            before upper app={\ignorespacesafterend},%
-            hypertarget=@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id},
-            before title pre={%
-                \@libx@box@title@pre{#2}%
-                \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
-            },#4%
-        }{#2}%
+\begin{\libx@get{UseStyle}}%
+[% Tikz arguments:
+    #3%
+]{% Title (braces guard):
+    {\libx@get{Title}}%
+}{% Further arguments for tcolorbox
+    before upper app={\ignorespacesafterend},%
+    hypertarget=@libx@ht:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id},
+    before title pre={%
+        \@libx@box@title@pre{#2}%
+        \label{@libx:\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
+    },#4%
+}{#2}%
 \libx@storemark{#2}%
 \libx@get{InCode}}
 
@@ -389,22 +366,22 @@
 
 % #1: title
 \def\@libx@box@title@pre#1{%
-    \libx@if{CustomList}{%
-        \libx@if{HasEmblem}{%
-            % We register with emblem
-            \expandafter\@libx@box@list@add@element@emblem
-        }{%
-            % We register without emblem
-            \expandafter\@libx@box@list@add@element
-        }% args:
-        {\libx@get{ListName}}% list name
-        {\libx@get{ListMen}}% list men
-        {\thetcbcounter}% counter
-        {\libx@curbox@shorttitle}% title
-        {\libx@get{Emblem}}% may be ignored
-        {@libx@box@\libx@get{ListMen}@id}% the id will be used to shiput list add
-        \ignorespacesafterend
-    }{}% Do nothing
+\libx@if{CustomList}{%
+\libx@if{HasEmblem}{%
+    % We register with emblem
+    \expandafter\@libx@box@list@add@element@emblem
+}{%
+    % We register without emblem
+    \expandafter\@libx@box@list@add@element
+}% args:
+{\libx@get{ListName}}% list name
+{\libx@get{ListMen}}% list men
+{\thetcbcounter}% counter
+{\libx@curbox@shorttitle}% title
+{\libx@get{Emblem}}% may be ignored
+{@libx@box@\libx@get{ListMen}@id}% the id will be used to shiput list add
+\ignorespacesafterend
+}{}% Do nothing
 }
 
 % NOTE: we don't use numwidth as this allows us to save space on multiline
@@ -417,11 +394,10 @@
 }
 
 \def\@libx@box@list@add@element@emblem#1#2#3#4#5#6{%
-    \refstepcounter{#1}%
-    \libx@addcontentsline{#6}{#2}{#1}{\libx@list@numberformat{#3}\makebox[.45cm][c]{\scriptsize#5}\libx@sp\ignorespaces#4}%
+\refstepcounter{#1}%
+\libx@addcontentsline{#6}{#2}{#1}{\libx@list@numberformat{#3}\makebox[.45cm][c]{\scriptsize#5}\libx@sp\ignorespaces#4}%
 }
 
-% TODO: store current catcode?
 \gdef\libx@currentstyle{default}
 \def\libx@loadstyle@ending{.style}
 \def\libx@LoadBoxStyle#1{\typeout{Loading box style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}\gdef\libx@currentstyle{#1}}
@@ -433,36 +409,34 @@
 }
 \def\@libx@getrefpage{\libx@pageref*{\@libx@getcurtar{@libx}}}
 \AtEndPreamble{%
-    \let\libx@raw@addcontentsline\addcontentsline%
-    \patchcmd{\libx@raw@addcontentsline}{\thepage}{\@libx@getrefpage}{}{}%
-    \loop% we stop if replace throws error
-        \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{\iftrue}{\iffalse}%
-    \repeat
-    \let\libx@raw@addtocontents\addtocontents
+\let\libx@raw@addcontentsline\addcontentsline%
+\patchcmd{\libx@raw@addcontentsline}{\thepage}{\@libx@getrefpage}{}{}%
+\loop% we stop if replace throws error
+    \patchcmd{\libx@raw@addcontentsline}{\@currentHref}{\@libx@getcurtar{@libx@ht}}{\iftrue}{\iffalse}%
+\repeat
+\let\libx@raw@addtocontents\addtocontents
 }
 
-
 \def\@libx@addtocontents#1#2#3{%
-    % we want the exact id:
-    \expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{%
-        \noexpand\libx@raw@addtocontents{#2}{#3}%
-    }%
+% we want the exact id:
+\expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{%
+    \noexpand\libx@raw@addtocontents{#2}{#3}%
+}%
 }
 
 \def\libx@addtocontents#1#2#3{\@libx@addtocontents{\arabic{#1}}{#2}{#3}}
 
 \def\@libx@addcontentsline#1#2#3#4{%
-    % we want the exact id:
-    \expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{%
-        \noexpand\libx@raw@addcontentsline{#2}{#3}{#4}%
-    }%
+% we want the exact id:
+\expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{%
+    \noexpand\libx@raw@addcontentsline{#2}{#3}{#4}%
+}%
 }
 
 \def\libx@addcontentsline#1#2#3#4{\@libx@addcontentsline{\arabic{#1}}{#2}{#3}{#4}}
 
 % ----------------------------------------
 % box definitions
-
 % initialize the number within lock
 \ifx\libx@boxes@lockstyle@\@empty% no lock:
 \pgfqkeys{/tcb/new}{lithie@box@number@within/.style={}}
@@ -476,28 +450,26 @@
 \setlength\libx@numwidth{.9cm-\libx@numwidth@offset}%
 \fi
 
-% TODO: restructure?
-% TODO: allow without emblem and 'other' second style?
 % #1 internal list name #2 internal list men #3 list of title text
 % #4 Emblem for starred variant #5 color
 % #6 style to use #7 id
 % #8 environment name
 % #9 title
 \def\libx@RegisterBoxPair#1#2#3#4#5#6#7#8#9{%
-    \libx@newlistof{#1}{#2}{#3}%
-    % kept for compat :D
-    \expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
-    % set name
-    \expandafter\providecommand\csname #1name\endcsname{#9}%
-    % \expandafter\protected@edef\csname cft#2titlefont\endcsname{\@nameuse{cft#2titlefont}\selectfont}%
+\libx@newlistof{#1}{#2}{#3}%
+% kept for compat :D
+\expandafter\setlength\csname cft#1numwidth\endcsname{\libx@numwidth}%
+% set name
+\expandafter\providecommand\csname #1name\endcsname{#9}%
+% \expandafter\protected@edef\csname cft#2titlefont\endcsname{\@nameuse{cft#2titlefont}\selectfont}%
 % Register no star
-    \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,in code=\libx@parfill@\libx@parskip@\noindent,%
-    box color=#5,use style=libx@box@#6}{}{#8}{#9}{#7}%
-    % if the emblem is empty we do not define the starred variant!
-    \ifx!#4!\else
-        \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,emblem=\protect#4,%
-    in code=\libx@parfill@\libx@parskip@\noindent,box color=#5,use style=libx@box@#6}{}{#8*}{#9}{#7@s}%
-    \fi
+\libx@RegisterBox{list name=#1,list men=#2,has emblem=true,in code=\libx@parfill@\libx@parskip@\noindent,%
+box color=#5,use style=libx@box@#6}{}{#8}{#9}{#7}%
+% if the emblem is empty we do not define the starred variant!
+\ifx!#4!\else
+    \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,emblem=\protect#4,%
+in code=\libx@parfill@\libx@parskip@\noindent,box color=#5,use style=libx@box@#6}{}{#8*}{#9}{#7@s}%
+\fi
 }
 
 % ----------------------------------------
@@ -507,20 +479,20 @@
 \def\libx@list@boxes{}
 
 \tcbset{%
-    lithie@box@style@default/.style={%
-        enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
-        lines before break=3,before skip=\z@,boxrule=\z@,toprule=.5mm,%
-        bottomtitle=.5mm,bottomrule=1.1mm,after skip=\z@,%
-        enlarge top by=.55\baselineskip,enlarge bottom by=.55\baselineskip,%
-        sharp corners=south,breakable, colback=\libx@get{BoxColor}!4!white,colframe=\libx@get{BoxColor},tikz={#1}%
-    },%
-    lithie@box@style@default@plain/.style={%
-        enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
-        lines before break=3,before skip=\z@,boxrule=\z@,%
-        enlarge top by=.2\baselineskip,enlarge bottom by=.2\baselineskip,attach title to upper={\medskip\nobreak\par\nobreak},coltitle=black,boxsep=\z@,left=\z@,right=\z@,%
-        opacityback=0,opacityframe=0,%
-        breakable,tikz={#1}%
-    }%
+lithie@box@style@default/.style={%
+    enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
+    lines before break=3,before skip=\z@,boxrule=\z@,toprule=.5mm,%
+    bottomtitle=.5mm,bottomrule=1.1mm,after skip=\z@,%
+    enlarge top by=.55\baselineskip,enlarge bottom by=.55\baselineskip,%
+    sharp corners=south,breakable, colback=\libx@get{BoxColor}!4!white,colframe=\libx@get{BoxColor},tikz={#1}%
+},%
+lithie@box@style@default@plain/.style={%
+    enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
+    lines before break=3,before skip=\z@,boxrule=\z@,%
+    enlarge top by=.2\baselineskip,enlarge bottom by=.2\baselineskip,attach title to upper={\medskip\nobreak\par\nobreak},coltitle=black,boxsep=\z@,left=\z@,right=\z@,%
+    opacityback=0,opacityframe=0,%
+    breakable,tikz={#1}%
+}%
 }
 
 % get the new stlyes
@@ -569,40 +541,33 @@
 
 % ----------------------------------------
 % translations
-
 \providetranslation[to=German]{List of}{Alle}
 
 \def\libx@translateenv#1#2{
-    % empty auto:
-    \ifx\libx@environments@trans\@empty
-        \protected@edef\libx@tmp{\noexpand\translatelet{\csname @libx@#1@envname\endcsname}{#2}}%
-    \else
-        \protected@edef\libx@tmp{\noexpand\translatelet[to=\libx@environments@trans]{\csname @libx@#1@envname\endcsname}{#2}}%
-    \fi
-    \libx@tmp
-}
+% empty auto:
+\ifx\libx@environments@trans\@empty
+    \protected@edef\libx@tmp{\noexpand\translatelet{\csname @libx@#1@envname\endcsname}{#2}}%
+\else
+    \protected@edef\libx@tmp{\noexpand\translatelet[to=\libx@environments@trans]{\csname @libx@#1@envname\endcsname}{#2}}%
+\fi\libx@tmp}
 
 \def\libx@provide@translation#1#2#3{%
-    \ifcsname #1\endcsname\else
-        % we have to do this to avoid warnings with hyperref
-        \expandafter\translatelet\csname #1@@listof\endcsname{#2}%
-        \expandafter\translatelet\csname #1@@name\endcsname{#3}%
-        \@namedef{#1}{\csname #1@@listof\endcsname\ \csname #1@@name\endcsname}%
-    \fi
+\ifcsname #1\endcsname\else
+    % we have to do this to avoid warnings with hyperref
+    \expandafter\translatelet\csname #1@@listof\endcsname{#2}%
+    \expandafter\translatelet\csname #1@@name\endcsname{#3}%
+    \@namedef{#1}{\csname #1@@listof\endcsname\ \csname #1@@name\endcsname}%
+\fi
 }
 
 % ----------------------------------------
 % default boxes
-
-%% ---
 \providetranslation[to=German]{definition}{definition}
 \providetranslation[to=German]{definitions}{definitionen}
 \providetranslation[to=German]{Definition}{Definition}
 \providetranslation[to=German]{Definitions}{Definitionen}
-
 \translatelet{\@libx@defstyle}{Definition}
 \libx@RegisterNewDefaultStyle{\@libx@defstyle}{}
-
 \libx@translateenv{def}{definition}
 
 % note if this order is wrong redef of '\definitionslistname' is needed
@@ -620,10 +585,8 @@
 \providetranslation[to=German]{remarks}{bemerkungen}
 \providetranslation[to=German]{Remark}{Bemerkung}
 \providetranslation[to=German]{Remarks}{Bemerkungen}
-
 \translatelet{\@libx@remstyle}{Remark}
 \libx@RegisterNewDefaultStyle{\@libx@remstyle}{}
-
 \libx@translateenv{rem}{remark}
 
 \libx@provide@translation{remarkslistname}{List of}{Remarks}
@@ -640,7 +603,6 @@
 \providetranslation[to=German]{theorems}{sätze}
 \providetranslation[to=German]{Theorem}{Satz}
 \providetranslation[to=German]{Theorems}{Sätze}
-
 \translatelet{\@libx@theostyle}{Theorem}
 \libx@RegisterNewDefaultStyle{\@libx@theostyle}{}
 
@@ -660,7 +622,6 @@
 \providetranslation[to=German]{examples}{beispiele}
 \providetranslation[to=German]{Example}{Beispiel}
 \providetranslation[to=German]{Examples}{Beispiele}
-
 \translatelet{\@libx@exastyle}{Example}
 \libx@RegisterNewDefaultStyle{\@libx@exastyle}{}
 
@@ -680,7 +641,6 @@
 \providetranslation[to=German]{lemmas}{lemmata}
 \providetranslation[to=German]{Lemma}{Lemma}
 \providetranslation[to=German]{Lemmas}{Lemmata}
-
 \translatelet{\@libx@lemstyle}{Lemma}
 \libx@RegisterNewDefaultStyle{\@libx@lemstyle}{}
 
@@ -700,7 +660,6 @@
 \providetranslation[to=German]{proofs}{beweise}
 \providetranslation[to=German]{Proof}{Beweis}
 \providetranslation[to=German]{Proofs}{Beweise}
-
 \translatelet{\@libx@prostyle}{Proof}
 \libx@RegisterNewDefaultStyle{\@libx@prostyle}{after upper={\quad\nobreak\null\nobreak\hfill\nobreak\faSquareO}}
 
@@ -723,7 +682,6 @@
 
 \translatelet{\@libx@sumstyle}{Summary}
 \libx@RegisterNewDefaultStyle{\@libx@sumstyle}{}
-
 \libx@translateenv{sum}{summary}
 
 % synopses
@@ -746,55 +704,40 @@
     \else\PackageError{lithie-boxes}{No box-mapping for '#1'}{Maybe the box was not loaded yet?}\fi
 }
 
-% TODO: make more of them
 % starred variant sets both
 % #1 derivative to use
 % #2 boxname
-\newcommand*{\SetBoxPlain}{\@ifstar\libx@setboth@boxplain\libx@set@boxplain}
+\newcommand*\SetBoxPlain{\@ifstar\libx@setboth@boxplain\libx@set@boxplain}
 
-\newcommand*{\libx@setboth@boxplain}[2][@plain]{%
+\newcommand*\libx@setboth@boxplain[2][@plain]{%
     \libx@set@boxplain[#1]{#2}\libx@set@boxplain[#1]{#2*}%
 }
 
-\newcommand*{\libx@set@boxplain}[2][@plain]{\libx@update@boxdata{\@libx@decodeenv{#2}}{StyleDerivative}{#1}}
-
-% ----------------------------------------
-
-\newcommand*{\SetBoxesPlain}{\@ifstar\libx@setboth@boxesplain\libx@set@boxesplain}
-\newcommand*{\libx@setboth@boxesplain}[2][@plain]{\forcsvlist{\SetBoxPlain*[#1]}{#2}}
-\newcommand*{\libx@set@boxesplain}[2][@plain]{\forcsvlist{\SetBoxPlain[#1]}{#2}}
-
-% ----------------------------------------
-
-\newcommand*{\SetBoxDisabled}{\@ifstar\libx@setboth@boxdisabled\libx@set@boxdisabled}
-
-
-\newcommand*{\libx@setboth@boxdisabled}[2][false]{%
+\newcommand*\libx@set@boxplain[2][@plain]{\libx@update@boxdata{\@libx@decodeenv{#2}}{StyleDerivative}{#1}}
+%
+\newcommand*\SetBoxesPlain{\@ifstar\libx@setboth@boxesplain\libx@set@boxesplain}
+\newcommand*\libx@setboth@boxesplain[2][@plain]{\forcsvlist{\SetBoxPlain*[#1]}{#2}}
+\newcommand*\libx@set@boxesplain[2][@plain]{\forcsvlist{\SetBoxPlain[#1]}{#2}}
+%
+\newcommand*\SetBoxDisabled{\@ifstar\libx@setboth@boxdisabled\libx@set@boxdisabled}
+\newcommand*\libx@setboth@boxdisabled[2][false]{%
     \libx@set@boxdisabled[#1]{#2}\libx@set@boxdisabled[#1]{#2*}%
 }
-
-\newcommand*{\libx@set@boxdisabled}[2][false]{\libx@update@boxif{\@libx@decodeenv{#2}}{BoxEnabled}{#1}}
-
-% ----------------------------------------
-
-\newcommand*{\SetBoxesDisabled}{\@ifstar\libx@setboth@boxesdisabled\libx@set@boxesdisabled}
-\newcommand*{\libx@setboth@boxesdisabled}[2][false]{\forcsvlist{\SetBoxDisabled*[#1]}{#2}}
-\newcommand*{\libx@set@boxesdisabled}[2][false]{\forcsvlist{\SetBoxDisabled[#1]}{#2}}
-
-% ----------------------------------------
+\newcommand*\libx@set@boxdisabled[2][false]{\libx@update@boxif{\@libx@decodeenv{#2}}{BoxEnabled}{#1}}
+%
+\newcommand*\SetBoxesDisabled{\@ifstar\libx@setboth@boxesdisabled\libx@set@boxesdisabled}
+\newcommand*\libx@setboth@boxesdisabled[2][false]{\forcsvlist{\SetBoxDisabled*[#1]}{#2}}
+\newcommand*\libx@set@boxesdisabled[2][false]{\forcsvlist{\SetBoxDisabled[#1]}{#2}}
+%
 
 % maybe with rgb support?
 % ifstar: include 'starred' variant
 % #1 box id, #2 new color
-\newcommand*{\SetBoxColor}{\@ifstar\libx@setboth@boxcolor\libx@set@boxcolor}
-
+\newcommand*\SetBoxColor{\@ifstar\libx@setboth@boxcolor\libx@set@boxcolor}
 \def\libx@setboth@boxcolor#1#2{%
-    \libx@set@boxcolor{#1}{#2}%
-    \libx@set@boxcolor{#1*}{#2}%
+    \libx@set@boxcolor{#1}{#2}\libx@set@boxcolor{#1*}{#2}%
 }
-
 \def\libx@set@boxcolor#1#2{\libx@update@boxdata{\@libx@decodeenv{#1}}{BoxColor}{#2}}
-
 
 % ----------------------------------------
 % Ref system
@@ -802,59 +745,53 @@
 % ref box with given label
 % if starred hide title
 \DeclareRobustCommand*\boxref{\@ifstar\libx@num@nameref\libx@long@nameref}
-
 \long\def\@libx@num@nameref#1 (#2)#3\@nil{#1}
-
 \def\libx@thirdoffive#1#2#3#4#5{#3}
 \def\libx@num@nameref#1{%
-    % assure nameref:
-    \libx@namerefprobe{}%
-    % we directly access the label def
-    \ifcsname r@#1\endcsname
-        \protected@edef\libx@tmp{\csname r@#1\endcsname}%
-        \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
-        \protected@edef\libx@tmp{\noexpand\@libx@num@nameref\libx@tmp ?? ()\noexpand\@nil}%
-        \libx@hyperref[#1]{\libx@tmp}%
-    \else
-        \typeout{Warning boxref-num '#1' not found.}%
-    \fi
+% assure nameref:
+\libx@namerefprobe{}%
+% we directly access the label def
+\ifcsname r@#1\endcsname
+    \protected@edef\libx@tmp{\csname r@#1\endcsname}%
+    \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
+    \protected@edef\libx@tmp{\noexpand\@libx@num@nameref\libx@tmp ?? ()\noexpand\@nil}%
+    \libx@hyperref[#1]{\libx@tmp}%
+\else
+    \typeout{Warning boxref-num '#1' not found.}%
+\fi
 }
 
-% TODO: maybe allow to use 'Def' instead of 'Definition'?
 % allow rename as with normal nameref?
 % Note: this is a reimplementation as the behaviour might change
 % note without star this is same as boxref (allows better let's)
 \DeclareRobustCommand*\boxnameref{\@ifstar\libx@short@nameref\libx@long@nameref}
-
 \def\@libx@short@nameref#1 (#2)#3\@nil{#2}
 
 \def\libx@thirdoffive#1#2#3#4#5{#3}
 \def\libx@long@nameref#1{%
-    % assure nameref:
-    \libx@namerefprobe{}%
-    % we directly access the label def
-    \ifcsname r@#1\endcsname
-        \protected@edef\libx@tmp{\csname r@#1\endcsname}%
-        \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
-        \libx@hyperref[#1]{\libx@tmp}%
-    \else
-        \typeout{Warning boxref-short '#1' not found.}%
-    \fi
-}
+% assure nameref:
+\libx@namerefprobe{}%
+% we directly access the label def
+\ifcsname r@#1\endcsname
+    \protected@edef\libx@tmp{\csname r@#1\endcsname}%
+    \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
+    \libx@hyperref[#1]{\libx@tmp}%
+\else
+    \typeout{Warning boxref-short '#1' not found.}%
+\fi}
 
 \def\libx@short@nameref#1{%
-    % assure nameref:
-    \libx@namerefprobe{}%
-    % we directly access the label def
-    \ifcsname r@#1\endcsname
-        \protected@edef\libx@tmp{\csname r@#1\endcsname}%
-        \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
-        \protected@edef\libx@tmp{\noexpand\@libx@short@nameref\libx@tmp\noexpand\@nil}%
-        \libx@hyperref[#1]{\libx@tmp}%
-    \else
-        \typeout{Warning boxref-short '#1' not found.}%
-    \fi
-}
+% assure nameref:
+\libx@namerefprobe{}%
+% we directly access the label def
+\ifcsname r@#1\endcsname
+    \protected@edef\libx@tmp{\csname r@#1\endcsname}%
+    \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
+    \protected@edef\libx@tmp{\noexpand\@libx@short@nameref\libx@tmp\noexpand\@nil}%
+    \libx@hyperref[#1]{\libx@tmp}%
+\else
+    \typeout{Warning boxref-short '#1' not found.}%
+\fi}
 
 
 % ----------------------------------------
@@ -888,7 +825,6 @@
 
 % ----------------------------------------
 % Auto style
-
 \iflibx@autostyle@
 \libx@setboth@boxesplain\@libx@rem@envname
 \libx@setboth@boxesplain\@libx@exa@envname
@@ -898,7 +834,6 @@
 
 % ----------------------------------------------
 % Further User commands
-
 \let\LoadBoxStyle\libx@LoadBoxStyle
 \let\RegisterBox\libx@RegisterBox
 \let\RegisterNewDefaultStyle\libx@RegisterNewDefaultStyle
