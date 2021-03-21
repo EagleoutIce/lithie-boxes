@@ -1,0 +1,152 @@
+\ProvidesPackage{lithie-boxes@defaults}[2021/03/21 EagleoutIce - default boxes for lithie-boxes]
+\providetranslation[to=German]{List of}{Alle}
+
+\def\libx@translateenv#1#2{
+% empty auto:
+\ifx\libx@environments@trans\@empty
+\protected@edef\libx@tmp{\noexpand\translatelet{\csname @libx@#1@envname\endcsname}{#2}}%
+\else
+\protected@edef\libx@tmp{\noexpand\translatelet[to=\libx@environments@trans]{\csname @libx@#1@envname\endcsname}{#2}}%
+\fi\libx@tmp}
+
+\def\libx@provide@translation#1#2#3{%
+\ifcsname #1\endcsname\else
+    % we have to do this to avoid warnings with hyperref
+    \expandafter\translatelet\csname #1@@listof\endcsname{#2}%
+    \expandafter\translatelet\csname #1@@name\endcsname{#3}%
+    \@namedef{#1}{\csname #1@@listof\endcsname\ \csname #1@@name\endcsname}%
+\fi
+}
+
+\providetranslation[to=German]{definition}{definition}
+\providetranslation[to=German]{definitions}{definitionen}
+\providetranslation[to=German]{Definition}{Definition}
+\providetranslation[to=German]{Definitions}{Definitionen}
+\translatelet{\@libx@defstyle}{Definition}
+\libx@RegisterNewDefaultStyle{\@libx@defstyle}{}
+\libx@translateenv{def}{definition}
+
+% note if this order is wrong redef of '\definitionslistname' is needed
+\libx@provide@translation{definitionslistname}{List of}{Definitions}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{definitions}{ldefs}{\definitionslistname}{\faStar}%
+% color, style, id:
+{purple}{\@libx@defstyle}{def}%
+% environment name and Prefix:
+{\@libx@def@envname}{\translate{Definition}}
+
+% ---
+\providetranslation[to=German]{remark}{bemerkung}
+\providetranslation[to=German]{remarks}{bemerkungen}
+\providetranslation[to=German]{Remark}{Bemerkung}
+\providetranslation[to=German]{Remarks}{Bemerkungen}
+\translatelet{\@libx@remstyle}{Remark}
+\libx@RegisterNewDefaultStyle{\@libx@remstyle}{}
+\libx@translateenv{rem}{remark}
+
+\libx@provide@translation{remarkslistname}{List of}{Remarks}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{remarks}{lrem}{\remarkslistname}{\faStar}%
+% color, style, id:
+{teal}{\@libx@remstyle}{bem}%
+% environment name and Prefix:
+{\@libx@rem@envname}{\translate{Remark}}
+
+%% ---
+\providetranslation[to=German]{theorem}{satz}
+\providetranslation[to=German]{theorems}{sätze}
+\providetranslation[to=German]{Theorem}{Satz}
+\providetranslation[to=German]{Theorems}{Sätze}
+\translatelet{\@libx@theostyle}{Theorem}
+\libx@RegisterNewDefaultStyle{\@libx@theostyle}{}
+
+\libx@translateenv{the}{theorem}
+
+\libx@provide@translation{theoremslistname}{List of}{Theorems}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{theorems}{ltheo}{\theoremslistname}{\faStar}%
+% color, style, id:
+{orange}{\@libx@theostyle}{sat}%
+% environment name and Prefix:
+{\@libx@the@envname}{\translate{Theorem}}
+
+%% ---
+\providetranslation[to=German]{example}{beispiel}
+\providetranslation[to=German]{examples}{beispiele}
+\providetranslation[to=German]{Example}{Beispiel}
+\providetranslation[to=German]{Examples}{Beispiele}
+\translatelet{\@libx@exastyle}{Example}
+\libx@RegisterNewDefaultStyle{\@libx@exastyle}{}
+
+\libx@translateenv{exa}{example}
+
+\libx@provide@translation{exampleslistname}{List of}{Examples}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{examples}{lexa}{\exampleslistname}{\faStar}%
+% color, style, id:
+{olive}{\@libx@exastyle}{bei}%
+% environment name and Prefix:
+{\@libx@exa@envname}{\translate{Example}}
+
+%% ---
+\providetranslation[to=German]{lemma}{lemma}
+\providetranslation[to=German]{lemmas}{lemmata}
+\providetranslation[to=German]{Lemma}{Lemma}
+\providetranslation[to=German]{Lemmas}{Lemmata}
+\translatelet{\@libx@lemstyle}{Lemma}
+\libx@RegisterNewDefaultStyle{\@libx@lemstyle}{}
+
+\libx@translateenv{lem}{lemma}
+
+\libx@provide@translation{lemmaslistname}{List of}{Lemmas}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{lemmas}{llem}{\lemmaslistname}{\faStar}%
+% color, style, id:
+{violet}{\@libx@lemstyle}{lem}%
+% environment name and Prefix:
+{\@libx@lem@envname}{\translate{Lemma}}
+
+%% ---
+\providetranslation[to=German]{proof}{beweis}
+\providetranslation[to=German]{proofs}{beweise}
+\providetranslation[to=German]{Proof}{Beweis}
+\providetranslation[to=German]{Proofs}{Beweise}
+\translatelet{\@libx@prostyle}{Proof}
+\libx@RegisterNewDefaultStyle{\@libx@prostyle}{after upper={\quad\nobreak\null\nobreak\hfill\nobreak\faSquareO}}
+
+\libx@translateenv{pro}{proof}
+
+\libx@provide@translation{proofslistname}{List of}{Proofs}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{proofs}{lpro}{\proofslistname}{\faStar}%
+% color, style, id:
+{cyan}{\@libx@prostyle}{bew}%
+% environment name and Prefix:
+{\@libx@pro@envname}{\translate{Proof}}
+
+%% ---
+\providetranslation[to=German]{summary}{zusammenfassung}
+\providetranslation[to=German]{summaries}{zusammenfassungen}
+\providetranslation[to=German]{Summary}{Zusammenfassung}
+\providetranslation[to=German]{Summaries}{Zusammenfassungen}
+
+\translatelet{\@libx@sumstyle}{Summary}
+\libx@RegisterNewDefaultStyle{\@libx@sumstyle}{}
+\libx@translateenv{sum}{summary}
+
+% synopses
+\libx@provide@translation{summarieslistname}{List of}{Summaries}
+\libx@RegisterBoxPair%
+% List definition and emblem:
+{summaries}{lsum}{\summarieslistname}{\faStar}%
+% color, style, id:
+{lime!80!blue}{\@libx@sumstyle}{zsf}%
+% environment name and Prefix:
+{\@libx@sum@envname}{\translate{Summary}}
+\endinput
