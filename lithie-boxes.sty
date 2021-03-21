@@ -200,25 +200,24 @@ defaults/.style={%
 \endgroup}%
 % chapter spacing in list as all commands are appended in the end we step the internal boxid as it is used only on the command-inside
 \AtEndPreamble{%
-    \ifcsname chapter\endcsname
-    \xpreto\chapter{% only increment if already got one
-        \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
-        \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
-        \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
-        \noexpand\fi
-    }%
-    \else
-    \xpreto\section{% only increment if already got one
-        \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
-        \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
-        \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
-        \noexpand\fi
-    }%
-    \fi
+\ifcsname chapter\endcsname
+\xpreto\chapter{% only increment if already got one
+    \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
+    \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
+    \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
+    \noexpand\fi
 }%
-}{}
+\else
+\xpreto\section{% only increment if already got one
+    \noexpand\ifnum\noexpand\value{@libx@box@\libx@box@get{#5}{ListMen}@id}>0\noexpand\relax
+    \noexpand\stepcounter{@libx@box@\libx@box@get{#5}{ListMen}@id}%
+    \noexpand\libx@addtocontents{@libx@box@\libx@box@get{#5}{ListMen}@id}{\libx@box@get{#5}{ListMen}}{\noexpand\protect\noexpand\addvspace{\noexpand\medskipamount}}%
+    \noexpand\fi
+}%
+\fi
+}}{}% counter def
 % Define the main environment of the box
-\globaldefs=1%
+\globaldefs=1\relax
 % NOTE: #1 is short form!
 \let\libx@newboxenv\newenvironment
 \iflibx@modes@overwrite@% check if already there
@@ -239,8 +238,7 @@ defaults/.style={%
 % these mappings are used (internally) for user commands
 % for easier access
 \@namedef{@libx@map@envshort@#3}{#5}
-\globaldefs=0%
-\endgroup}
+\globaldefs=0\relax\endgroup}
 
 \def\@libx@boxconsume@with@boxopt#1#2#3(#4){
 \@ifnextchar[%
@@ -303,16 +301,16 @@ defaults/.style={%
 
 % #1 long title
 \def\libx@storemark#1{%
-    % global lock the counter value
-    \protected@edef\@libx@markertag{\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
-    % update autoref label
-    \edef\@currentlabel{\thetcbcounter}%
-    % stored signature: <num>:<short>:<long>
-    \def\@libx@tmp@store{{\thetcbcounter}{\libx@curbox@shorttitle}{#1}}%
-    \expandafter\expandafter\expandafter\protected@xdef
-            \expandafter\csname\@libx@markertag\endcsname{\@libx@tmp@store}%
-    % we mirror it to auxout:
-    \protected@write\@auxout{}{\protect\libx@loadmark{\expandafter\protect\@libx@markertag}\@libx@tmp@store}%
+% global lock the counter value
+\protected@edef\@libx@markertag{\libx@get{ListMen}\arabic{@libx@box@\libx@get{ListMen}@id}}%
+% update autoref label
+\edef\@currentlabel{\thetcbcounter}%
+% stored signature: <num>:<short>:<long>
+\def\@libx@tmp@store{{\thetcbcounter}{\libx@curbox@shorttitle}{#1}}%
+\expandafter\expandafter\expandafter\protected@xdef
+        \expandafter\csname\@libx@markertag\endcsname{\@libx@tmp@store}%
+% we mirror it to auxout:
+\protected@write\@auxout{}{\protect\libx@loadmark{\expandafter\protect\@libx@markertag}\@libx@tmp@store}%
 }
 
 % #1 is list-men #2 is number
@@ -469,8 +467,7 @@ box color=#5,use style=libx@box@#6}{}{#8}{#9}{#7}%
 \ifx!#4!\else
     \libx@RegisterBox{list name=#1,list men=#2,has emblem=true,emblem=\protect#4,%
 in code=\libx@parfill@\libx@parskip@\noindent,box color=#5,use style=libx@box@#6}{}{#8*}{#9}{#7@s}%
-\fi
-}
+\fi}
 
 % ----------------------------------------
 % default boxstyle registration
@@ -490,8 +487,7 @@ lithie@box@style@default@plain/.style={%
     enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
     lines before break=3,before skip=\z@,boxrule=\z@,%
     enlarge top by=.2\baselineskip,enlarge bottom by=.2\baselineskip,attach title to upper={\medskip\nobreak\par\nobreak},coltitle=black,boxsep=\z@,left=\z@,right=\z@,%
-    opacityback=0,opacityframe=0,%
-    breakable,tikz={#1}%
+    opacityback=0,opacityframe=0,breakable,tikz={#1}%
 }%
 }
 
@@ -514,21 +510,16 @@ lithie@box@style@default@plain/.style={%
 \endgroup}
 
 
-% #1 Name of the style
-% #2 other options
+% #1 Name of the style #2 other options
 \def\libx@RegisterNewDefaultStyle#1#2{%
-    \listadd{\libx@list@boxes}{#1}% \libx@get{StyleDerivative}
-    \tcbset{%
-        libx@style@defaults@libx@box@#1/.style={#2}%
-    }%
-    \newtcolorbox[lithie@box@style@default@init]{libx@box@#1}[4][]{%
-        lithie@box@style@default\libx@get{StyleDerivative}={##1},##3,libx@style@defaults@libx@box@#1,%
-        title={\libx@default@typeset@title{##4}{##2}{\thetcbcounter}}%
-    }%
-}
+\listadd{\libx@list@boxes}{#1}%
+\tcbset{libx@style@defaults@libx@box@#1/.style={#2}}%
+\newtcolorbox[lithie@box@style@default@init]{libx@box@#1}[4][]{%
+    lithie@box@style@default\libx@get{StyleDerivative}={##1},##3,libx@style@defaults@libx@box@#1,%
+    title={\libx@default@typeset@title{##4}{##2}{\thetcbcounter}}%
+}}
 
-% #1 Name of style
-% #2 style update (#1-#4)
+% #1 Name of style #2 style update (#1-#4)
 \def\libx@UpdateBoxStyle#1#2{%
     \renewtcolorbox[lithie@box@style@other@init={libx@box@#1}]{libx@box@#1}[4][]{#2}%
 }
@@ -539,151 +530,6 @@ lithie@box@style@default@plain/.style={%
     \forlistloop{\@libx@UpdateHelper{#1}}{\libx@list@boxes}%
 }
 
-% default boxes
-\RequirePackage{lithie-boxes@defaults}
-
-% ----------------------------------------
-% Utility control
-
-\def\@libx@decodeenv#1{%
-    \ifcsname @libx@map@envshort@#1\endcsname
-        \csname @libx@map@envshort@#1\endcsname
-    \else\PackageError{lithie-boxes}{No box-mapping for '#1'}{Maybe the box was not loaded yet?}\fi
-}
-
-% starred variant sets both
-% #1 derivative to use
-% #2 boxname
-\newcommand*\SetBoxPlain{\@ifstar\libx@setboth@boxplain\libx@set@boxplain}
-
-\newcommand*\libx@setboth@boxplain[2][@plain]{%
-    \libx@set@boxplain[#1]{#2}\libx@set@boxplain[#1]{#2*}%
-}
-
-\newcommand*\libx@set@boxplain[2][@plain]{\libx@update@boxdata{\@libx@decodeenv{#2}}{StyleDerivative}{#1}}
-%
-\newcommand*\SetBoxesPlain{\@ifstar\libx@setboth@boxesplain\libx@set@boxesplain}
-\newcommand*\libx@setboth@boxesplain[2][@plain]{\forcsvlist{\SetBoxPlain*[#1]}{#2}}
-\newcommand*\libx@set@boxesplain[2][@plain]{\forcsvlist{\SetBoxPlain[#1]}{#2}}
-%
-\newcommand*\SetBoxDisabled{\@ifstar\libx@setboth@boxdisabled\libx@set@boxdisabled}
-\newcommand*\libx@setboth@boxdisabled[2][false]{%
-    \libx@set@boxdisabled[#1]{#2}\libx@set@boxdisabled[#1]{#2*}%
-}
-\newcommand*\libx@set@boxdisabled[2][false]{\libx@update@boxif{\@libx@decodeenv{#2}}{BoxEnabled}{#1}}
-%
-\newcommand*\SetBoxesDisabled{\@ifstar\libx@setboth@boxesdisabled\libx@set@boxesdisabled}
-\newcommand*\libx@setboth@boxesdisabled[2][false]{\forcsvlist{\SetBoxDisabled*[#1]}{#2}}
-\newcommand*\libx@set@boxesdisabled[2][false]{\forcsvlist{\SetBoxDisabled[#1]}{#2}}
-%
-
-% maybe with rgb support?
-% ifstar: include 'starred' variant
-% #1 box id, #2 new color
-\newcommand*\SetBoxColor{\@ifstar\libx@setboth@boxcolor\libx@set@boxcolor}
-\def\libx@setboth@boxcolor#1#2{%
-    \libx@set@boxcolor{#1}{#2}\libx@set@boxcolor{#1*}{#2}%
-}
-\def\libx@set@boxcolor#1#2{\libx@update@boxdata{\@libx@decodeenv{#1}}{BoxColor}{#2}}
-
-% ----------------------------------------
-% Ref system
-
-% ref box with given label
-% if starred hide title
-\DeclareRobustCommand*\boxref{\@ifstar\libx@num@nameref\libx@long@nameref}
-\long\def\@libx@num@nameref#1 (#2)#3\@nil{#1}
-\def\libx@thirdoffive#1#2#3#4#5{#3}
-\def\libx@num@nameref#1{%
-% assure nameref:
-\libx@namerefprobe{}%
-% we directly access the label def
-\ifcsname r@#1\endcsname
-    \protected@edef\libx@tmp{\csname r@#1\endcsname}%
-    \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
-    \protected@edef\libx@tmp{\noexpand\@libx@num@nameref\libx@tmp ?? ()\noexpand\@nil}%
-    \libx@hyperref[#1]{\libx@tmp}%
-\else
-    \typeout{Warning boxref-num '#1' not found.}%
-\fi
-}
-
-% allow rename as with normal nameref?
-% Note: this is a reimplementation as the behaviour might change
-% note without star this is same as boxref (allows better let's)
-\DeclareRobustCommand*\boxnameref{\@ifstar\libx@short@nameref\libx@long@nameref}
-\def\@libx@short@nameref#1 (#2)#3\@nil{#2}
-
-\def\libx@thirdoffive#1#2#3#4#5{#3}
-\def\libx@long@nameref#1{%
-% assure nameref:
-\libx@namerefprobe{}%
-% we directly access the label def
-\ifcsname r@#1\endcsname
-    \protected@edef\libx@tmp{\csname r@#1\endcsname}%
-    \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
-    \libx@hyperref[#1]{\libx@tmp}%
-\else
-    \typeout{Warning boxref-short '#1' not found.}%
-\fi}
-
-\def\libx@short@nameref#1{%
-% assure nameref:
-\libx@namerefprobe{}%
-% we directly access the label def
-\ifcsname r@#1\endcsname
-    \protected@edef\libx@tmp{\csname r@#1\endcsname}%
-    \protected@edef\libx@tmp{\expandafter\libx@thirdoffive\libx@tmp\relax\relax\relax\relax\relax}%
-    \protected@edef\libx@tmp{\noexpand\@libx@short@nameref\libx@tmp\noexpand\@nil}%
-    \libx@hyperref[#1]{\libx@tmp}%
-\else
-    \typeout{Warning boxref-short '#1' not found.}%
-\fi}
-
-
-% ----------------------------------------
-% Color Palettes Control
-
-\iflibx@cpalette@
-\ifcsname cpl@registered@palettes\endcsname\else
-    \PackageError{lithie-boxes}{cpalette requested, but package not loaded}
-    {You have to load the 'color-palettes' package yourself if you use the 'cpalette'-Option.}%
-\fi % Add to the hook... as error we can do it in main
-
-\let\libx@old@cpl@hooks\cpl@hooks
-\def\cpl@hooks{% Add to the hook
-    \libx@old@cpl@hooks\libx@cpalette@hook
-}
-
-\providecommand\libxdefcolor{paletteA} \providecommand\libxthecolor{paletteC} \providecommand\libxlemcolor{paletteC}
-\providecommand\libxsumcolor{paletteD}
-\providecommand\libxprocolor{gray} \providecommand\libxremcolor{gray} \providecommand\libxexacolor{gray}
-
-\def\libx@cpalette@hook{%
-\libx@setboth@boxcolor\@libx@def@envname\libxdefcolor
-\libx@setboth@boxcolor\@libx@the@envname\libxthecolor
-\libx@setboth@boxcolor\@libx@lem@envname\libxlemcolor
-\libx@setboth@boxcolor\@libx@sum@envname\libxsumcolor
-\libx@setboth@boxcolor\@libx@pro@envname\libxprocolor
-\libx@setboth@boxcolor\@libx@rem@envname\libxremcolor
-\libx@setboth@boxcolor\@libx@exa@envname\libxexacolor
-}
-\fi
-
-% ----------------------------------------
-% Auto style
-\iflibx@autostyle@
-\libx@setboth@boxesplain\@libx@rem@envname
-\libx@setboth@boxesplain\@libx@exa@envname
-\libx@setboth@boxesplain\@libx@lem@envname
-\libx@setboth@boxesplain\@libx@pro@envname
-\fi
-
-% ----------------------------------------------
-% Further User commands
-\let\LoadBoxStyle\libx@LoadBoxStyle
-\let\RegisterBox\libx@RegisterBox
-\let\RegisterNewDefaultStyle\libx@RegisterNewDefaultStyle
-\let\CurrentBoxStyle\libx@currentstyle
-\let\RefreshBoxStyle\libx@RefreshBoxStyle
+\RequirePackage{lithie-boxes@defaults} % default boxes
+\RequirePackage{lithie-boxes@extras} % Utility control, links and colorboxes
 \endinput
