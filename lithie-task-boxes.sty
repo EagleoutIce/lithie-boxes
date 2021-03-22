@@ -1,43 +1,34 @@
 %% lithie-task-boxes.sty
-%%
-%% -----------------------------------------
 %% Florian Sihler, 30.09.2020
-%%
 %% Dependent brother
-
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{lithie-task-boxes}[2020/10/06 EagleoutIce - lilly box-port of task boxes]
-
-\newif\iflibx@tb@boxes@style@plain@{}
+\newif\iflibx@tb@boxes@style@plain@
 \DeclareOption{plainstyle}{\libx@tb@boxes@style@plain@true}
 \DeclareOption{normalstyle}{\libx@tb@boxes@style@plain@false}
 
-\newif\iflibx@tb@boxes@showub@{}
+\newif\iflibx@tb@boxes@showub@
 \DeclareOption{showub}{\libx@tb@boxes@showub@true}
 \DeclareOption{hideub}{\libx@tb@boxes@showub@false}
 
-\newif\iflibx@tb@boxes@isbm@{}
+\newif\iflibx@tb@boxes@isbm@
 \DeclareOption{isbm}{\libx@tb@boxes@isbm@true}
 \DeclareOption{noisbm}{\libx@tb@boxes@isbm@false}
 
-\newif\iflibx@tb@boxes@cpalette@{}
+\newif\iflibx@tb@boxes@cpalette@
 \DeclareOption{cpalette}{\libx@tb@boxes@cpalette@true}
 \DeclareOption{nocpalette}{\libx@tb@boxes@cpalette@false}
-
-% TODO: use as toc
 \ProcessOptions*
 
 \iflibx@tb@boxes@cpalette@
-\let\libx@tsk@old@cpl@hooks\cpl@hooks%
+\let\libx@tsk@old@cpl@hooks\cpl@hooks
 \def\cpl@hooks{% Add to the hook
-    \libx@tsk@old@cpl@hooks%
-    \libx@task@cpalette@hook%
-}
+\libx@tsk@old@cpl@hooks\libx@task@cpalette@hook}
+
 \def\libx@task@cpalette@hook{%
 \colorlet{tskcolor}{paletteA!20!black!50!white}%
 \colorlet{tskcolorA}{paletteA}%
-\colorlet{tskcolorB}{paletteB}%
-}
+\colorlet{tskcolorB}{paletteB}}
 \AtBeginDocument{\libx@task@cpalette@hook}
 \fi
 
@@ -45,52 +36,44 @@
 \def\libx@taskbox@border@width@large{6.71pt}
 
 \newcounter{libx@tsk@ubnum@}
-
 \colorlet{tskcolor}{black!40!white}
-\colorlet{tskcolorA}{black}
-\colorlet{tskcolorB}{white}
+\colorlet{tskcolorA}{black}\colorlet{tskcolorB}{white}
 
 \def\tsksub{\@ifstar\@tsksub@star\@tsksub}
 \newcommand*\@tsksub@star[2][]{%
-    \ifx!#1!\stepcounter{libx@tsk@ubnum@}%
-    \else\setcounter{libx@tsk@ubnum@}{#1}\fi%
-    \def\libx@currentub{#2}%
-    \pdfbookmark[0]{\thelibx@tsk@ubnum@\ #2}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@}%
+\ifx!#1!\stepcounter{libx@tsk@ubnum@}%
+\else\setcounter{libx@tsk@ubnum@}{#1}\fi
+\def\libx@currentub{#2}%
+\pdfbookmark[0]{\thelibx@tsk@ubnum@\ #2}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@}%
 }
 
 \newcommand*\@tsksub[2][]{%
-    \ifx!#1!\stepcounter{libx@tsk@ubnum@}%
-    \else\setcounter{libx@tsk@ubnum@}{#1}\fi
-    \def\libx@currentub{#2}%
-    \section*{#2}%
-}
+\ifx!#1!\stepcounter{libx@tsk@ubnum@}%
+\else\setcounter{libx@tsk@ubnum@}{#1}\fi
+\def\libx@currentub{#2}%
+\section*{#2}}
 
-\iflibx@tb@boxes@style@plain@\else
-\RequirePackage{varwidth}\fi
-
+\iflibx@tb@boxes@style@plain@\else\RequirePackage{varwidth}\fi
 \RequirePackage{bookmark}
 
 \iflibx@tb@boxes@showub@
 \def\libx@tb@boxes@boxnumber{\thelibx@tsk@ubnum@.\thetcbcounter}
-\else
-\def\libx@tb@boxes@boxnumber{\thetcbcounter}
-\fi
-
+\else\def\libx@tb@boxes@boxnumber{\thetcbcounter}\fi
 \translatelet{\@libx@tskstyle}{Task}
 
 \tcbset{
     lithie@box@style@taskbox@plain/.style={%
-        lithie@box@style@default@plain,fonttitle=\normalsize\normalcolor\sffamily\small,%
-        % as guides:
-        lithie@box@style@taskbox@extra@arrows=tskcolor,%
-        % padding to give them space to breathe:
-        pad before break*=3mm,pad after break=3mm,lines before break=4,%
-        after upper={\nobreak\null\nobreak\hfill\nobreak\rlap{\hyperref[@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter]{\textcolor{gray}{\raisebox{.65pt}{$\diamondsuit$}\color{gray}~$\mathsf{\libx@tb@boxes@boxnumber}$}}}}%
+    lithie@box@style@default@plain,fonttitle=\normalsize\normalcolor\sffamily\small,%
+    % as guides:
+    lithie@box@style@taskbox@extra@arrows=tskcolor,%
+    % padding to give them space to breathe:
+    pad before break*=3mm,pad after break=3mm,lines before break=4,%
+    after upper={\nobreak\null\nobreak\hfill\nobreak\rlap{\hyperref[@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter]{\textcolor{gray}{\raisebox{.65pt}{$\diamondsuit$}\textcolor{gray}{~$\mathsf{\libx@tb@boxes@boxnumber}$}}}}}%
     },%
     lithie@box@style@taskbox@extra@arrows/.style={%
-extras first and middle={overlay={% 0.33pt offset to buffer
+extras first and middle={overlay={% .33pt offset to buffer
 \begin{scope}[shift={(frame.south west)}]
-    \path[fill=#1] (0,\z@) -- ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) --
+    \path[fill=#1] (0,0) -- ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) --
         ++(\libx@taskbox@border@width/2,\libx@taskbox@border@width) |- (0,.33pt) -- cycle;
 \end{scope}
 }},%
@@ -99,28 +82,23 @@ extras middle and last={overlay={%
     \path[fill=#1] (0,\z@) -- ++(\libx@taskbox@border@width/2,\libx@taskbox@border@width) --
         ++(\libx@taskbox@border@width/2,-\libx@taskbox@border@width) |- (0,-.33pt) -- cycle;
 \end{scope}
-}}%
-    }%
+}}}%
 }
 
-\iflibx@tb@boxes@style@plain@%
-\def\@libx@tskstyle@suffix{plain}%
+\iflibx@tb@boxes@style@plain@
+\def\@libx@tskstyle@suffix{plain}
 \else\def\@libx@tskstyle@suffix{normal}\fi
-
 
 \newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle @plain}[4][]{lithie@box@style@taskbox@plain,%
     before title pre={%
     \label{@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter}%
     \iflibx@tb@boxes@isbm@\pdfbookmark[1]{\libx@tb@boxes@boxnumber\ - #4}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@ @\thetcbcounter}\fi},
     title={\textbf{#2 \libx@tb@boxes@boxnumber{}} \ifthenelse{\equal{#4}{}}{}{--~}#4},tikz={#1},%
-}%
+}
 
 \newlength\libx@tb@ulnumwidth
-\iflibx@tb@boxes@showub@%
-\setlength{\libx@tb@ulnumwidth}{22mm}
-\else
-\setlength{\libx@tb@ulnumwidth}{13.25mm}
-\fi
+\iflibx@tb@boxes@showub@\libx@tb@ulnumwidth=22mm
+\else\libx@tb@ulnumwidth=13.25mm\fi
 
 \def\libx@tsk@numfieldbox{%
     \path[fill=tskcolorA] ([xshift=6mm]frame.north west)
@@ -140,66 +118,62 @@ extras middle and last={overlay={%
 \newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle @normal}[4][]{%
     enforce breakable, %enforce breakable für: Mehr Seiten
     enhanced jigsaw, before skip=2mm plus 3mm minus 1mm,after skip=4mm plus 2mm minus 2mm,
-    colback=white,colframe=tskcolor,boxrule=0.4mm,%
+    colback=white,colframe=tskcolor,boxrule=.4mm,%
     enlargepage flexible=\baselineskip,%
-    attach boxed title to top left={xshift=\linewidth-\tcboxedtitlewidth-0.75cm,yshift*=1mm-\tcboxedtitleheight},top=2.55mm,bottom=2.55mm,
-    varwidth boxed title*=-4.5cm,lines before break=4,arc=0.75mm,%
+    attach boxed title to top left={xshift=\linewidth-\tcboxedtitlewidth-.75cm,yshift*=1mm-\tcboxedtitleheight},top=2.55mm,bottom=2.55mm,
+    varwidth boxed title*=-4.5cm,lines before break=4,arc=.75mm,%
     boxed title style={
-        frame code={
-            \fill[tskcolor]
-                ([yshift=-1mm,xshift=-1.25mm]frame.north west)
-                arc[start angle=0,end angle=180,radius=1mm];
-            \fill[white!24!tskcolor] ([yshift=-1mm,xshift=1.25mm]frame.north east)
-                arc[start angle=180,end angle=0,radius=1mm];
-            \path[left color=tskcolor,right color=white!24!tskcolor,
-                middle color=tskcolor]
-                ([xshift=-2.5mm]frame.north west) -- ([xshift=2.5mm]frame.north east)
-                [rounded corners=1mm]-- ([xshift=2mm,yshift=-1mm]frame.north east)
-                -- ([xshift=.75mm]frame.south east) -- ([xshift=-.75mm]frame.south west)
-                -- ([xshift=-2mm,yshift=-1mm]frame.north west)
-                [sharp corners]-- cycle;
-        },interior engine=empty,
+    frame code={
+    \fill[tskcolor]
+        ([yshift=-1mm,xshift=-1.25mm]frame.north west)
+        arc[start angle=0,end angle=180,radius=1mm];
+    \fill[white!24!tskcolor] ([yshift=-1mm,xshift=1.25mm]frame.north east)
+        arc[start angle=180,end angle=0,radius=1mm];
+    \path[left color=tskcolor,right color=white!24!tskcolor,
+        middle color=tskcolor]
+        ([xshift=-2.5mm]frame.north west) -- ([xshift=2.5mm]frame.north east)
+        [rounded corners=1mm]-- ([xshift=2mm,yshift=-1mm]frame.north east)
+        -- ([xshift=.75mm]frame.south east) -- ([xshift=-.75mm]frame.south west)
+        -- ([xshift=-2mm,yshift=-1mm]frame.north west)
+        [sharp corners]-- cycle;
+    },interior engine=empty,
     },
-    extras first={overlay={% 0.33pt offset to buffer
-    \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
+    extras first={overlay={% .33pt offset to buffer
+    \begin{scope}[shift={(frame.south)},yshift=-.125cm]
         \path[fill=tskcolor] (0,\z@) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
             ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
     \end{scope}
     \libx@tsk@numfieldbox%
     }},
-    extras middle={overlay={% 0.33pt offset to buffer
-    \begin{scope}[shift={(frame.south)},yshift=-0.125cm]
-        \path[fill=tskcolor] (0,\z@) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
+    extras middle={overlay={% .33pt offset to buffer
+    \begin{scope}[shift={(frame.south)},yshift=-.125cm]
+        \path[fill=tskcolor] (0,0) -- ++(\libx@taskbox@border@width@large/2,-\libx@taskbox@border@width@large) --
             ++(\libx@taskbox@border@width@large/2,\libx@taskbox@border@width@large) |- (0,.33pt) -- cycle;
     \end{scope}
-    \begin{scope}[shift={(frame.north)},yshift=0.125cm]
-        \path[fill=tskcolor] (0,\z@) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
+    \begin{scope}[shift={(frame.north)},yshift=.125cm]
+        \path[fill=tskcolor] (0,0) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
             ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
     \end{scope}
         }},%
     extras last={overlay={%
-        \begin{scope}[shift={(frame.north)},yshift=0.125cm]
-            \path[fill=tskcolor] (0,\z@) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
-                ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
-        \end{scope}
+    \begin{scope}[shift={(frame.north)},yshift=.125cm]
+        \path[fill=tskcolor] (0,0) -- ++(\libx@taskbox@border@width@large/1.65,\libx@taskbox@border@width@large) --
+            ++(\libx@taskbox@border@width@large/1.65,-\libx@taskbox@border@width@large) -- cycle;
+    \end{scope}
     }},%
-    extras unbroken={overlay={%
-        \libx@tsk@numfieldbox%
-    }},
+    extras unbroken={overlay={\libx@tsk@numfieldbox}},
     before title pre={%
     \label{@libx@tsk:\thelibx@tsk@ubnum@ @\thetcbcounter}%
     \iflibx@tb@boxes@isbm@\pdfbookmark[1]{\libx@tb@boxes@boxnumber\ - #4}{libx@tb@boxes@@id@\thelibx@tsk@ubnum@ @\thetcbcounter}\fi},
     %lithie@box@style@default\libx@get{StyleDerivative}={#1},
     fonttitle=\bfseries, #3,%
     title={\small\strut#4}%
-}%
-
+}
 
 \providetranslation[to=German]{task}{aufgabe}
 \providetranslation[to=German]{tasks}{aufgaben}
 \providetranslation[to=German]{Task}{Aufgabe}
 \providetranslation[to=German]{Tasks}{Aufgaben}
-
 \libx@translateenv{tsk}{task}
 
 % note if this order is wrong redef of '\tasksslistname' is needed
