@@ -8,7 +8,6 @@
 \def\libx@version{1.1}
 
 %% Options
-%% ------------------------
 \def\libx@boxes@lockstyle@{}
 \DeclareOption{lockhigh}{% lock on high
 \@ifundefined{chapter}{\def\libx@boxes@lockstyle@{section}}{\def\libx@boxes@lockstyle@{chapter}}%
@@ -46,18 +45,21 @@
 \DeclareOption{overwrite}{ \libx@modes@overwrite@true }
 \DeclareOption{nooverwrite}{ \libx@modes@overwrite@false }
 
-\@ifundefined{@@libx@noparfill}{%
+\ifcsname @@libx@noparfill\endcsname\else
     \def\@@libx@noparfill{\parfillskip=\z@ plus 1fil}
-}{}
+\fi
 \let\libx@parfill@\@@libx@noparfill
 \DeclareOption{parfill}{ \def\libx@parfill@{} }
 \DeclareOption{noparfill}{ \let\libx@parfill@\@@libx@noparfill }
-\def\libx@parskip@{\parskip=\smallskipamount}
+
+\def\libx@parskip@do{\parskip=\smallskipamount}
+\def\libx@parskip@none{\parskip=\z@}
+\DeclareOption{parskip}{ \let\libx@parskip@\libx@parskip@do }
+\DeclareOption{noparskip}{ \let\libx@parskip@\libx@parskip@none }
+\let\libx@parskip@\libx@parskip@do
 \ProcessOptions*
 
-% ----------------------------------------
 % koma-script abstraction (for tocloft)
-
 \@ifclassloaded{scrartcl}{\libx@comp@koma@true}{}
 \@ifclassloaded{scrreprt}{\libx@comp@koma@true}{}
 \@ifclassloaded{scrbook}{\libx@comp@koma@true}{}
@@ -135,8 +137,7 @@ defaults/.style={%
     emblem={},list name={\noexpand\libx@box@Name}, pre code={}, in code={},has emblem=false,%
     out code={},post code={},custom list=true,
     list men=NO,box enabled=true,style derivative={}%
-}
-}
+}}
 
 % #1 boxid, #2 key
 \def\libx@persist#1#2{%
@@ -265,17 +266,17 @@ defaults/.style={%
 % The boxes
 \NewEnviron{libx@read@box@hidden}{}
 \AtEndPreamble{%
-\@ifundefined{hypertarget}{%
-    \long\def\libx@hypertarget#1#2{\label{#1}#2}%
-    \newcommand\libx@hyperref[2][]{#2}%
+\@ifundefined{hypertarget}{
+    \long\def\libx@hypertarget#1#2{\label{#1}#2}
+    \newcommand\libx@hyperref[2][]{#2}
     % gobble the star:
-    \def\libx@pageref{\protect\@ifstar\pageref\pageref}%
-    \def\libx@phantomsection{}%
+    \def\libx@pageref{\protect\@ifstar\pageref\pageref}
+    \def\libx@phantomsection{}
 }{% adapt to redefinitions
-    \def\libx@hypertarget{\hypertarget}%
-    \def\libx@pageref{\pageref}%
+    \def\libx@hypertarget{\hypertarget}
+    \def\libx@pageref{\pageref}
     \let\libx@phantomsection\phantomsection
-    \def\libx@hyperref{\hyperref}%
+    \def\libx@hyperref{\hyperref}
 }%
 }
 
@@ -433,7 +434,6 @@ defaults/.style={%
 
 \def\libx@addcontentsline#1#2#3#4{\@libx@addcontentsline{\arabic{#1}}{#2}{#3}{#4}}
 
-% ----------------------------------------
 % box definitions
 % initialize the number within lock
 \ifx\libx@boxes@lockstyle@\@empty% no lock:
@@ -469,7 +469,6 @@ box color=#5,use style=libx@box@#6}{}{#8}{#9}{#7}%
 in code=\libx@parfill@\libx@parskip@\noindent,box color=#5,use style=libx@box@#6}{}{#8*}{#9}{#7@s}%
 \fi}
 
-% ----------------------------------------
 % default boxstyle registration
 
 % list of all boxes for style updates
