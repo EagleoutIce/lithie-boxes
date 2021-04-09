@@ -16,46 +16,46 @@
 \@ifundefined{chapter}{\def\libx@boxes@lockstyle@{subsection}}{\def\libx@boxes@lockstyle@{section}}%
 }
 
-\DeclareOption{nolock}{ \def\libx@boxes@lockstyle@{} }
+\DeclareOption{nolock}{\def\libx@boxes@lockstyle@{}}
 
 \newif\iflibx@cpalette@
-\DeclareOption{cpalette}{ \libx@cpalette@true }
-\DeclareOption{nocpalette}{ \libx@cpalette@false }
+\DeclareOption{cpalette}{\libx@cpalette@true}
+\DeclareOption{nocpalette}{\libx@cpalette@false}
 
 \newif\iflibx@autostyle@% supplies some defaults for styling. loadsd cpalletes
-\DeclareOption{autostyle}{ \libx@cpalette@true\libx@autostyle@true }
-\DeclareOption{noautostyle}{ \libx@autostyle@false }
+\DeclareOption{autostyle}{\libx@cpalette@true\libx@autostyle@true}
+\DeclareOption{noautostyle}{\libx@autostyle@false}
 
 \def\libx@environments@trans{}
-\DeclareOption{germanenv}{ \def\libx@environments@trans{German} }
-\DeclareOption{englishenv}{ \def\libx@environments@trans{English} }%defaults for trans
-\DeclareOption{autoenv}{ \def\libx@environments@trans{} }
+\DeclareOption{germanenv}{\def\libx@environments@trans{German}}
+\DeclareOption{englishenv}{\def\libx@environments@trans{English}}%defaults for trans
+\DeclareOption{autoenv}{\def\libx@environments@trans{}}
 
 \newif\iflibx@forcekomadisabled@
 \newif\iflibx@comp@koma@
-\DeclareOption{koma}{ \libx@comp@koma@true\libx@forcekomadisabled@false }
-\DeclareOption{nokoma}{ \libx@forcekomadisabled@true }
+\DeclareOption{koma}{\libx@comp@koma@true\libx@forcekomadisabled@false}
+\DeclareOption{nokoma}{\libx@forcekomadisabled@true}
 
 \def\libx@language{}
-\DeclareOption{german}{ \def\libx@language{German} }
-\DeclareOption{english}{ \def\libx@language{English} }
-\DeclareOption{autolang}{ \def\libx@language{} }
+\DeclareOption{german}{\def\libx@language{German}}
+\DeclareOption{english}{\def\libx@language{English}}
+\DeclareOption{autolang}{\def\libx@language{}}
 
 \newif\iflibx@modes@overwrite@
-\DeclareOption{overwrite}{ \libx@modes@overwrite@true }
-\DeclareOption{nooverwrite}{ \libx@modes@overwrite@false }
+\DeclareOption{overwrite}{\libx@modes@overwrite@true}
+\DeclareOption{nooverwrite}{\libx@modes@overwrite@false}
 
 \ifcsname @@libx@noparfill\endcsname\else
     \def\@@libx@noparfill{\parfillskip=\z@ plus 1fil}
 \fi
 \let\libx@parfill@\@@libx@noparfill
-\DeclareOption{parfill}{ \def\libx@parfill@{} }
-\DeclareOption{noparfill}{ \let\libx@parfill@\@@libx@noparfill }
+\DeclareOption{parfill}{\def\libx@parfill@{}}
+\DeclareOption{noparfill}{\let\libx@parfill@\@@libx@noparfill}
 
-\def\libx@parskip@do{\parskip=\smallskipamount}
-\def\libx@parskip@none{\parskip=\z@}
-\DeclareOption{parskip}{ \let\libx@parskip@\libx@parskip@do }
-\DeclareOption{noparskip}{ \let\libx@parskip@\libx@parskip@none }
+\def\libx@parskip@do{\parskip\smallskipamount}
+\def\libx@parskip@none{\parskip\z@}
+\DeclareOption{parskip}{\let\libx@parskip@\libx@parskip@do}
+\DeclareOption{noparskip}{\let\libx@parskip@\libx@parskip@none}
 \let\libx@parskip@\libx@parskip@do
 \ProcessOptions*
 
@@ -80,15 +80,15 @@
 \typeout{Koma-Script detected. lithie-boxes using a fallback mechanism.}%
 % important: dropping the optional reset
 \def\libx@newlistof#1#2#3{%
-    \newcounter{#1}%
-    \expandafter\newlength\csname cft#1numwidth\endcsname
-    \expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{\csname cft#1numwidth\endcsname}{\csname cft#1numwidth\endcsname}{##1}{##2}}%
-    \expandafter\gdef\csname listof#1\endcsname{\begingroup
-        \lbix@ls@microtypehook
-        \def\contentsname{#3}% may?
-        \libx@listof@heading{\contentsname}%
-        \libx@starttoc{#2}%
-    \endgroup}%
+\newcounter{#1}%
+\expandafter\newlength\csname cft#1numwidth\endcsname
+\expandafter\gdef\csname l@#1\endcsname##1##2{\@dottedtocline{1}{\csname cft#1numwidth\endcsname}{\csname cft#1numwidth\endcsname}{##1}{##2}}%
+\expandafter\gdef\csname listof#1\endcsname{\begingroup
+    \lbix@ls@microtypehook
+    \def\contentsname{#3}% may?
+    \libx@listof@heading{\contentsname}%
+    \libx@starttoc{#2}%
+\endgroup}%
 }%
 \else
 \RequirePackage{tocloft}
@@ -193,9 +193,9 @@ defaults/.style={%
 \@ifundefined{c@@libx@box@\libx@get{ListMen}@id}{%
 \newcounter{@libx@box@\libx@get{ListMen}@id}%
 \libx@preatend{\begingroup\makeatletter\edef\libx@boxid{#5}% just to carry for sub commands
-    \ifnum\arabic{@libx@box@\libx@get{ListMen}@id}=0\else
+    \ifnum\value{@libx@box@\libx@get{ListMen}@id}=\z@\else
     \foreach \i in {1,...,\arabic{@libx@box@\libx@get{ListMen}@id}}{%
-        \@nameuse{libx@box@\libx@get{ListMen}@contentsline@\i}%
+        \csname libx@box@\libx@get{ListMen}@contentsline@\i\endcsname
     }%
     \fi
 \endgroup}%
@@ -218,7 +218,7 @@ defaults/.style={%
 \fi
 }}{}% counter def
 % Define the main environment of the box
-\globaldefs=1\relax
+\globaldefs=1%
 % NOTE: #1 is short form!
 \let\libx@newboxenv\newenvironment
 \iflibx@modes@overwrite@% check if already there
@@ -239,7 +239,7 @@ defaults/.style={%
 % these mappings are used (internally) for user commands
 % for easier access
 \@namedef{@libx@map@envshort@#3}{#5}
-\globaldefs=0\relax\endgroup}
+\globaldefs=0\endgroup}
 
 \def\@libx@boxconsume@with@boxopt#1#2#3(#4){
 \@ifnextchar[%
@@ -492,11 +492,11 @@ lithie@box@style@default@plain/.style={%
 
 % get the new stlyes
 \pgfqkeys{/tcb/new}{%
-    lithie@box@style@default@init/.style={%
-        auto counter,lithie@box@number@within,%
-        reset counter on overlays%
-    },%
-    lithie@box@style@other@init/.style={use counter from=#1}%
+lithie@box@style@default@init/.style={%
+    auto counter,lithie@box@number@within,%
+    reset counter on overlays%
+},%
+lithie@box@style@other@init/.style={use counter from=#1}%
 }
 
 \newsavebox\libx@title@strut
@@ -504,8 +504,8 @@ lithie@box@style@default@plain/.style={%
 
 % #1 is prefix, #2 is number, #3 is text
 \def\libx@default@typeset@title#1#2#3{\begingroup%
-    \sbox0{\libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3~}%
-    \textbf{\textsc{\usebox\libx@title@strut\usebox0} \hfill\parbox[t]{\linewidth-\wd0-1em}{\raggedleft\textbf{#1}}}%
+    \sbox\z@{\libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3~}%
+    \textbf{\textsc{\usebox\libx@title@strut\usebox\z@} \hfill\parbox[t]{\linewidth-\wd0-1em}{\raggedleft\textbf{#1}}}%
 \endgroup}
 
 
@@ -528,7 +528,5 @@ lithie@box@style@default@plain/.style={%
 \def\libx@UpdateAllBoxStyles#1{%
     \forlistloop{\@libx@UpdateHelper{#1}}{\libx@list@boxes}%
 }
-
-\RequirePackage{lithie-boxes@defaults} % default boxes
-\RequirePackage{lithie-boxes@extras} % Utility control, links and colorboxes
+\RequirePackage{lithie-boxes@defaults,lithie-boxes@extras}
 \endinput
