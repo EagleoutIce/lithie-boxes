@@ -473,14 +473,14 @@ in code=\libx@parfill@\libx@parskip@\noindent,box color=#5,use style=libx@box@#6
 \tcbset{%
 lithie@box@style@default/.style={%
     enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
-    lines before break=3,before skip=0,boxrule=0,toprule=.5mm,%
-    bottomtitle=.5mm,bottomrule=1.1mm,after skip=0,%
+    lines before break=3,before skip=\z@,boxrule=\z@,toprule=.5mm,%
+    bottomtitle=.5mm,bottomrule=1.1mm,after skip=\z@,%
     enlarge top by=.55\baselineskip,enlarge bottom by=.55\baselineskip,%
     sharp corners=south,breakable, colback=\libx@get{BoxColor}!4!white,colframe=\libx@get{BoxColor},tikz={#1}%
 },%
 lithie@box@style@default@plain/.style={%
     enhanced jigsaw,pad before break*=2mm,pad after break=2mm,%
-    lines before break=3,before skip=0,boxrule=0,%
+    lines before break=3,before skip=\z@,boxrule=\z@,%
     enlarge top by=.2\baselineskip,enlarge bottom by=.2\baselineskip,attach title to upper={\medskip\nobreak\par\nobreak},coltitle=black,boxsep=0,left=0,right=0,%
     opacityback=0,opacityframe=0,breakable,tikz={#1}%
 }%
