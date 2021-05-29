@@ -1,41 +1,39 @@
 % limerence box-styles
-
 % is defined to allow importing this style multiple times
 \def\libx@limerence@border@width{2.71pt}
 \colorlet{libx@limerence@box@backcolor}{gray!20!white}
-
 \tcbset{%
-    lithie@box@style@limerence/.style={%
-        breakable,lines before break=3,width=\linewidth,enhanced jigsaw,sharp corners,%
-        boxrule=\z@,fonttitle={\normalsize},coltitle=black,attach title to upper,%
-        opacityfill=.45,top=3pt,bottom=3pt,right=5pt,frame hidden,%
-        colback=libx@limerence@box@backcolor,grow to right by=\libx@limerence@border@width,%
-        enlarge left by=-\libx@limerence@border@width,
-        after title app={\hbox{}~\vspace*{-.85\baselineskip}%
-            \newline\unskip\widowpenalties=3 10000 10000 150},%
-        tikz={#1},hyphenationfix,%
-        borderline west={\libx@limerence@border@width}{\z@}{\libx@get{BoxColor},line join=miter,line cap=butt},%
-        lithie@box@style@limerence@extra@arrows=\libx@get{BoxColor}%
-    },%
-    lithie@box@style@limerence@plain/.style={%
-        breakable,lines before break=3,enhanced jigsaw,width=\linewidth,sharp corners,%
-        boxrule=\z@,fonttitle={\normalsize},coltitle={black},attach title to upper,hyphenationfix,%
-        opacityfill=0,boxsep=\z@,top=\z@,bottom=\z@,right=\z@,left=\z@,frame hidden,%
-        enlarge top by=.2\baselineskip,enlarge bottom by=.2\baselineskip,%
-        after title app={\hbox{}~\vspace*{-\baselineskip}%
-            \newline\unskip\widowpenalties=3 10000 10000 150},%
-        tikz={#1},%
-        % as guides:
-        lithie@box@style@limerence@extra@arrows=black,%
-        % padding to give them space to breathe:
-        pad before break*=3mm,pad after break=3mm,%
-        after upper={\nopagebreak\null\nobreak\hfill\nobreak$\rfloor$}%
-    },%
-    lithie@box@style@limerence@extra@arrows/.style={%
-        extras first and middle={overlay={% 0.33pt offset to buffer
+lithie@box@style@limerence/.style={%
+    breakable,lines before break=3,width=\linewidth,enhanced jigsaw,sharp corners,%
+    boxrule=\z@,fonttitle={\normalsize},coltitle=black,attach title to upper,%
+    opacityfill=.45,top=3pt,bottom=3pt,right=5pt,frame hidden,%
+    colback=libx@limerence@box@backcolor,grow to right by=\libx@limerence@border@width,%
+    enlarge left by=-\libx@limerence@border@width,
+    after title app={\hbox{}~\vspace*{-.85\baselineskip}%
+        \newline\unskip\widowpenalties=3 10000 10000 150},%
+    tikz={#1},hyphenationfix,%
+    borderline west={\libx@limerence@border@width}{\z@}{\libx@get{BoxColor},line join=miter,line cap=butt},%
+    lithie@box@style@limerence@extra@arrows=\libx@get{BoxColor}%
+},%
+lithie@box@style@limerence@plain/.style={%
+    breakable,lines before break=3,enhanced jigsaw,width=\linewidth,sharp corners,%
+    boxrule=\z@,fonttitle={\normalsize},coltitle={black},attach title to upper,hyphenationfix,%
+    opacityfill=0,boxsep=\z@,top=\z@,bottom=\z@,right=\z@,left=\z@,frame hidden,%
+    enlarge top by=.2\baselineskip,enlarge bottom by=.2\baselineskip,%
+    after title app={\hbox{}~\vspace*{-\baselineskip}%
+        \newline\unskip\widowpenalties=3 10000 10000 150},%
+    tikz={#1},%
+    % as guides:
+    lithie@box@style@limerence@extra@arrows=black,%
+    % padding to give them space to breathe:
+    pad before break*=3mm,pad after break=3mm,%
+    after upper={\nopagebreak\null\nobreak\hfill\nobreak$\rfloor$}%
+},%
+lithie@box@style@limerence@extra@arrows/.style={%
+    extras first and middle={overlay={% 0.33pt offset to buffer
 \begin{scope}[shift={(frame.south west)}]
-    \path[fill=#1] (0,\z@) -- ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) --
-        ++(\libx@limerence@border@width/2,\libx@limerence@border@width) |- (0,.33pt) -- cycle;
+\path[fill=#1] (0,\z@) -- ++(\libx@limerence@border@width/2,-\libx@limerence@border@width) --
+    ++(\libx@limerence@border@width/2,\libx@limerence@border@width) |- (0,.33pt) -- cycle;
 \end{scope}
         }},%
         extras middle and last={overlay={%
@@ -63,7 +61,7 @@
         \libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3%
     }{\ifx!#1!\else\libx@style@limerence@titledivider\fi}%
     % we do not use the width again as we want to save space :D
-{#1}}\nopagebreak\\*%
+{#1}}\\*%
 }
 
 \def\@libx@updatestyle{%

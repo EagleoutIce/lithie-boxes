@@ -116,21 +116,21 @@
 % \newif\iflibx@UseBox@
 \pgfkeys{
 /libx@keys/.is family, /libx@keys,
-name/.store in = \libx@box@Name,
-title/.store in = \libx@box@Title,
-box color/.store in = \libx@box@BoxColor,
-pre code/.store in = \libx@box@PreCode,
-in code/.store in = \libx@box@InCode,
-out code/.store in = \libx@box@OutCode,
-post code/.store in = \libx@box@PostCode,
-use style/.store in = \libx@box@UseStyle,
-emblem/.store in = \libx@box@Emblem,
+name/.store in=\libx@box@Name,
+title/.store in=\libx@box@Title,
+box color/.store in=\libx@box@BoxColor,
+pre code/.store in=\libx@box@PreCode,
+in code/.store in=\libx@box@InCode,
+out code/.store in=\libx@box@OutCode,
+post code/.store in=\libx@box@PostCode,
+use style/.store in=\libx@box@UseStyle,
+emblem/.store in=\libx@box@Emblem,
 style derivative/.store in=\libx@box@StyleDerivative,
 has emblem/.is if=libx@HasEmblem@,
 custom list/.is if=libx@CustomList@,
 box enabled/.is if=libx@BoxEnabled@,
-list name/.store in = \libx@box@ListName,
-list men/.store in =\libx@box@ListMen,
+list name/.store in=\libx@box@ListName,
+list men/.store in=\libx@box@ListMen,
 defaults/.style={%
     name=noname,title={\noexpand\libx@box@Name},%
     box color=black,use style={},% mandatory!
@@ -399,9 +399,9 @@ defaults/.style={%
 
 \gdef\libx@currentstyle{default}
 \def\libx@loadstyle@ending{.style}
-\def\libx@LoadBoxStyle#1{\typeout{Loading box style: '#1\libx@loadstyle@ending'...}\makeatletter\input{#1\libx@loadstyle@ending}\gdef\libx@currentstyle{#1}}
+\def\libx@LoadBoxStyle#1{\typeout{Loading box style: '#1\libx@loadstyle@ending'.}\makeatletter\input{#1\libx@loadstyle@ending}\gdef\libx@currentstyle{#1}}
 
-\def\libx@RefreshBoxStyle{\typeout{Refreshing box style: '\libx@currentstyle\libx@loadstyle@ending'...}\@libx@updatestyle}
+\def\libx@RefreshBoxStyle{\typeout{Refreshing box style: '\libx@currentstyle\libx@loadstyle@ending'.}\@libx@updatestyle}
 
 \def\@libx@getcurtar#1{% we expect i and curboxid to be set
 #1:\libx@get{ListMen}\i
@@ -418,18 +418,14 @@ defaults/.style={%
 
 \def\@libx@addtocontents#1#2#3{%
 % we want the exact id:
-\expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{%
-    \noexpand\libx@raw@addtocontents{#2}{#3}%
-}%
+\expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{\noexpand\libx@raw@addtocontents{#2}{#3}}%
 }
 
 \def\libx@addtocontents#1#2#3{\@libx@addtocontents{\arabic{#1}}{#2}{#3}}
 
 \def\@libx@addcontentsline#1#2#3#4{%
 % we want the exact id:
-\expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{%
-    \noexpand\libx@raw@addcontentsline{#2}{#3}{#4}%
-}%
+\expandafter\protected@xdef\csname libx@box@#2@contentsline@#1\endcsname{\noexpand\libx@raw@addcontentsline{#2}{#3}{#4}}%
 }
 
 \def\libx@addcontentsline#1#2#3#4{\@libx@addcontentsline{\arabic{#1}}{#2}{#3}{#4}}
@@ -505,7 +501,7 @@ lithie@box@style@other@init/.style={use counter from=#1}%
 % #1 is prefix, #2 is number, #3 is text
 \def\libx@default@typeset@title#1#2#3{\begingroup%
     \sbox0{\libx@get@ifempty{Emblem}{}{\libx@get{Emblem}\thinspace~}#2 #3~}%
-    \textbf{\textsc{\usebox\libx@title@strut\usebox0} \hfill\parbox[t]{\linewidth-\wd0-1em}{\raggedleft\textbf{#1}}}%
+    \textbf{\textsc{\usebox\libx@title@strut\usebox0}\space\hfill\parbox[t]{\linewidth-\wd0-1em}{\raggedleft\textbf{#1}}}%
 \endgroup}
 
 
