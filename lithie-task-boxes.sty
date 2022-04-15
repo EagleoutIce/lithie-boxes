@@ -115,10 +115,12 @@ extras middle and last={overlay={%
     \path (frame.north west)++(\libx@tb@ulnumwidth/2+5mm,-7.5mm/2) node[white] {\bfseries\libx@tb@boxes@boxnumber};%
 }
 
+\colorlet{lithie@box@taskbox@back}{white}
+\colorlet{lithie@box@taskbox@text}{black}
 \newtcolorbox[lithie@box@style@default@init]{libx@box@addon@\@libx@tskstyle @normal}[4][]{%
     enforce breakable, %enforce breakable für: Mehr Seiten
-    enhanced jigsaw, before skip=2mm plus 3mm minus 1mm,after skip=4mm plus 2mm minus 2mm,
-    colback=white,colframe=tskcolor,boxrule=.4mm,%
+    enhanced jigsaw, before skip=2mm plus 3mm minus 1mm,after skip=4mm plus 2mm minus 2mm,coltext=lithie@box@taskbox@text,
+    colback=lithie@box@taskbox@back,colframe=tskcolor,boxrule=.4mm,%
     enlargepage flexible=\baselineskip,%
     attach boxed title to top left={xshift=\linewidth-\tcboxedtitlewidth-.75cm,yshift*=1mm-\tcboxedtitleheight},top=2.55mm,bottom=2.55mm,
     varwidth boxed title*=-4.5cm,lines before break=4,arc=.75mm,%
