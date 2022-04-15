@@ -514,9 +514,9 @@ lithie@box@style@other@init/.style={use counter from=#1}%
     title={\libx@default@typeset@title{##4}{##2}{\thetcbcounter}}%
 }}
 
-% #1 Name of style #2 style update (#1-#4)
-\def\libx@UpdateBoxStyle#1#2{%
-    \renewtcolorbox[lithie@box@style@other@init={libx@box@#1}]{libx@box@#1}[4][]{#2}%
+% #1 potential new key overwrite, #2 Name of style #1 style update (#1-#4)
+\newcommand\libx@UpdateBoxStyle[3][]{%
+    \renewtcolorbox[lithie@box@style@other@init={libx@box@#2},#1]{libx@box@#2}[4][]{#3}%
 }
 % simple swap for consume
 \def\@libx@UpdateHelper#1#2{\libx@UpdateBoxStyle{#2}{#1}}
