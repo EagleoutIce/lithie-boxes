@@ -524,5 +524,26 @@ lithie@box@style@other@init/.style={use counter from=#1}%
 \def\libx@UpdateAllBoxStyles#1{%
     \forlistloop{\@libx@UpdateHelper{#1}}{\libx@list@boxes}%
 }
-\RequirePackage{lithie-boxes@defaults,lithie-boxes@extras}
+
+\def\libx@translateenv#1#2{
+% empty auto:
+\ifx\libx@environments@trans\@empty
+\protected@edef\libx@tmp{\noexpand\translatelet{\csname @libx@#1@envname\endcsname}{#2}}%
+\else
+\protected@edef\libx@tmp{\noexpand\translatelet[to=\libx@environments@trans]{\csname @libx@#1@envname\endcsname}{#2}}%
+\fi\libx@tmp}
+
+\def\libx@provide@translation#1#2#3{%
+\ifcsname #1\endcsname\else
+    % we have to do this to avoid warnings with hyperref
+    \expandafter\translatelet\csname #1@@listof\endcsname{#2}%
+    \expandafter\translatelet\csname #1@@name\endcsname{#3}%
+    \@namedef{#1}{\csname #1@@listof\endcsname\ \csname #1@@name\endcsname}%
+\fi
+}
+
+\providecommand\LithieBoxesLoadDefault{\RequirePackage{lithie-boxes@defaults}}
+\LithieBoxesLoadDefault
+\providecommand\LithieBoxesLoadExtras{\RequirePackage{lithie-boxes@extras}}
+\LithieBoxesLoadExtras
 \endinput
